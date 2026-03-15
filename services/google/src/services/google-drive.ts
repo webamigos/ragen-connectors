@@ -39,7 +39,8 @@ export async function searchFiles(
 ): Promise<Record<string, unknown>> {
   const qParts = ["trashed = false"];
   if (mimeType) {
-    qParts.push(`mimeType = '${mimeType}'`);
+    const safeMimeType = mimeType.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+    qParts.push(`mimeType = '${safeMimeType}'`);
   }
   if (query) {
     const safeQuery = query.replace(/\\/g, "\\\\").replace(/'/g, "\\'");

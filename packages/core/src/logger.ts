@@ -43,11 +43,15 @@ const logger = pino(
           }
 
           if (message) {
-            otelLogger[otelMethod](message, attrs);
+            try {
+              otelLogger[otelMethod](message, attrs);
+            } catch {
+              // Swallow OTEL errors to avoid breaking primary logging
+            }
           }
         }
 
-        method.apply(this, inputArgs as Parameters<typeof method>);
+        return method.apply(this, inputArgs as Parameters<typeof method>);
       },
     },
   },

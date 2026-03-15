@@ -24,7 +24,7 @@ import { logs } from "@opentelemetry/api-logs";
 import { HttpInstrumentation } from "@opentelemetry/instrumentation-http";
 import { registerInstrumentations } from "@opentelemetry/instrumentation";
 
-const endpoint = process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
+const endpoint = process.env.OTEL_EXPORTER_OTLP_ENDPOINT?.replace(/\/+$/, "");
 
 const resource = resourceFromAttributes({
   "service.name": process.env.OTEL_SERVICE_NAME ?? "ragen-mcp",
