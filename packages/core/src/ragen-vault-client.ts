@@ -72,6 +72,7 @@ export class RagenVaultClient {
       headers,
       body: options?.json ? body : undefined,
       redirect: options?.followRedirects === false ? "manual" : "follow",
+      signal: AbortSignal.timeout(30_000),
     });
 
     if (!resp.ok && resp.status !== 301 && resp.status !== 302) {

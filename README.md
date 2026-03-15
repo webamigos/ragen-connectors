@@ -87,8 +87,11 @@ Each service requires these variables in `.env.local`:
 
 1. Copy an existing service directory (e.g., `services/clickup/`)
 2. Replace `tools/`, `services/`, and `auth/` with your provider-specific code
-3. Update `index.ts` to register your tools
+3. Update `index.ts` to register your tools and validate env vars
 4. Update `package.json` with service name and any extra dependencies
+5. Run `npm install` from the monorepo root to link the new workspace
+
+> **Build order**: `@ragen-mcp/core` must be built before any service. Run `npm run build` from the monorepo root — npm processes workspaces in dependency order, so core builds first automatically. If building a single service, ensure core is already built (`npm -w packages/core run build`).
 
 The shared `@ragen-mcp/core` package gives you: ragen-token-vault client, OAuth state management, env validation, and customer ID extraction — out of the box.
 

@@ -5,17 +5,20 @@
 import { FastMCP } from "fastmcp";
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
-import { validateEnv } from "@ragen-mcp/core";
+import { validateEnvVars } from "@ragen-mcp/core";
+import { z } from "zod";
 import { registerHubspotTools } from "./tools/hubspot-tools.js";
 import { authRouter } from "./auth/oauth.js";
 
-validateEnv([
-  "HUBSPOT_CLIENT_ID",
-  "HUBSPOT_CLIENT_SECRET",
-  "OAUTH_REDIRECT_URI",
-  "RAGEN_TOKEN_VAULT_URL",
-  "RAGEN_TOKEN_VAULT_SERVICE_SECRET",
-]);
+validateEnvVars(
+  z.object({
+    HUBSPOT_CLIENT_ID: z.string(),
+    HUBSPOT_CLIENT_SECRET: z.string(),
+    OAUTH_REDIRECT_URI: z.string(),
+    RAGEN_TOKEN_VAULT_URL: z.string(),
+    RAGEN_TOKEN_VAULT_SERVICE_SECRET: z.string(),
+  }),
+);
 
 process.env.OTEL_SERVICE_NAME ??= "ragen-mcp-hubspot";
 
