@@ -13,11 +13,11 @@ validateEnv([
   "HUBSPOT_CLIENT_ID",
   "HUBSPOT_CLIENT_SECRET",
   "OAUTH_REDIRECT_URI",
-  "RAGEN_VAULT_URL",
-  "RAGEN_VAULT_SERVICE_SECRET",
+  "RAGEN_TOKEN_VAULT_URL",
+  "RAGEN_TOKEN_VAULT_SERVICE_SECRET",
 ]);
 
-process.env.RAGEN_VAULT_SERVICE_NAME ??= "ragen-mcp-hubspot";
+process.env.RAGEN_TOKEN_VAULT_SERVICE_NAME ??= "ragen-mcp-hubspot";
 
 const PORT = parseInt(process.env.PORT ?? "8002", 10);
 

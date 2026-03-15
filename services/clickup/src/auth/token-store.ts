@@ -1,5 +1,5 @@
 /**
- * Per-customer token management for ClickUp via ragen-vault.
+ * Per-customer token management for ClickUp via ragen-token-vault.
  */
 
 import { RagenVaultClient, ragenVaultClient } from "@ragen-mcp/core";
@@ -9,8 +9,8 @@ const PROVIDER = "CLICKUP";
 function client(): RagenVaultClient {
   if (!ragenVaultClient) {
     throw new Error(
-      "ragen-vault client is not configured. " +
-        "Set RAGEN_VAULT_URL and RAGEN_VAULT_SERVICE_SECRET environment variables.",
+      "ragen-token-vault client is not configured. " +
+        "Set RAGEN_TOKEN_VAULT_URL and RAGEN_TOKEN_VAULT_SERVICE_SECRET environment variables.",
     );
   }
   return ragenVaultClient;

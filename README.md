@@ -7,7 +7,7 @@ TypeScript monorepo for multi-tenant MCP (Model Context Protocol) servers. Each 
 - **Runtime**: Node.js 22 + TypeScript 5.7
 - **MCP Framework**: [FastMCP](https://github.com/punkpeye/fastmcp) (npm)
 - **HTTP Framework**: [Hono](https://hono.dev) (OAuth routes, health checks)
-- **Token Storage**: [ragen-vault](https://github.com/webamigos/ragen-vault) (AES-256-GCM encrypted, HMAC-authenticated)
+- **Token Storage**: [ragen-token-vault](https://github.com/webamigos/ragen-token-vault) (AES-256-GCM encrypted, HMAC-authenticated)
 - **Validation**: Zod
 - **Deployment**: Docker + Railway
 - **CI/CD**: GitHub Actions + semantic-release
@@ -61,9 +61,9 @@ Each service requires these variables in `.env.local`:
 
 | Variable                     | Required | Description                              |
 | ---------------------------- | -------- | ---------------------------------------- |
-| `RAGEN_VAULT_URL`            | Yes      | ragen-vault service URL                  |
-| `RAGEN_VAULT_SERVICE_SECRET` | Yes      | HMAC shared secret for vault auth        |
-| `RAGEN_VAULT_SERVICE_NAME`   | No       | Service identifier (default per service) |
+| `RAGEN_TOKEN_VAULT_URL`            | Yes      | ragen-token-vault service URL            |
+| `RAGEN_TOKEN_VAULT_SERVICE_SECRET` | Yes      | HMAC shared secret for vault auth        |
+| `RAGEN_TOKEN_VAULT_SERVICE_NAME`   | No       | Service identifier (default per service) |
 | `PORT`                       | No       | HTTP server port (default: 8001/8002)    |
 
 **ClickUp-specific:**
@@ -90,7 +90,7 @@ Each service requires these variables in `.env.local`:
 3. Update `index.ts` to register your tools
 4. Update `package.json` with service name and any extra dependencies
 
-The shared `@ragen-mcp/core` package gives you: ragen-vault client, OAuth state management, env validation, and customer ID extraction — out of the box.
+The shared `@ragen-mcp/core` package gives you: ragen-token-vault client, OAuth state management, env validation, and customer ID extraction — out of the box.
 
 ## Switching Between Our MCP and Official Servers
 
@@ -117,6 +117,6 @@ Each service is deployed as a separate Railway service from this monorepo:
 
 Build context must be the monorepo root so `COPY packages/core` works in the Dockerfile.
 
-## Token Vault (ragen-vault)
+## Token Vault (ragen-token-vault)
 
-OAuth tokens are stored in [ragen-vault](https://github.com/webamigos/ragen-vault) — a centralized token vault with AES-256-GCM encryption. MCP services are stateless regarding secrets. OAuth pending states are kept in-memory with a 10-minute TTL — no database needed.
+OAuth tokens are stored in [ragen-token-vault](https://github.com/webamigos/ragen-token-vault) — a centralized token vault with AES-256-GCM encryption. MCP services are stateless regarding secrets. OAuth pending states are kept in-memory with a 10-minute TTL — no database needed.
