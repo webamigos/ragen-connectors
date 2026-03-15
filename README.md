@@ -14,7 +14,7 @@ TypeScript monorepo for multi-tenant MCP (Model Context Protocol) servers. Each 
 
 ## Structure
 
-```
+```text
 ragen-mcp-ts/
 ├── packages/core/             # @ragen-mcp/core — shared library
 │   └── src/
