@@ -21,7 +21,7 @@ async function get(
   params?: Record<string, string>,
 ): Promise<Record<string, unknown>> {
   let url = `${BASE_URL}${path}`;
-  if (params) url += `?${new URLSearchParams(params).toString()}`;
+  if (params) {url += `?${new URLSearchParams(params).toString()}`;}
 
   let resp = await fetch(url, {
     headers: await headers(customerId),
@@ -56,7 +56,7 @@ async function post(
     headers: await headers(customerId),
     signal: AbortSignal.timeout(TIMEOUT_MS),
   };
-  if (body) opts.body = JSON.stringify(body);
+  if (body) {opts.body = JSON.stringify(body);}
 
   let resp = await fetch(`${BASE_URL}${path}`, opts);
 
@@ -84,8 +84,8 @@ export async function getContacts(
   properties?: string[],
 ): Promise<Record<string, unknown>> {
   const params: Record<string, string> = { limit: String(limit) };
-  if (after) params.after = after;
-  if (properties) params.properties = properties.join(",");
+  if (after) {params.after = after;}
+  if (properties) {params.properties = properties.join(",");}
   const data = await get(customerId, "/crm/v3/objects/contacts", params);
   return {
     results: ((data.results ?? []) as Record<string, unknown>[]).map(formatObject),
@@ -99,7 +99,7 @@ export async function getContact(
   properties?: string[],
 ): Promise<Record<string, unknown>> {
   const params: Record<string, string> = {};
-  if (properties) params.properties = properties.join(",");
+  if (properties) {params.properties = properties.join(",");}
   const data = await get(customerId, `/crm/v3/objects/contacts/${contactId}`, Object.keys(params).length ? params : undefined);
   return formatObject(data);
 }
@@ -113,8 +113,8 @@ export async function getCompanies(
   properties?: string[],
 ): Promise<Record<string, unknown>> {
   const params: Record<string, string> = { limit: String(limit) };
-  if (after) params.after = after;
-  if (properties) params.properties = properties.join(",");
+  if (after) {params.after = after;}
+  if (properties) {params.properties = properties.join(",");}
   const data = await get(customerId, "/crm/v3/objects/companies", params);
   return {
     results: ((data.results ?? []) as Record<string, unknown>[]).map(formatObject),
@@ -128,7 +128,7 @@ export async function getCompany(
   properties?: string[],
 ): Promise<Record<string, unknown>> {
   const params: Record<string, string> = {};
-  if (properties) params.properties = properties.join(",");
+  if (properties) {params.properties = properties.join(",");}
   const data = await get(customerId, `/crm/v3/objects/companies/${companyId}`, Object.keys(params).length ? params : undefined);
   return formatObject(data);
 }
@@ -142,8 +142,8 @@ export async function getDeals(
   properties?: string[],
 ): Promise<Record<string, unknown>> {
   const params: Record<string, string> = { limit: String(limit) };
-  if (after) params.after = after;
-  if (properties) params.properties = properties.join(",");
+  if (after) {params.after = after;}
+  if (properties) {params.properties = properties.join(",");}
   const data = await get(customerId, "/crm/v3/objects/deals", params);
   return {
     results: ((data.results ?? []) as Record<string, unknown>[]).map(formatObject),
@@ -157,7 +157,7 @@ export async function getDeal(
   properties?: string[],
 ): Promise<Record<string, unknown>> {
   const params: Record<string, string> = {};
-  if (properties) params.properties = properties.join(",");
+  if (properties) {params.properties = properties.join(",");}
   const data = await get(customerId, `/crm/v3/objects/deals/${dealId}`, Object.keys(params).length ? params : undefined);
   return formatObject(data);
 }
@@ -171,8 +171,8 @@ export async function getTickets(
   properties?: string[],
 ): Promise<Record<string, unknown>> {
   const params: Record<string, string> = { limit: String(limit) };
-  if (after) params.after = after;
-  if (properties) params.properties = properties.join(",");
+  if (after) {params.after = after;}
+  if (properties) {params.properties = properties.join(",");}
   const data = await get(customerId, "/crm/v3/objects/tickets", params);
   return {
     results: ((data.results ?? []) as Record<string, unknown>[]).map(formatObject),
@@ -186,7 +186,7 @@ export async function getTicket(
   properties?: string[],
 ): Promise<Record<string, unknown>> {
   const params: Record<string, string> = {};
-  if (properties) params.properties = properties.join(",");
+  if (properties) {params.properties = properties.join(",");}
   const data = await get(customerId, `/crm/v3/objects/tickets/${ticketId}`, Object.keys(params).length ? params : undefined);
   return formatObject(data);
 }
@@ -203,10 +203,10 @@ export async function searchObjects(
   after = 0,
 ): Promise<Record<string, unknown>> {
   const body: Record<string, unknown> = { limit };
-  if (query) body.query = query;
-  if (after) body.after = after;
-  if (properties) body.properties = properties;
-  if (filters) body.filterGroups = [{ filters }];
+  if (query) {body.query = query;}
+  if (after) {body.after = after;}
+  if (properties) {body.properties = properties;}
+  if (filters) {body.filterGroups = [{ filters }];}
 
   const data = await post(customerId, `/crm/v3/objects/${objectType}/search`, body);
   return {
@@ -243,7 +243,7 @@ export async function getOwners(
   after?: string,
 ): Promise<Record<string, unknown>> {
   const params: Record<string, string> = { limit: String(limit) };
-  if (after) params.after = after;
+  if (after) {params.after = after;}
   const data = await get(customerId, "/crm/v3/owners", params);
   return {
     results: ((data.results ?? []) as Record<string, unknown>[]).map((o) => ({
