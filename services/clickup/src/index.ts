@@ -18,7 +18,7 @@ validateEnv([
   "RAGEN_TOKEN_VAULT_SERVICE_SECRET",
 ]);
 
-process.env.RAGEN_TOKEN_VAULT_SERVICE_NAME ??= "ragen-mcp-clickup";
+process.env.OTEL_SERVICE_NAME ??= "ragen-mcp-clickup";
 
 const PORT = parseInt(process.env.PORT ?? "8001", 10);
 

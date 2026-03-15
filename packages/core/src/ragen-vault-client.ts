@@ -5,8 +5,6 @@
 
 import { createHmac, createHash } from "node:crypto";
 
-const SERVICE_NAME = process.env.RAGEN_TOKEN_VAULT_SERVICE_NAME ?? "ragen-mcp-ts";
-
 export class RagenVaultClient {
   private baseUrl: string;
   private secret: string;
@@ -42,7 +40,7 @@ export class RagenVaultClient {
       .digest("hex");
     return {
       Authorization: `HMAC-SHA256 ts=${timestamp},sig=${sig}`,
-      "X-Service-Name": SERVICE_NAME,
+      "X-Service-Name": process.env.OTEL_SERVICE_NAME ?? "ragen-mcp-ts",
     };
   }
 

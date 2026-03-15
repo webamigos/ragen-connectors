@@ -63,7 +63,7 @@ Each service requires these variables in `.env.local`:
 | ---------------------------- | -------- | ---------------------------------------- |
 | `RAGEN_TOKEN_VAULT_URL`            | Yes      | ragen-token-vault service URL            |
 | `RAGEN_TOKEN_VAULT_SERVICE_SECRET` | Yes      | HMAC shared secret for vault auth        |
-| `RAGEN_TOKEN_VAULT_SERVICE_NAME`   | No       | Service identifier (default per service) |
+| `OTEL_SERVICE_NAME`                | No       | OpenTelemetry service name (default per service) |
 | `PORT`                       | No       | HTTP server port (default: 8001/8002)    |
 
 **ClickUp-specific:**
