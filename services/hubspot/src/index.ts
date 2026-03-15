@@ -2,10 +2,13 @@
  * FastMCP server for HubSpot — multi-tenant, remote HTTP.
  */
 
+// Must be imported first to set up OTEL before any other imports
+import "@ragen-mcp/core/instrument";
+
 import { FastMCP } from "fastmcp";
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
-import { validateEnvVars } from "@ragen-mcp/core";
+import { validateEnvVars, logger, shutdownOtel } from "@ragen-mcp/core";
 import { z } from "zod";
 import { registerHubspotTools } from "./tools/hubspot-tools.js";
 import { authRouter } from "./auth/oauth.js";
@@ -45,10 +48,10 @@ app.get("/", (c) => {
   return c.json({ status: "ok", server: "HubSpot MCP" });
 });
 
-console.log(`Starting HubSpot MCP server on port ${PORT}`);
+logger.info(`Starting HubSpot MCP server on port ${PORT}`);
 
 serve({ fetch: app.fetch, port: PORT }, (info) => {
-  console.log(`HubSpot HTTP server listening on http://localhost:${info.port}`);
+  logger.info(`HubSpot HTTP server listening on http://localhost:${info.port}`);
 });
 
 const MCP_PORT = PORT + 1000; // e.g., 9002
@@ -56,4 +59,12 @@ mcp.start({
   transportType: "httpStream",
   httpStream: { port: MCP_PORT },
 });
-console.log(`HubSpot MCP endpoint at http://localhost:${MCP_PORT}/mcp`);
+logger.info(`HubSpot MCP endpoint at http://localhost:${MCP_PORT}/mcp`);
+
+const shutdown = async () => {
+  logger.info("Shutting down...");
+  await shutdownOtel();
+  process.exit(0);
+};
+process.on("SIGTERM", shutdown);
+process.on("SIGINT", shutdown);

@@ -185,12 +185,12 @@ export async function createTask(
   options: CreateTaskOptions,
 ): Promise<Record<string, unknown>> {
   const body: Record<string, unknown> = { name: options.name };
-  if (options.description) body.description = options.description;
-  if (options.status) body.status = options.status;
-  if (options.priority != null) body.priority = options.priority;
-  if (options.assignees) body.assignees = options.assignees;
-  if (options.dueDate != null) body.due_date = options.dueDate;
-  if (options.tags) body.tags = options.tags;
+  if (options.description) {body.description = options.description;}
+  if (options.status) {body.status = options.status;}
+  if (options.priority != null) {body.priority = options.priority;}
+  if (options.assignees) {body.assignees = options.assignees;}
+  if (options.dueDate != null) {body.due_date = options.dueDate;}
+  if (options.tags) {body.tags = options.tags;}
 
   const data = await post(customerId, `/list/${listId}/task`, body);
   return formatTask(data);
@@ -210,11 +210,11 @@ export async function updateTask(
   options: UpdateTaskOptions,
 ): Promise<Record<string, unknown>> {
   const body: Record<string, unknown> = {};
-  if (options.name != null) body.name = options.name;
-  if (options.description != null) body.description = options.description;
-  if (options.status != null) body.status = options.status;
-  if (options.priority != null) body.priority = options.priority;
-  if (options.dueDate != null) body.due_date = options.dueDate;
+  if (options.name != null) {body.name = options.name;}
+  if (options.description != null) {body.description = options.description;}
+  if (options.status != null) {body.status = options.status;}
+  if (options.priority != null) {body.priority = options.priority;}
+  if (options.dueDate != null) {body.due_date = options.dueDate;}
 
   const data = await put(customerId, `/task/${taskId}`, body);
   return formatTask(data);
