@@ -1,6 +1,6 @@
 # Ragen MCP (TypeScript)
 
-TypeScript monorepo for multi-tenant MCP (Model Context Protocol) servers. Each service exposes a third-party API as MCP tools over HTTP. This is the TypeScript port of [ragen-mcp](https://github.com/webamigos/ragen-mcp) (Python).
+TypeScript monorepo for multi-tenant MCP (Model Context Protocol) servers. Each service exposes a third-party API as MCP tools over HTTP.
 
 ## Stack
 
@@ -59,29 +59,29 @@ docker compose up --build
 
 Each service requires these variables in `.env.local`:
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `RAGEN_VAULT_URL` | Yes | ragen-vault service URL |
-| `RAGEN_VAULT_SERVICE_SECRET` | Yes | HMAC shared secret for vault auth |
-| `RAGEN_VAULT_SERVICE_NAME` | No | Service identifier (default per service) |
-| `PORT` | No | HTTP server port (default: 8001/8002) |
+| Variable                     | Required | Description                              |
+| ---------------------------- | -------- | ---------------------------------------- |
+| `RAGEN_VAULT_URL`            | Yes      | ragen-vault service URL                  |
+| `RAGEN_VAULT_SERVICE_SECRET` | Yes      | HMAC shared secret for vault auth        |
+| `RAGEN_VAULT_SERVICE_NAME`   | No       | Service identifier (default per service) |
+| `PORT`                       | No       | HTTP server port (default: 8001/8002)    |
 
 **ClickUp-specific:**
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `CLICKUP_CLIENT_ID` | Yes | ClickUp OAuth client ID |
-| `CLICKUP_CLIENT_SECRET` | Yes | ClickUp OAuth client secret |
-| `OAUTH_REDIRECT_URI` | Yes | OAuth callback URL |
+| Variable                | Required | Description                 |
+| ----------------------- | -------- | --------------------------- |
+| `CLICKUP_CLIENT_ID`     | Yes      | ClickUp OAuth client ID     |
+| `CLICKUP_CLIENT_SECRET` | Yes      | ClickUp OAuth client secret |
+| `OAUTH_REDIRECT_URI`    | Yes      | OAuth callback URL          |
 
 **HubSpot-specific:**
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `HUBSPOT_CLIENT_ID` | Yes | HubSpot OAuth client ID |
-| `HUBSPOT_CLIENT_SECRET` | Yes | HubSpot OAuth client secret |
-| `OAUTH_REDIRECT_URI` | Yes | OAuth callback URL |
-| `HUBSPOT_AUTH_DOMAIN` | No | Auth domain (default: `app.hubspot.com`) |
+| Variable                | Required | Description                              |
+| ----------------------- | -------- | ---------------------------------------- |
+| `HUBSPOT_CLIENT_ID`     | Yes      | HubSpot OAuth client ID                  |
+| `HUBSPOT_CLIENT_SECRET` | Yes      | HubSpot OAuth client secret              |
+| `OAUTH_REDIRECT_URI`    | Yes      | OAuth callback URL                       |
+| `HUBSPOT_AUTH_DOMAIN`   | No       | Auth domain (default: `app.hubspot.com`) |
 
 ## Adding a New Service
 

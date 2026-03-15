@@ -18,13 +18,13 @@
     "lint": "eslint src/"
   },
   "dependencies": {
+    "@hono/node-server": "^1.19.11",
     "fastmcp": "^3.34.0",
-    "hono": "^4.7.0",
-    "@hono/node-server": "^1.14.0",
+    "hono": "^4.12.8",
     "zod": "^3.24.0"
   },
   "devDependencies": {
-    "typescript": "^5.7.0",
-    "@types/node": "^22.0.0"
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
   }
 }
