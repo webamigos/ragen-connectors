@@ -33,6 +33,7 @@ export async function getAccessToken(customerId: string): Promise<string> {
     throw new Error(
       `No tokens found for customer '${customerId}'. ` +
         `Please authenticate at /auth/clickup?customer_id=${customerId}`,
+      { cause: err },
     );
   }
   const accessToken = tokenData.access_token;
