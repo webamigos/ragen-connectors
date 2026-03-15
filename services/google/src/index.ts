@@ -2,13 +2,15 @@
  * FastMCP server for Google — Calendar, Drive, Analytics & Ads — multi-tenant, remote HTTP.
  */
 
+process.env.OTEL_SERVICE_NAME ??= "ragen-mcp-google";
+
 // Must be imported first to set up OTEL before any other imports
-import "@ragen-mcp/core/instrument";
+import { shutdownOtel } from "@ragen-mcp/core/instrument";
 
 import { FastMCP } from "fastmcp";
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
-import { validateEnvVars, logger, shutdownOtel } from "@ragen-mcp/core";
+import { validateEnvVars, logger } from "@ragen-mcp/core";
 import { z } from "zod";
 import { registerCalendarTools } from "./tools/calendar-tools.js";
 import { registerDriveTools } from "./tools/drive-tools.js";
@@ -26,8 +28,6 @@ validateEnvVars(
     RAGEN_TOKEN_VAULT_SERVICE_SECRET: z.string(),
   }),
 );
-
-process.env.OTEL_SERVICE_NAME ??= "ragen-mcp-google";
 
 const PORT = parseInt(process.env.PORT ?? "8003", 10);
 
@@ -52,10 +52,14 @@ app.get("/drive/search", async (c) => {
     return c.json({ success: false, error: "customer_id is required" }, 400);
   }
   try {
+    const rawPageSize = parseInt(c.req.query("page_size") ?? "20", 10);
+    const pageSize = Number.isFinite(rawPageSize)
+      ? Math.min(Math.max(rawPageSize, 1), 100)
+      : 20;
     const data = await drive.searchFiles(
       customerId,
       c.req.query("query") ?? "",
-      parseInt(c.req.query("page_size") ?? "20", 10),
+      pageSize,
       c.req.query("page_token") ?? "",
       c.req.query("mime_type") ?? "",
     );

@@ -27,7 +27,6 @@ export async function saveTokens(
     access_token: accessToken,
     refresh_token: refreshToken,
     client_id: GOOGLE_CLIENT_ID,
-    client_secret: GOOGLE_CLIENT_SECRET,
   });
 }
 

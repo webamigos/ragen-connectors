@@ -42,6 +42,23 @@ const logger = pino(
             }
           }
 
+          if (typeof inputArgs[0] === "object" && inputArgs[0] instanceof Error) {
+            const err = inputArgs[0];
+            attrs = {
+              ...attrs,
+              "err.type": err.constructor.name || "Error",
+              "err.message": err.message,
+              ...(err.stack ? { "err.stacktrace": err.stack } : {}),
+            };
+            if (!message) {
+              message = err.message;
+            }
+          }
+
+          if (!message && attrs) {
+            message = Object.keys(attrs).join(", ");
+          }
+
           if (message) {
             try {
               otelLogger[otelMethod](message, attrs);

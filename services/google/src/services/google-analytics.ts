@@ -42,7 +42,7 @@ export async function getTrafficReport(
 ): Promise<Record<string, unknown>> {
   const response = (await googlePost(
     customerId,
-    `${BASE}/properties/${propertyId}:runReport`,
+    `${BASE}/properties/${encodeURIComponent(propertyId)}:runReport`,
     {
       dimensions: [{ name: "date" }],
       metrics: [
@@ -74,7 +74,7 @@ export async function getConversionData(
 ): Promise<Record<string, unknown>> {
   const response = (await googlePost(
     customerId,
-    `${BASE}/properties/${propertyId}:runReport`,
+    `${BASE}/properties/${encodeURIComponent(propertyId)}:runReport`,
     {
       dimensions: [{ name: "eventName" }],
       metrics: [
@@ -106,7 +106,7 @@ export async function getTopPages(
 ): Promise<Record<string, unknown>> {
   const response = (await googlePost(
     customerId,
-    `${BASE}/properties/${propertyId}:runReport`,
+    `${BASE}/properties/${encodeURIComponent(propertyId)}:runReport`,
     {
       dimensions: [{ name: "pagePath" }, { name: "pageTitle" }],
       metrics: [
@@ -142,7 +142,7 @@ export async function getAudienceInsights(
 ): Promise<Record<string, unknown>> {
   const deviceResponse = (await googlePost(
     customerId,
-    `${BASE}/properties/${propertyId}:runReport`,
+    `${BASE}/properties/${encodeURIComponent(propertyId)}:runReport`,
     {
       dimensions: [{ name: "deviceCategory" }],
       metrics: [{ name: "sessions" }, { name: "totalUsers" }],
@@ -155,7 +155,7 @@ export async function getAudienceInsights(
 
   const countryResponse = (await googlePost(
     customerId,
-    `${BASE}/properties/${propertyId}:runReport`,
+    `${BASE}/properties/${encodeURIComponent(propertyId)}:runReport`,
     {
       dimensions: [{ name: "country" }],
       metrics: [{ name: "sessions" }, { name: "totalUsers" }],

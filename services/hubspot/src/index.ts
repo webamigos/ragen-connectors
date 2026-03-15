@@ -2,13 +2,15 @@
  * FastMCP server for HubSpot — multi-tenant, remote HTTP.
  */
 
+process.env.OTEL_SERVICE_NAME ??= "ragen-mcp-hubspot";
+
 // Must be imported first to set up OTEL before any other imports
-import "@ragen-mcp/core/instrument";
+import { shutdownOtel } from "@ragen-mcp/core/instrument";
 
 import { FastMCP } from "fastmcp";
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
-import { validateEnvVars, logger, shutdownOtel } from "@ragen-mcp/core";
+import { validateEnvVars, logger } from "@ragen-mcp/core";
 import { z } from "zod";
 import { registerHubspotTools } from "./tools/hubspot-tools.js";
 import { authRouter } from "./auth/oauth.js";
@@ -22,8 +24,6 @@ validateEnvVars(
     RAGEN_TOKEN_VAULT_SERVICE_SECRET: z.string(),
   }),
 );
-
-process.env.OTEL_SERVICE_NAME ??= "ragen-mcp-hubspot";
 
 const PORT = parseInt(process.env.PORT ?? "8002", 10);
 

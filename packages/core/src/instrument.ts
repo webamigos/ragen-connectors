@@ -22,6 +22,7 @@ import { resourceFromAttributes } from "@opentelemetry/resources";
 import { metrics } from "@opentelemetry/api";
 import { logs } from "@opentelemetry/api-logs";
 import { HttpInstrumentation } from "@opentelemetry/instrumentation-http";
+import { UndiciInstrumentation } from "@opentelemetry/instrumentation-undici";
 import { registerInstrumentations } from "@opentelemetry/instrumentation";
 
 const endpoint = process.env.OTEL_EXPORTER_OTLP_ENDPOINT?.replace(/\/+$/, "");
@@ -77,7 +78,7 @@ function init() {
   registerInstrumentations({
     tracerProvider,
     meterProvider,
-    instrumentations: [new HttpInstrumentation()],
+    instrumentations: [new HttpInstrumentation(), new UndiciInstrumentation()],
   });
 }
 

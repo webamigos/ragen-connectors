@@ -2,26 +2,29 @@
  * FastMCP server for ClickUp — multi-tenant, remote HTTP.
  */
 
+process.env.OTEL_SERVICE_NAME ??= "ragen-mcp-clickup";
+
 // Must be imported first to set up OTEL before any other imports
-import "@ragen-mcp/core/instrument";
+import { shutdownOtel } from "@ragen-mcp/core/instrument";
 
 import { FastMCP } from "fastmcp";
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
-import { validateEnv, logger, shutdownOtel } from "@ragen-mcp/core";
+import { validateEnvVars, logger } from "@ragen-mcp/core";
+import { z } from "zod";
 import { registerClickupTools } from "./tools/clickup-tools.js";
 import { authRouter } from "./auth/oauth.js";
 
 // Validate required env vars
-validateEnv([
-  "CLICKUP_CLIENT_ID",
-  "CLICKUP_CLIENT_SECRET",
-  "OAUTH_REDIRECT_URI",
-  "RAGEN_TOKEN_VAULT_URL",
-  "RAGEN_TOKEN_VAULT_SERVICE_SECRET",
-]);
-
-process.env.OTEL_SERVICE_NAME ??= "ragen-mcp-clickup";
+validateEnvVars(
+  z.object({
+    CLICKUP_CLIENT_ID: z.string(),
+    CLICKUP_CLIENT_SECRET: z.string(),
+    OAUTH_REDIRECT_URI: z.string(),
+    RAGEN_TOKEN_VAULT_URL: z.string(),
+    RAGEN_TOKEN_VAULT_SERVICE_SECRET: z.string(),
+  }),
+);
 
 const PORT = parseInt(process.env.PORT ?? "8001", 10);
 

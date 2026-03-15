@@ -43,7 +43,13 @@ export async function googleGet(
   }
 
   if (!resp.ok) {
-    throw new Error(`Google API GET ${url} failed (${resp.status})`);
+    let body: string;
+    try {
+      body = await resp.text();
+    } catch {
+      body = "";
+    }
+    throw new Error(`Google API GET ${url} failed (${resp.status}): ${body}`);
   }
   return (await resp.json()) as Record<string, unknown>;
 }
@@ -69,7 +75,13 @@ export async function googlePost(
   }
 
   if (!resp.ok) {
-    throw new Error(`Google API POST ${url} failed (${resp.status})`);
+    let body: string;
+    try {
+      body = await resp.text();
+    } catch {
+      body = "";
+    }
+    throw new Error(`Google API POST ${url} failed (${resp.status}): ${body}`);
   }
   return (await resp.json()) as Record<string, unknown>;
 }
@@ -96,7 +108,13 @@ export async function googleGetText(
   }
 
   if (!resp.ok) {
-    throw new Error(`Google API GET ${url} failed (${resp.status})`);
+    let body: string;
+    try {
+      body = await resp.text();
+    } catch {
+      body = "";
+    }
+    throw new Error(`Google API GET ${url} failed (${resp.status}): ${body}`);
   }
   return resp.text();
 }

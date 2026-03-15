@@ -7,9 +7,21 @@ import { getAccessToken, refreshAndGetToken } from "../auth/token-store.js";
 const ADS_API_VERSION = "v19";
 const BASE = `https://googleads.googleapis.com/${ADS_API_VERSION}`;
 const TIMEOUT_MS = 30_000;
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 const DEVELOPER_TOKEN = process.env.GOOGLE_ADS_DEVELOPER_TOKEN ?? "";
 const LOGIN_CUSTOMER_ID = process.env.GOOGLE_ADS_LOGIN_CUSTOMER_ID ?? "";
+
+function sanitizeDate(date: string): string {
+  if (!DATE_RE.test(date)) {
+    throw new Error(`Invalid date format: '${date}'. Expected YYYY-MM-DD.`);
+  }
+  return date;
+}
+
+function sanitizeGaqlString(value: string): string {
+  return value.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+}
 
 interface AdsRow {
   campaign?: {
@@ -75,7 +87,13 @@ async function adsSearch(
   }
 
   if (!resp.ok) {
-    throw new Error(`Google Ads API search failed (${resp.status})`);
+    let body: string;
+    try {
+      body = await resp.text();
+    } catch {
+      body = "";
+    }
+    throw new Error(`Google Ads API search failed (${resp.status}): ${body}`);
   }
 
   const data = (await resp.json()) as { results?: AdsRow[] }[];
@@ -121,7 +139,9 @@ export async function getCampaignPerformance(
   startDate: string,
   endDate: string,
 ): Promise<Record<string, unknown>[]> {
-  const safeName = campaignName.replace(/'/g, "\\'");
+  const safeName = sanitizeGaqlString(campaignName);
+  const safeStart = sanitizeDate(startDate);
+  const safeEnd = sanitizeDate(endDate);
   const query = `
     SELECT
       campaign.name,
@@ -135,7 +155,7 @@ export async function getCampaignPerformance(
       metrics.average_cpc
     FROM campaign
     WHERE campaign.name = '${safeName}'
-      AND segments.date BETWEEN '${startDate}' AND '${endDate}'
+      AND segments.date BETWEEN '${safeStart}' AND '${safeEnd}'
     ORDER BY segments.date DESC
   `;
 
@@ -163,6 +183,8 @@ export async function getCostSummary(
   startDate: string,
   endDate: string,
 ): Promise<Record<string, unknown>> {
+  const safeStart = sanitizeDate(startDate);
+  const safeEnd = sanitizeDate(endDate);
   const query = `
     SELECT
       campaign.name,
@@ -171,7 +193,7 @@ export async function getCostSummary(
       metrics.impressions,
       metrics.conversions
     FROM campaign
-    WHERE segments.date BETWEEN '${startDate}' AND '${endDate}'
+    WHERE segments.date BETWEEN '${safeStart}' AND '${safeEnd}'
     ORDER BY metrics.cost_micros DESC
   `;
 
