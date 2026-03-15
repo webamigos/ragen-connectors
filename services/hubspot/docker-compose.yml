@@ -1,0 +1,20 @@
+# Local development. Joins the ragen-network so all projects can coexist.
+services:
+  app:
+    build:
+      context: ../..
+      dockerfile: services/hubspot/Dockerfile
+    ports:
+      - "8002:8002"
+      - "9002:9002"
+    env_file: .env.local
+    environment:
+      PORT: "8002"
+    restart: unless-stopped
+    networks:
+      - ragen-network
+
+networks:
+  ragen-network:
+    name: ragen-network
+    external: true

@@ -1,0 +1,18 @@
+{
+  "name": "ragen-mcp-ts",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "services/*"
+  ],
+  "scripts": {
+    "dev:clickup": "npm -w services/clickup run dev",
+    "dev:hubspot": "npm -w services/hubspot run dev",
+    "build": "npm -ws run build",
+    "lint": "npm -ws run lint",
+    "typecheck": "npm -ws run typecheck"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
