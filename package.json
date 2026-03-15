@@ -1,6 +1,7 @@
 {
   "name": "ragen-mcp-ts",
   "private": true,
+  "type": "module",
   "workspaces": [
     "packages/*",
     "services/*"
@@ -14,5 +15,10 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.0.3",
+    "typescript-eslint": "^8.57.0"
   }
 }

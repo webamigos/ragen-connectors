@@ -1,5 +1,5 @@
 /**
- * Per-customer token management for HubSpot via ragen-vault with auto-refresh.
+ * Per-customer token management for HubSpot via ragen-token-vault with auto-refresh.
  */
 
 import { RagenVaultClient, ragenVaultClient } from "@ragen-mcp/core";
@@ -11,8 +11,8 @@ const HUBSPOT_CLIENT_SECRET = process.env.HUBSPOT_CLIENT_SECRET ?? "";
 function client(): RagenVaultClient {
   if (!ragenVaultClient) {
     throw new Error(
-      "ragen-vault client is not configured. " +
-        "Set RAGEN_VAULT_URL and RAGEN_VAULT_SERVICE_SECRET environment variables.",
+      "ragen-token-vault client is not configured. " +
+        "Set RAGEN_TOKEN_VAULT_URL and RAGEN_TOKEN_VAULT_SERVICE_SECRET environment variables.",
     );
   }
   return ragenVaultClient;
@@ -39,6 +39,7 @@ export async function getAccessToken(customerId: string): Promise<string> {
     throw new Error(
       `No tokens found for customer '${customerId}'. ` +
         `Please authenticate at /auth/hubspot?customer_id=${customerId}`,
+      { cause: err },
     );
   }
   const accessToken = tokenData.access_token;
@@ -65,6 +66,7 @@ export async function refreshAndGetToken(customerId: string): Promise<string> {
     throw new Error(
       `No tokens found for customer '${customerId}'. ` +
         `Please authenticate at /auth/hubspot?customer_id=${customerId}`,
+      { cause: err },
     );
   }
 

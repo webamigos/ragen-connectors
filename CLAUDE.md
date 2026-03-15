@@ -44,8 +44,8 @@ FastMCP starts its own HTTP server and cannot be mounted on an existing one, so 
 
 ### Shared core (`packages/core/` → `@ragen-mcp/core`)
 
-- `RagenVaultClient` — HMAC-SHA256 authenticated HTTP client for ragen-vault. Module-level singleton `ragenVaultClient` is created at import time from `RAGEN_VAULT_URL` and `RAGEN_VAULT_SERVICE_SECRET` env vars. **Set env vars before importing.**
-- `validateEnvVars(schema)` — Zod-based validation, exits process on failure (matches ragen-vault/worker pattern).
+- `RagenVaultClient` — HMAC-SHA256 authenticated HTTP client for ragen-token-vault. Module-level singleton `ragenVaultClient` is created at import time from `RAGEN_TOKEN_VAULT_URL` and `RAGEN_TOKEN_VAULT_SERVICE_SECRET` env vars. **Set env vars before importing.**
+- `validateEnvVars(schema)` — Zod-based validation, exits process on failure (matches ragen-token-vault/worker pattern).
 - `validateEnv(list)` — Simple string-list check, exits process on failure.
 - `saveState()`/`popState()` — In-memory OAuth state store with 10-minute TTL. Thread-safe cleanup on access.
 - `getCustomerId(headers)` — Extracts `x-customer-id` from request headers.
@@ -58,12 +58,12 @@ services/<name>/src/
 ├── tools/*-tools.ts       # MCP tool definitions (addTool + Zod schemas)
 ├── services/*.ts          # API client logic (native fetch + AbortSignal.timeout)
 ├── auth/oauth.ts          # OAuth2 flow (Hono router: /auth/<provider>, /auth/callback, /auth/status)
-└── auth/token-store.ts    # Per-customer token CRUD via ragen-vault
+└── auth/token-store.ts    # Per-customer token CRUD via ragen-token-vault
 ```
 
 ### Multi-tenancy
 
-Every MCP tool receives `customer_id` as a Zod parameter. Tokens are stored per-customer in ragen-vault. `getAccessToken(customerId)` retrieves the correct token from the vault.
+Every MCP tool receives `customer_id` as a Zod parameter. Tokens are stored per-customer in ragen-token-vault. `getAccessToken(customerId)` retrieves the correct token from the vault.
 
 ### Tool registration pattern
 
@@ -75,7 +75,7 @@ Each tool module exports a `register*Tools(mcp: FastMCP)` function that calls `m
 - TypeScript strict mode, ES2022 target, Node16 module resolution.
 - Native `fetch` for all HTTP calls — no axios dependency.
 - `AbortSignal.timeout(30_000)` on all outbound HTTP requests.
-- Environment loaded via `--env-file=.env.local` (Node native flag, matches ragen-vault/worker). No dotenv dependency.
+- Environment loaded via `--env-file=.env.local` (Node native flag, matches ragen-token-vault/worker). No dotenv dependency.
 - npm workspaces for monorepo. Services reference core as `"@ragen-mcp/core": "*"`.
 
 ### Service-specific notes
