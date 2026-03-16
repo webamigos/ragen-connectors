@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf 
 WORKDIR /app
 
 # Copy workspace root files
-COPY package.json package-lock.json* ./
+COPY package.json package-lock.json* tsconfig.base.json ./
 
 # Copy shared core package
 COPY packages/core/ ./packages/core/
