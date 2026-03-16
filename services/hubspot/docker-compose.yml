@@ -5,11 +5,11 @@ services:
       context: ../..
       dockerfile: services/hubspot/Dockerfile
     ports:
-      - "8002:8002"
-      - "9002:9002"
+      - "8003:8003"
+      - "9003:9003"
     env_file: .env.local
     environment:
-      PORT: "8002"
+      PORT: "8003"
     restart: unless-stopped
     networks:
       - ragen-network

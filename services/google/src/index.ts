@@ -29,7 +29,7 @@ validateEnvVars(
   }),
 );
 
-const PORT = parseInt(process.env.PORT ?? "8003", 10);
+const PORT = parseInt(process.env.PORT ?? "8001", 10);
 
 // -- MCP server --
 const mcp = new FastMCP({ name: "Google", version: "0.1.0" });
@@ -77,12 +77,15 @@ app.get("/drive/file/:file_id/content", async (c) => {
   try {
     const data = await drive.getFileContent(customerId, c.req.param("file_id"));
     if (data.error) {
-      return c.json({
-        success: false,
-        error: data.error,
-        name: data.name ?? "",
-        mime_type: data.mime_type ?? "",
-      }, 422);
+      return c.json(
+        {
+          success: false,
+          error: data.error,
+          name: data.name ?? "",
+          mime_type: data.mime_type ?? "",
+        },
+        422,
+      );
     }
     return c.json({ success: true, ...data });
   } catch (e) {

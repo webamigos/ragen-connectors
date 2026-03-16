@@ -10,7 +10,7 @@ import { saveTokens, getAccessToken } from "./token-store.js";
 const CLICKUP_CLIENT_ID = process.env.CLICKUP_CLIENT_ID ?? "";
 const CLICKUP_CLIENT_SECRET = process.env.CLICKUP_CLIENT_SECRET ?? "";
 const REDIRECT_URI =
-  process.env.OAUTH_REDIRECT_URI ?? "http://localhost:8001/auth/callback";
+  process.env.OAUTH_REDIRECT_URI ?? "http://localhost:8002/auth/callback";
 
 export const authRouter = new Hono();
 

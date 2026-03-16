@@ -10,7 +10,7 @@ import { saveTokens, getAccessToken } from "./token-store.js";
 const HUBSPOT_CLIENT_ID = process.env.HUBSPOT_CLIENT_ID ?? "";
 const HUBSPOT_CLIENT_SECRET = process.env.HUBSPOT_CLIENT_SECRET ?? "";
 const REDIRECT_URI =
-  process.env.OAUTH_REDIRECT_URI ?? "http://localhost:8002/auth/callback";
+  process.env.OAUTH_REDIRECT_URI ?? "http://localhost:8003/auth/callback";
 const HUBSPOT_AUTH_DOMAIN =
   process.env.HUBSPOT_AUTH_DOMAIN ?? "app.hubspot.com";
 

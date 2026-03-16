@@ -10,7 +10,7 @@ import { saveTokens, refreshAndGetToken } from "./token-store.js";
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID ?? "";
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET ?? "";
 const REDIRECT_URI =
-  process.env.OAUTH_REDIRECT_URI ?? "http://localhost:8003/auth/callback";
+  process.env.OAUTH_REDIRECT_URI ?? "http://localhost:8001/auth/callback";
 
 const SCOPES = [
   "https://www.googleapis.com/auth/calendar",
@@ -102,14 +102,20 @@ authRouter.get("/callback", async (c) => {
   await saveTokens(customerId, accessToken, refreshToken);
 
   if (redirectUri) {
-    const ALLOWED_ORIGINS = (process.env.ALLOWED_REDIRECT_ORIGINS ?? "").split(",").filter(Boolean);
+    const ALLOWED_ORIGINS = (process.env.ALLOWED_REDIRECT_ORIGINS ?? "")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
     let finalUrl: URL;
     try {
       finalUrl = new URL(redirectUri);
     } catch {
       return c.json({ error: "Invalid redirect_uri" }, 400);
     }
-    if (ALLOWED_ORIGINS.length > 0 && !ALLOWED_ORIGINS.includes(finalUrl.origin)) {
+    if (
+      ALLOWED_ORIGINS.length > 0 &&
+      !ALLOWED_ORIGINS.includes(finalUrl.origin)
+    ) {
       return c.json({ error: "redirect_uri origin not allowed" }, 400);
     }
     finalUrl.searchParams.set("status", "success");
