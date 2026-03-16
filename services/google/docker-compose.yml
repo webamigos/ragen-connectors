@@ -1,0 +1,20 @@
+# Local development. Joins the ragen-network so all projects can coexist.
+services:
+  app:
+    build:
+      context: ../..
+      dockerfile: services/google/Dockerfile
+    ports:
+      - "8001:8001"
+      - "9001:9001"
+    env_file: .env.local
+    environment:
+      PORT: "8001"
+    restart: unless-stopped
+    networks:
+      - ragen-network
+
+networks:
+  ragen-network:
+    name: ragen-network
+    external: true
