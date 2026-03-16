@@ -104,6 +104,7 @@ authRouter.get("/callback", async (c) => {
   if (redirectUri) {
     const ALLOWED_ORIGINS = (process.env.ALLOWED_REDIRECT_ORIGINS ?? "")
       .split(",")
+      .map((s) => s.trim())
       .filter(Boolean);
     let finalUrl: URL;
     try {
