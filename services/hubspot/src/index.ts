@@ -25,7 +25,7 @@ validateEnvVars(
   }),
 );
 
-const PORT = parseInt(process.env.PORT ?? "8002", 10);
+const PORT = parseInt(process.env.PORT ?? "8003", 10);
 
 // -- MCP server --
 const mcp = new FastMCP({ name: "HubSpot", version: "0.1.0" });

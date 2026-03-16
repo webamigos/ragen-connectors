@@ -28,6 +28,6 @@ WORKDIR /app/services/google
 USER app
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
-  CMD curl --fail http://localhost:${PORT:-8003}/health || exit 1
+  CMD curl --fail http://localhost:${PORT:-8001}/health || exit 1
 
 CMD ["node", "dist/index.js"]
