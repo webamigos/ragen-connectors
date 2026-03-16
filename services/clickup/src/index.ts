@@ -26,7 +26,7 @@ validateEnvVars(
   }),
 );
 
-const PORT = parseInt(process.env.PORT ?? "8001", 10);
+const PORT = parseInt(process.env.PORT ?? "8002", 10);
 
 // -- MCP server --
 const mcp = new FastMCP({ name: "ClickUp", version: "0.1.0" });
