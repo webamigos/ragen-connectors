@@ -6,6 +6,19 @@ import { googleGet, googlePost } from "./google-api.js";
 
 const BASE = "https://www.googleapis.com/calendar/v3";
 
+/**
+ * Ensure a datetime string is RFC3339 compliant (has timezone suffix).
+ * LLMs often send "2026-03-17T00:00:00" without timezone — Google API rejects this.
+ */
+function ensureRfc3339(dt: string): string {
+  // Already has timezone info (Z, +HH:MM, -HH:MM)
+  if (/[Zz]$/.test(dt) || /[+-]\d{2}:\d{2}$/.test(dt)) {
+    return dt;
+  }
+  // Assume UTC if no timezone provided
+  return `${dt}Z`;
+}
+
 export async function listCalendars(
   customerId: string,
 ): Promise<Record<string, unknown>[]> {
@@ -34,11 +47,11 @@ export async function listEvents(
     orderBy: "startTime",
   };
   if (timeMin) {
-    params.timeMin = timeMin;
+    params.timeMin = ensureRfc3339(timeMin);
   } else {
     params.timeMin = new Date().toISOString();
   }
-  if (timeMax) {params.timeMax = timeMax;}
+  if (timeMax) {params.timeMax = ensureRfc3339(timeMax);}
   if (query) {params.q = query;}
 
   const data = await googleGet(
@@ -75,8 +88,8 @@ export async function getFreeBusy(
   timeMax: string,
 ): Promise<Record<string, unknown>> {
   const data = await googlePost(customerId, `${BASE}/freeBusy`, {
-    timeMin,
-    timeMax,
+    timeMin: ensureRfc3339(timeMin),
+    timeMax: ensureRfc3339(timeMax),
     items: calendarIds.map((id) => ({ id })),
   });
 

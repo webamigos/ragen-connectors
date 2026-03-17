@@ -12,24 +12,41 @@ const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET ?? "";
 const REDIRECT_URI =
   process.env.OAUTH_REDIRECT_URI ?? "http://localhost:8001/auth/callback";
 
-const SCOPES = [
+const ALLOWED_SCOPES = [
   "https://www.googleapis.com/auth/calendar",
+  "https://www.googleapis.com/auth/calendar.readonly",
+  "https://www.googleapis.com/auth/calendar.events",
+  "https://www.googleapis.com/auth/calendar.events.readonly",
   "https://www.googleapis.com/auth/drive.readonly",
   "https://www.googleapis.com/auth/analytics.readonly",
   "https://www.googleapis.com/auth/adwords",
-].join(" ");
+] as const;
+
+const ALLOWED_SCOPES_SET = new Set<string>(ALLOWED_SCOPES);
+
+const DEFAULT_SCOPES = ALLOWED_SCOPES.slice(0, 4).join(" ");
 
 export const authRouter = new Hono();
 
 authRouter.get("/google", async (c) => {
   const customerId = c.req.query("customer_id");
   const redirectUri = c.req.query("redirect_uri") ?? "";
+  const requestedScopes = c.req.query("scopes");
 
   if (!customerId) {
     return c.json({ error: "customer_id is required" }, 400);
   }
   if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
     return c.json({ error: "Google OAuth credentials not configured" }, 500);
+  }
+
+  let scopes = DEFAULT_SCOPES;
+  if (requestedScopes && requestedScopes.trim()) {
+    const validated = requestedScopes
+      .trim()
+      .split(/[\s,]+/)
+      .filter((s) => ALLOWED_SCOPES_SET.has(s));
+    scopes = validated.length > 0 ? validated.join(" ") : DEFAULT_SCOPES;
   }
 
   const state = randomBytes(32).toString("base64url");
@@ -39,7 +56,7 @@ authRouter.get("/google", async (c) => {
     client_id: GOOGLE_CLIENT_ID,
     redirect_uri: REDIRECT_URI,
     response_type: "code",
-    scope: SCOPES,
+    scope: scopes,
     access_type: "offline",
     prompt: "consent",
     state,
