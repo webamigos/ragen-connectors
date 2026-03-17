@@ -2,24 +2,30 @@
  * FastMCP server for HubSpot — multi-tenant, remote HTTP.
  */
 
+process.env.OTEL_SERVICE_NAME ??= "ragen-mcp-hubspot";
+
+// Must be imported first to set up OTEL before any other imports
+import { shutdownOtel } from "@ragen-mcp/core/instrument";
+
 import { FastMCP } from "fastmcp";
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
-import { validateEnv } from "@ragen-mcp/core";
+import { validateEnvVars, logger } from "@ragen-mcp/core";
+import { z } from "zod";
 import { registerHubspotTools } from "./tools/hubspot-tools.js";
 import { authRouter } from "./auth/oauth.js";
 
-validateEnv([
-  "HUBSPOT_CLIENT_ID",
-  "HUBSPOT_CLIENT_SECRET",
-  "OAUTH_REDIRECT_URI",
-  "RAGEN_VAULT_URL",
-  "RAGEN_VAULT_SERVICE_SECRET",
-]);
+validateEnvVars(
+  z.object({
+    HUBSPOT_CLIENT_ID: z.string(),
+    HUBSPOT_CLIENT_SECRET: z.string(),
+    OAUTH_REDIRECT_URI: z.string(),
+    RAGEN_TOKEN_VAULT_URL: z.string(),
+    RAGEN_TOKEN_VAULT_SERVICE_SECRET: z.string(),
+  }),
+);
 
-process.env.RAGEN_VAULT_SERVICE_NAME ??= "ragen-mcp-hubspot";
-
-const PORT = parseInt(process.env.PORT ?? "8002", 10);
+const PORT = parseInt(process.env.PORT ?? "8003", 10);
 
 // -- MCP server --
 const mcp = new FastMCP({ name: "HubSpot", version: "0.1.0" });
@@ -42,10 +48,10 @@ app.get("/", (c) => {
   return c.json({ status: "ok", server: "HubSpot MCP" });
 });
 
-console.log(`Starting HubSpot MCP server on port ${PORT}`);
+logger.info(`Starting HubSpot MCP server on port ${PORT}`);
 
 serve({ fetch: app.fetch, port: PORT }, (info) => {
-  console.log(`HubSpot HTTP server listening on http://localhost:${info.port}`);
+  logger.info(`HubSpot HTTP server listening on http://localhost:${info.port}`);
 });
 
 const MCP_PORT = PORT + 1000; // e.g., 9002
@@ -53,4 +59,12 @@ mcp.start({
   transportType: "httpStream",
   httpStream: { port: MCP_PORT },
 });
-console.log(`HubSpot MCP endpoint at http://localhost:${MCP_PORT}/mcp`);
+logger.info(`HubSpot MCP endpoint at http://localhost:${MCP_PORT}/mcp`);
+
+const shutdown = async () => {
+  logger.info("Shutting down...");
+  await shutdownOtel();
+  process.exit(0);
+};
+process.on("SIGTERM", shutdown);
+process.on("SIGINT", shutdown);

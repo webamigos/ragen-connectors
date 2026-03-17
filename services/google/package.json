@@ -1,7 +1,7 @@
 {
-  "name": "@ragen-mcp/clickup",
+  "name": "@ragen-mcp/google",
   "version": "0.1.0",
-  "description": "Multi-tenant MCP server for ClickUp",
+  "description": "Multi-tenant MCP server for Google (Calendar, Drive, Analytics, Ads)",
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {

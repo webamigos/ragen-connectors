@@ -1,11 +1,13 @@
 {
   "name": "ragen-mcp-ts",
   "private": true,
+  "type": "module",
   "workspaces": [
     "packages/*",
     "services/*"
   ],
   "scripts": {
+    "dev:google": "npm -w services/google run dev",
     "dev:clickup": "npm -w services/clickup run dev",
     "dev:hubspot": "npm -w services/hubspot run dev",
     "build": "npm -ws run build",
@@ -14,5 +16,10 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.0.3",
+    "typescript-eslint": "^8.57.0"
   }
 }

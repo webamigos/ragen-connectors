@@ -1,12 +1,12 @@
 /**
- * Per-customer token management for HubSpot via ragen-token-vault with auto-refresh.
+ * Per-customer token management for Google via ragen-token-vault with auto-refresh.
  */
 
 import { RagenVaultClient, ragenVaultClient } from "@ragen-mcp/core";
 
-const PROVIDER = "HUBSPOT";
-const HUBSPOT_CLIENT_ID = process.env.HUBSPOT_CLIENT_ID ?? "";
-const HUBSPOT_CLIENT_SECRET = process.env.HUBSPOT_CLIENT_SECRET ?? "";
+const PROVIDER = "GOOGLE";
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID ?? "";
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET ?? "";
 
 function client(): RagenVaultClient {
   if (!ragenVaultClient) {
@@ -26,8 +26,7 @@ export async function saveTokens(
   await client().storeToken(customerId, PROVIDER, {
     access_token: accessToken,
     refresh_token: refreshToken,
-    client_id: HUBSPOT_CLIENT_ID,
-    client_secret: HUBSPOT_CLIENT_SECRET,
+    client_id: GOOGLE_CLIENT_ID,
   });
 }
 
@@ -38,7 +37,7 @@ export async function getAccessToken(customerId: string): Promise<string> {
   } catch (err) {
     throw new Error(
       `No tokens found for customer '${customerId}'. ` +
-        `Please authenticate at /auth/hubspot?customer_id=${customerId}`,
+        `Please authenticate at /auth/google?customer_id=${customerId}`,
       { cause: err },
     );
   }
@@ -46,16 +45,16 @@ export async function getAccessToken(customerId: string): Promise<string> {
   if (typeof accessToken !== "string" || !accessToken) {
     throw new Error(
       `Invalid token data for customer '${customerId}'. ` +
-        `Please re-authenticate at /auth/hubspot?customer_id=${customerId}`,
+        `Please re-authenticate at /auth/google?customer_id=${customerId}`,
     );
   }
   return accessToken;
 }
 
 export async function refreshAndGetToken(customerId: string): Promise<string> {
-  if (!HUBSPOT_CLIENT_ID || !HUBSPOT_CLIENT_SECRET) {
+  if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
     throw new Error(
-      "HUBSPOT_CLIENT_ID and HUBSPOT_CLIENT_SECRET environment variables must be set",
+      "GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables must be set",
     );
   }
 
@@ -65,7 +64,7 @@ export async function refreshAndGetToken(customerId: string): Promise<string> {
   } catch (err) {
     throw new Error(
       `No tokens found for customer '${customerId}'. ` +
-        `Please authenticate at /auth/hubspot?customer_id=${customerId}`,
+        `Please authenticate at /auth/google?customer_id=${customerId}`,
       { cause: err },
     );
   }
@@ -75,13 +74,13 @@ export async function refreshAndGetToken(customerId: string): Promise<string> {
     throw new Error(`No refresh token found for customer '${customerId}'`);
   }
 
-  const resp = await fetch("https://api.hubapi.com/oauth/v1/token", {
+  const resp = await fetch("https://oauth2.googleapis.com/token", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
       grant_type: "refresh_token",
-      client_id: HUBSPOT_CLIENT_ID,
-      client_secret: HUBSPOT_CLIENT_SECRET,
+      client_id: GOOGLE_CLIENT_ID,
+      client_secret: GOOGLE_CLIENT_SECRET,
       refresh_token: refreshToken,
     }),
     signal: AbortSignal.timeout(30_000),
@@ -91,12 +90,14 @@ export async function refreshAndGetToken(customerId: string): Promise<string> {
     let errorDetail: string;
     try {
       const body = (await resp.json()) as Record<string, unknown>;
-      errorDetail = (body.message as string) ?? resp.statusText;
+      errorDetail = typeof body.error_description === "string"
+        ? body.error_description
+        : resp.statusText;
     } catch {
       errorDetail = resp.statusText;
     }
     throw new Error(
-      `HubSpot token refresh failed for customer '${customerId}': ${errorDetail}`,
+      `Google token refresh failed for customer '${customerId}': ${errorDetail}`,
     );
   }
 
@@ -104,9 +105,10 @@ export async function refreshAndGetToken(customerId: string): Promise<string> {
   const newAccessToken = newTokenData.access_token;
   if (typeof newAccessToken !== "string" || !newAccessToken) {
     throw new Error(
-      `HubSpot returned invalid token response for customer '${customerId}'`,
+      `Google returned invalid token response for customer '${customerId}'`,
     );
   }
+  // Google may not return a new refresh_token on every refresh
   const newRefreshToken =
     typeof newTokenData.refresh_token === "string"
       ? newTokenData.refresh_token

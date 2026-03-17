@@ -1,28 +1,26 @@
 /**
- * HTTP client for the ragen-vault token vault service.
+ * HTTP client for the ragen-token-vault token vault service.
  * Uses HMAC-SHA256 service-to-service authentication.
  */
 
 import { createHmac, createHash } from "node:crypto";
-
-const SERVICE_NAME = process.env.RAGEN_VAULT_SERVICE_NAME ?? "ragen-mcp-ts";
 
 export class RagenVaultClient {
   private baseUrl: string;
   private secret: string;
 
   constructor(baseUrl?: string, secret?: string) {
-    this.baseUrl = (baseUrl ?? process.env.RAGEN_VAULT_URL ?? "").replace(
+    this.baseUrl = (baseUrl ?? process.env.RAGEN_TOKEN_VAULT_URL ?? "").replace(
       /\/$/,
       "",
     );
-    this.secret = secret ?? process.env.RAGEN_VAULT_SERVICE_SECRET ?? "";
+    this.secret = secret ?? process.env.RAGEN_TOKEN_VAULT_SERVICE_SECRET ?? "";
     if (!this.baseUrl) {
-      throw new Error("RAGEN_VAULT_URL environment variable is required");
+      throw new Error("RAGEN_TOKEN_VAULT_URL environment variable is required");
     }
     if (!this.secret) {
       throw new Error(
-        "RAGEN_VAULT_SERVICE_SECRET environment variable is required",
+        "RAGEN_TOKEN_VAULT_SERVICE_SECRET environment variable is required",
       );
     }
   }
@@ -42,7 +40,7 @@ export class RagenVaultClient {
       .digest("hex");
     return {
       Authorization: `HMAC-SHA256 ts=${timestamp},sig=${sig}`,
-      "X-Service-Name": SERVICE_NAME,
+      "X-Service-Name": process.env.OTEL_SERVICE_NAME ?? "ragen-mcp-ts",
     };
   }
 
@@ -74,12 +72,13 @@ export class RagenVaultClient {
       headers,
       body: options?.json ? body : undefined,
       redirect: options?.followRedirects === false ? "manual" : "follow",
+      signal: AbortSignal.timeout(30_000),
     });
 
     if (!resp.ok && resp.status !== 301 && resp.status !== 302) {
       const text = await resp.text();
       throw new Error(
-        `ragen-vault ${method} ${path} failed (${resp.status}): ${text}`,
+        `ragen-token-vault ${method} ${path} failed (${resp.status}): ${text}`,
       );
     }
     return resp;
@@ -158,7 +157,7 @@ export class RagenVaultClient {
     const location = resp.headers.get("location");
     if (!location) {
       throw new Error(
-        "ragen-vault did not return a redirect Location header",
+        "ragen-token-vault did not return a redirect Location header",
       );
     }
     return location;
@@ -177,8 +176,8 @@ export class RagenVaultClient {
 
 // Module-level singleton (null if env vars not set)
 function createClient(): RagenVaultClient | null {
-  const url = process.env.RAGEN_VAULT_URL ?? "";
-  const secret = process.env.RAGEN_VAULT_SERVICE_SECRET ?? "";
+  const url = process.env.RAGEN_TOKEN_VAULT_URL ?? "";
+  const secret = process.env.RAGEN_TOKEN_VAULT_SERVICE_SECRET ?? "";
   if (url && secret) {
     return new RagenVaultClient(url, secret);
   }
