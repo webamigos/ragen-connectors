@@ -20,6 +20,7 @@ const ALLOWED_SCOPES = [
   "https://www.googleapis.com/auth/drive.readonly",
   "https://www.googleapis.com/auth/analytics.readonly",
   "https://www.googleapis.com/auth/adwords",
+  "https://www.googleapis.com/auth/gmail.readonly",
 ] as const;
 
 const ALLOWED_SCOPES_SET = new Set<string>(ALLOWED_SCOPES);
