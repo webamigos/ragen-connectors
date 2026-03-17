@@ -12,7 +12,7 @@ const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET ?? "";
 const REDIRECT_URI =
   process.env.OAUTH_REDIRECT_URI ?? "http://localhost:8001/auth/callback";
 
-const SCOPES = [
+const DEFAULT_SCOPES = [
   "https://www.googleapis.com/auth/calendar",
   "https://www.googleapis.com/auth/drive.readonly",
   "https://www.googleapis.com/auth/analytics.readonly",
@@ -24,6 +24,7 @@ export const authRouter = new Hono();
 authRouter.get("/google", async (c) => {
   const customerId = c.req.query("customer_id");
   const redirectUri = c.req.query("redirect_uri") ?? "";
+  const requestedScopes = c.req.query("scopes");
 
   if (!customerId) {
     return c.json({ error: "customer_id is required" }, 400);
@@ -32,6 +33,9 @@ authRouter.get("/google", async (c) => {
     return c.json({ error: "Google OAuth credentials not configured" }, 500);
   }
 
+  const scopes =
+    requestedScopes && requestedScopes.trim() ? requestedScopes.trim() : DEFAULT_SCOPES;
+
   const state = randomBytes(32).toString("base64url");
   saveState(state, customerId, redirectUri);
 
@@ -39,7 +43,7 @@ authRouter.get("/google", async (c) => {
     client_id: GOOGLE_CLIENT_ID,
     redirect_uri: REDIRECT_URI,
     response_type: "code",
-    scope: SCOPES,
+    scope: scopes,
     access_type: "offline",
     prompt: "consent",
     state,

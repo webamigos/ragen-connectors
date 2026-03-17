@@ -7,9 +7,9 @@
     "services/*"
   ],
   "scripts": {
+    "dev:google": "npm -w services/google run dev",
     "dev:clickup": "npm -w services/clickup run dev",
     "dev:hubspot": "npm -w services/hubspot run dev",
-    "dev:google": "npm -w services/google run dev",
     "build": "npm -ws run build",
     "lint": "npm -ws run lint",
     "typecheck": "npm -ws run typecheck"
