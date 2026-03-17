@@ -1,5 +1,5 @@
 /**
- * FastMCP server for Google — Calendar, Drive, Analytics & Ads — multi-tenant, remote HTTP.
+ * FastMCP server for Google — Calendar, Drive, Analytics, Ads & Gmail — multi-tenant, remote HTTP.
  */
 
 process.env.OTEL_SERVICE_NAME ??= "ragen-mcp-google";
@@ -16,6 +16,7 @@ import { registerCalendarTools } from "./tools/calendar-tools.js";
 import { registerDriveTools } from "./tools/drive-tools.js";
 import { registerAnalyticsTools } from "./tools/analytics-tools.js";
 import { registerAdsTools } from "./tools/ads-tools.js";
+import { registerGmailTools } from "./tools/gmail-tools.js";
 import { authRouter } from "./auth/oauth.js";
 import * as drive from "./services/google-drive.js";
 
@@ -37,6 +38,7 @@ registerCalendarTools(mcp);
 registerDriveTools(mcp);
 registerAnalyticsTools(mcp);
 registerAdsTools(mcp);
+registerGmailTools(mcp);
 
 // -- HTTP app (Hono) for OAuth + health + Drive REST --
 const app = new Hono();
