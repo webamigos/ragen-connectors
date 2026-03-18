@@ -123,6 +123,47 @@ export async function getFileMetadata(
   return formatFile(f);
 }
 
+export async function listFolderFiles(
+  customerId: string,
+  folderId: string,
+  pageSize = 50,
+  pageToken = "",
+): Promise<Record<string, unknown>> {
+  const safeFolderId = folderId.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+  const q = `'${safeFolderId}' in parents and trashed = false`;
+
+  const params: Record<string, string> = {
+    q,
+    pageSize: String(pageSize),
+    fields:
+      "nextPageToken, files(id, name, mimeType, modifiedTime, size, iconLink, webViewLink, owners)",
+    orderBy: "folder,modifiedTime desc",
+  };
+  if (pageToken) {
+    params.pageToken = pageToken;
+  }
+
+  const data = await googleGet(customerId, `${BASE}/files`, params);
+
+  const files = ((data.files ?? []) as Record<string, unknown>[]).map(formatFile);
+
+  return {
+    files,
+    count: files.length,
+    next_page_token: (data.nextPageToken as string) ?? "",
+  };
+}
+
+export async function getFolderMetadata(
+  customerId: string,
+  folderId: string,
+): Promise<Record<string, unknown>> {
+  const f = await googleGet(customerId, `${BASE}/files/${encodeURIComponent(folderId)}`, {
+    fields: "id, name, mimeType",
+  });
+  return { id: f.id ?? "", name: f.name ?? "", mime_type: f.mimeType ?? "" };
+}
+
 function formatFile(f: Record<string, unknown>): Record<string, unknown> {
   const mimeType = (f.mimeType as string) ?? "";
   const owners = (f.owners ?? []) as Record<string, unknown>[];

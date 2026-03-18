@@ -23,8 +23,9 @@ ragen-mcp-ts/
 │       ├── env.ts                 # Zod-based env validation
 │       └── customer.ts            # Multi-tenancy (x-customer-id header)
 ├── services/
-│   ├── clickup/               # ClickUp MCP server (HTTP 8001, MCP 9001)
-│   └── hubspot/               # HubSpot MCP server (HTTP 8002, MCP 9002)
+│   ├── clickup/               # ClickUp MCP server (HTTP 8002, MCP 9002)
+│   ├── google/                # Google MCP server (HTTP 8001, MCP 9001) — Calendar, Drive, Analytics, Ads, Gmail
+│   └── hubspot/               # HubSpot MCP server (HTTP 8003, MCP 9003)
 └── .github/workflows/         # CI + Release
 ```
 
@@ -64,7 +65,7 @@ Each service requires these variables in `.env.local`:
 | `RAGEN_TOKEN_VAULT_URL`            | Yes      | ragen-token-vault service URL            |
 | `RAGEN_TOKEN_VAULT_SERVICE_SECRET` | Yes      | HMAC shared secret for vault auth        |
 | `OTEL_SERVICE_NAME`                | No       | OpenTelemetry service name (default per service) |
-| `PORT`                       | No       | HTTP server port (default: 8001/8002)    |
+| `PORT`                       | No       | HTTP server port (default: 8001/8002/8003) |
 
 **ClickUp-specific:**
 
@@ -72,6 +73,14 @@ Each service requires these variables in `.env.local`:
 | ----------------------- | -------- | --------------------------- |
 | `CLICKUP_CLIENT_ID`     | Yes      | ClickUp OAuth client ID     |
 | `CLICKUP_CLIENT_SECRET` | Yes      | ClickUp OAuth client secret |
+| `OAUTH_REDIRECT_URI`    | Yes      | OAuth callback URL          |
+
+**Google-specific:**
+
+| Variable                | Required | Description                 |
+| ----------------------- | -------- | --------------------------- |
+| `GOOGLE_CLIENT_ID`      | Yes      | Google OAuth client ID      |
+| `GOOGLE_CLIENT_SECRET`  | Yes      | Google OAuth client secret  |
 | `OAUTH_REDIRECT_URI`    | Yes      | OAuth callback URL          |
 
 **HubSpot-specific:**
@@ -101,8 +110,9 @@ In `ragen-app`, configure which MCP server to use per provider:
 
 ```bash
 # Use our self-hosted servers (default)
-CLICKUP_MCP_URL=http://localhost:9001/mcp
-HUBSPOT_MCP_URL=http://localhost:9002/mcp
+MCP_GOOGLE_SERVER_URL=http://localhost:9001/mcp
+CLICKUP_MCP_URL=http://localhost:9002/mcp
+HUBSPOT_MCP_URL=http://localhost:9003/mcp
 
 # Use official MCP servers (when accepted)
 CLICKUP_MCP_URL=https://mcp.clickup.com
