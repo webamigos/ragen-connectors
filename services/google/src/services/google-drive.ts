@@ -161,6 +161,13 @@ export async function getFolderMetadata(
   const f = await googleGet(customerId, `${BASE}/files/${encodeURIComponent(folderId)}`, {
     fields: "id, name, mimeType",
   });
+
+  if (f.mimeType !== "application/vnd.google-apps.folder") {
+    throw new Error(
+      `Item ${folderId} is not a folder (mimeType: ${f.mimeType ?? "unknown"})`,
+    );
+  }
+
   return { id: f.id ?? "", name: f.name ?? "", mime_type: f.mimeType ?? "" };
 }
 
