@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-TypeScript monorepo for multi-tenant MCP (Model Context Protocol) servers. Each service in `services/` wraps a third-party API (ClickUp, HubSpot) as MCP tools over HTTP using FastMCP (npm) + Hono. Deployed on Railway. Part of the larger `ragen` platform. This is the TypeScript port of `ragen-mcp` (Python).
+TypeScript monorepo for multi-tenant MCP (Model Context Protocol) servers. Each service in `services/` wraps a third-party API (ClickUp, HubSpot, Google) as MCP tools over HTTP using FastMCP (npm) + Hono. Deployed on Railway. Part of the larger `ragen` platform. This is the TypeScript port of `ragen-mcp` (Python).
 
 ## Commands
 
@@ -14,6 +14,7 @@ From the monorepo root:
 npm install                     # Install all workspace dependencies
 npm run build                   # Build all packages (core first, then services)
 npm run dev:clickup             # Run ClickUp service with hot-reload
+npm run dev:google              # Run Google service with hot-reload
 npm run dev:hubspot             # Run HubSpot service with hot-reload
 npm run typecheck               # Typecheck all packages
 npm run lint                    # Lint all packages
@@ -37,8 +38,8 @@ There is no test suite yet.
 ### Dual-port design
 
 Each service runs two servers:
-- **Hono HTTP** (port 8001/8002) — OAuth flow endpoints (`/auth/*`), health check (`/health`), root redirect
-- **FastMCP HTTP stream** (port 9001/9002) — MCP protocol endpoint (`/mcp`)
+- **Hono HTTP** (port 8001/8002/8003) — OAuth flow endpoints (`/auth/*`), health check (`/health`), REST endpoints, root redirect
+- **FastMCP HTTP stream** (port 9001/9002/9003) — MCP protocol endpoint (`/mcp`)
 
 FastMCP starts its own HTTP server and cannot be mounted on an existing one, so the MCP port is `PORT + 1000`.
 
@@ -81,12 +82,13 @@ Each tool module exports a `register*Tools(mcp: FastMCP)` function that calls `m
 ### Service-specific notes
 
 - **ClickUp**: OAuth tokens don't expire — no refresh logic. Root `/` route redirects OAuth callbacks to `/auth/callback` because ClickUp strips paths from redirect URIs.
+- **Google**: Single service covering Calendar, Drive, Analytics, Ads, and Gmail tools. OAuth via ragen-token-vault with PKCE. Drive tools include `search_drive_files`, `read_drive_file`, `get_drive_file_info`, `list_drive_folder_files`. Also exposes REST endpoints for ragen-app UI file pickers: `GET /drive/search`, `GET /drive/file/:id/content`, `GET /drive/folder/:id/files`.
 - **HubSpot**: Access tokens expire after ~30 minutes. Service layer auto-refreshes on 401 via `refreshAndGetToken()`. Auth domain configurable via `HUBSPOT_AUTH_DOMAIN` (defaults to `app.hubspot.com`).
 
 ### Deployment
 
 - Railway with Dockerfile builder. Build context is monorepo root so `COPY packages/core` works.
-- Ports: ClickUp HTTP 8001 / MCP 9001, HubSpot HTTP 8002 / MCP 9002.
+- Ports: Google HTTP 8001 / MCP 9001, ClickUp HTTP 8002 / MCP 9002, HubSpot HTTP 8003 / MCP 9003.
 - GitHub Actions: CI (lint + typecheck + build on Node 22), Release (semantic-release on main).
 
 ### Adding a new service
@@ -102,8 +104,9 @@ Each tool module exports a `register*Tools(mcp: FastMCP)` function that calls `m
 In `ragen-app`, switch via env vars:
 
 ```bash
-CLICKUP_MCP_URL=http://localhost:9001/mcp    # our server
-HUBSPOT_MCP_URL=http://localhost:9002/mcp    # our server
+MCP_GOOGLE_SERVER_URL=http://localhost:9001/mcp   # our server
+CLICKUP_MCP_URL=http://localhost:9002/mcp         # our server
+HUBSPOT_MCP_URL=http://localhost:9003/mcp         # our server
 # or official MCPs when accepted
 CLICKUP_MCP_URL=https://mcp.clickup.com
 HUBSPOT_MCP_URL=https://mcp.hubspot.com

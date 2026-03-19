@@ -95,6 +95,28 @@ app.get("/drive/file/:file_id/content", async (c) => {
   }
 });
 
+// Drive folder listing REST endpoint for ragen-app UI folder picker
+app.get("/drive/folder/:folder_id/files", async (c) => {
+  const customerId = c.req.query("customer_id");
+  if (!customerId) {
+    return c.json({ success: false, error: "customer_id is required" }, 400);
+  }
+  try {
+    const folderId = c.req.param("folder_id");
+    const rawPageSize = parseInt(c.req.query("page_size") ?? "50", 10);
+    const pageSize = Number.isFinite(rawPageSize)
+      ? Math.min(Math.max(rawPageSize, 1), 100)
+      : 50;
+    const [folderMeta, filesData] = await Promise.all([
+      drive.getFolderMetadata(customerId, folderId),
+      drive.listFolderFiles(customerId, folderId, pageSize, c.req.query("page_token") ?? ""),
+    ]);
+    return c.json({ success: true, folder_name: folderMeta.name, ...filesData });
+  } catch (e) {
+    return c.json({ success: false, error: String(e) }, 500);
+  }
+});
+
 // Root: handle OAuth callback redirect
 app.get("/", (c) => {
   const code = c.req.query("code");

@@ -65,4 +65,25 @@ export function registerDriveTools(mcp: FastMCP): void {
       } catch (e) { return JSON.stringify({ success: false, error: String(e) }); }
     },
   });
+
+  mcp.addTool({
+    name: "list_drive_folder_files",
+    description:
+      "List all files inside a Google Drive folder. Does not include sub-folders.",
+    parameters: z.object({
+      customer_id: z.string().describe("Customer identifier"),
+      folder_id: z.string().describe("The Google Drive folder ID"),
+      page_size: z.number().default(50).describe("Maximum number of files to return."),
+      page_token: z.string().default("").describe("Pagination token from a previous response."),
+    }),
+    execute: async ({ customer_id, folder_id, page_size, page_token }) => {
+      try {
+        const [folderMeta, filesData] = await Promise.all([
+          drive.getFolderMetadata(customer_id, folder_id),
+          drive.listFolderFiles(customer_id, folder_id, page_size, page_token),
+        ]);
+        return JSON.stringify({ success: true, folder_name: folderMeta.name, ...filesData });
+      } catch (e) { return JSON.stringify({ success: false, error: String(e) }); }
+    },
+  });
 }
