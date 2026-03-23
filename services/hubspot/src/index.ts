@@ -50,14 +50,14 @@ app.get("/", (c) => {
 
 logger.info(`Starting HubSpot MCP server on port ${PORT}`);
 
-serve({ fetch: app.fetch, port: PORT }, (info) => {
-  logger.info(`HubSpot HTTP server listening on http://localhost:${info.port}`);
+serve({ fetch: app.fetch, hostname: "::", port: PORT }, (info) => {
+  logger.info(`HubSpot HTTP server listening on port ${info.port} (dual-stack)`);
 });
 
 const MCP_PORT = PORT + 1000; // e.g., 9002
 mcp.start({
   transportType: "httpStream",
-  httpStream: { port: MCP_PORT },
+  httpStream: { hostname: "::", port: MCP_PORT },
 });
 logger.info(`HubSpot MCP endpoint at http://localhost:${MCP_PORT}/mcp`);
 
