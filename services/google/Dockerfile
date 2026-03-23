@@ -27,6 +27,9 @@ WORKDIR /app/services/google
 
 USER app
 
+# Prefer IPv6 DNS resolution for Railway internal networking (neutral on IPv4-only networks)
+ENV NODE_OPTIONS="--dns-result-order=ipv6first"
+
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
   CMD curl --fail http://localhost:${PORT:-8001}/health || exit 1
 
