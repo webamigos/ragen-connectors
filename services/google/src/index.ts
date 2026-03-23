@@ -136,7 +136,7 @@ serve({ fetch: app.fetch, hostname: "::", port: PORT }, (info) => {
 const MCP_PORT = PORT + 1000; // e.g., 9003
 mcp.start({
   transportType: "httpStream",
-  httpStream: { hostname: "::", port: MCP_PORT },
+  httpStream: { host: "::", port: MCP_PORT },
 });
 logger.info(`Google MCP endpoint at http://localhost:${MCP_PORT}/mcp`);
 
