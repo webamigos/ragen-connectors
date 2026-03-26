@@ -10,6 +10,7 @@ TypeScript monorepo for multi-tenant MCP (Model Context Protocol) servers. Each 
 - **Token Storage**: [ragen-token-vault](https://github.com/webamigos/ragen-token-vault) (AES-256-GCM encrypted, HMAC-authenticated)
 - **Validation**: Zod
 - **Deployment**: Docker + Railway
+- **Testing**: Vitest + v8 coverage (deployed to GitHub Pages)
 - **CI/CD**: GitHub Actions + semantic-release
 
 ## Structure
@@ -37,6 +38,12 @@ npm install
 
 # Build everything
 npm run build
+
+# Run tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
 
 # Copy and fill in env vars for a service
 cp services/clickup/.env.example services/clickup/.env.local
