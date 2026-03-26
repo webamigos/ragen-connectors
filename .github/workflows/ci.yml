@@ -38,6 +38,11 @@ jobs:
     name: Test & Coverage
     needs: lint
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      pages: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -52,6 +57,14 @@ jobs:
         uses: MishaKav/jest-coverage-comment@v1.0.32
         with:
           coverage-summary-path: coverage/coverage-summary.json
+      - name: Upload coverage to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: coverage/
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: actions/deploy-pages@v4
 
   build:
     name: Build
