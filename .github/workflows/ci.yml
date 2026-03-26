@@ -34,9 +34,28 @@ jobs:
       - run: npm run build
       - run: npm run typecheck
 
+  test:
+    name: Test & Coverage
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run test:coverage
+      - name: Coverage report
+        if: always() && github.event_name == 'pull_request'
+        uses: MishaKav/jest-coverage-comment@main
+        with:
+          coverage-summary-path: coverage/coverage-summary.json
+
   build:
     name: Build
-    needs: typecheck
+    needs: [typecheck, test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
