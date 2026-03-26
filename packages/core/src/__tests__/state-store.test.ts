@@ -34,8 +34,6 @@ describe("state-store", () => {
   });
 
   it("cleans up expired entries on save", () => {
-    const realNow = Date.now;
-
     // Save a state at time T
     const baseTime = Date.now();
     vi.spyOn(Date, "now").mockReturnValue(baseTime);
@@ -48,8 +46,6 @@ describe("state-store", () => {
     // Old state should be cleaned up
     expect(popState("old-state")).toBeUndefined();
     expect(popState("new-state")).toBeDefined();
-
-    Date.now = realNow;
   });
 
   it("cleans up expired entries on pop", () => {

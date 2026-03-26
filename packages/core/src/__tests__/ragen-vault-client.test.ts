@@ -18,7 +18,7 @@ describe("RagenVaultClient", () => {
   });
 
   describe("constructor", () => {
-    it("strips trailing slash from baseUrl", () => {
+    it("strips trailing slash from baseUrl", async () => {
       const client = new RagenVaultClient("https://vault.example.com/", SECRET);
       // Verify by making a request and checking the URL
       const mockFetch = vi.fn().mockResolvedValue({
@@ -27,7 +27,7 @@ describe("RagenVaultClient", () => {
       });
       vi.stubGlobal("fetch", mockFetch);
 
-      client.getToken("cust1", "GOOGLE");
+      await client.getToken("cust1", "GOOGLE");
       const calledUrl = mockFetch.mock.calls[0][0] as string;
       expect(calledUrl).not.toContain("//v1");
     });

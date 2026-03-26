@@ -107,6 +107,19 @@ describe("google-api", () => {
       expect(opts.body).toBe(JSON.stringify({ name: "test" }));
     });
 
+    it("throws on non-401 error", async () => {
+      const mockFetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 500,
+        text: () => Promise.resolve("Server Error"),
+      });
+      vi.stubGlobal("fetch", mockFetch);
+
+      await expect(
+        googlePost("cust1", "https://api.example.com/create", { data: "test" }),
+      ).rejects.toThrow("Google API POST https://api.example.com/create failed (500): Server Error");
+    });
+
     it("retries POST on 401", async () => {
       const mockFetch = vi
         .fn()
@@ -135,6 +148,19 @@ describe("google-api", () => {
 
       const result = await googleGetText("cust1", "https://api.example.com/file");
       expect(result).toBe("file content here");
+    });
+
+    it("throws on non-401 error", async () => {
+      const mockFetch = vi.fn().mockResolvedValue({
+        ok: false,
+        status: 500,
+        text: () => Promise.resolve("Server Error"),
+      });
+      vi.stubGlobal("fetch", mockFetch);
+
+      await expect(
+        googleGetText("cust1", "https://api.example.com/file"),
+      ).rejects.toThrow("Google API GET https://api.example.com/file failed (500): Server Error");
     });
 
     it("retries text GET on 401", async () => {

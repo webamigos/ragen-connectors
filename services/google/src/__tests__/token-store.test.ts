@@ -1,16 +1,17 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
-// Mock the vault client
-const mockStoreToken = vi.fn();
-const mockGetToken = vi.fn();
-const mockDeleteToken = vi.fn();
+const { mockStoreToken, mockGetToken, mockDeleteToken } = vi.hoisted(() => ({
+  mockStoreToken: vi.fn(),
+  mockGetToken: vi.fn(),
+  mockDeleteToken: vi.fn(),
+}));
 
 vi.mock("@ragen-mcp/core", () => ({
   RagenVaultClient: vi.fn(),
   ragenVaultClient: {
-    storeToken: (...args: unknown[]) => mockStoreToken(...args),
-    getToken: (...args: unknown[]) => mockGetToken(...args),
-    deleteToken: (...args: unknown[]) => mockDeleteToken(...args),
+    storeToken: mockStoreToken,
+    getToken: mockGetToken,
+    deleteToken: mockDeleteToken,
   },
 }));
 
