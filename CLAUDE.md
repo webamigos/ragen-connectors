@@ -18,6 +18,9 @@ npm run dev:google              # Run Google service with hot-reload
 npm run dev:hubspot             # Run HubSpot service with hot-reload
 npm run typecheck               # Typecheck all packages
 npm run lint                    # Lint all packages
+npm test                        # Run tests (vitest)
+npm run test:watch              # Run tests in watch mode
+npm run test:coverage           # Run tests with v8 coverage report
 ```
 
 From within a service directory:
@@ -31,7 +34,7 @@ docker compose up --build       # Docker (requires ragen-network)
 
 Build order matters: `@ragen-mcp/core` must build before any service. `npm run build` at root handles this because npm processes workspaces in dependency order.
 
-There is no test suite yet.
+Tests use Vitest with v8 coverage. Test files live in `__tests__/` directories next to the source they test. Run `npm test` from root. Coverage HTML report is deployed to GitHub Pages on pushes to main.
 
 ## Architecture
 
@@ -89,7 +92,7 @@ Each tool module exports a `register*Tools(mcp: FastMCP)` function that calls `m
 
 - Railway with Dockerfile builder. Build context is monorepo root so `COPY packages/core` works.
 - Ports: Google HTTP 8001 / MCP 9001, ClickUp HTTP 8002 / MCP 9002, HubSpot HTTP 8003 / MCP 9003.
-- GitHub Actions: CI (lint + typecheck + build on Node 22), Release (semantic-release on main).
+- GitHub Actions: CI (lint + typecheck + test with coverage + build on Node 22), Release (semantic-release on main). Coverage report deployed to GitHub Pages on main.
 
 ### Adding a new service
 

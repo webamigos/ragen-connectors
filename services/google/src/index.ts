@@ -129,14 +129,14 @@ app.get("/", (c) => {
 
 logger.info(`Starting Google MCP server on port ${PORT}`);
 
-serve({ fetch: app.fetch, port: PORT }, (info) => {
-  logger.info(`Google HTTP server listening on http://localhost:${info.port}`);
+serve({ fetch: app.fetch, hostname: "::", port: PORT }, (info) => {
+  logger.info(`Google HTTP server listening on port ${info.port} (dual-stack)`);
 });
 
 const MCP_PORT = PORT + 1000; // e.g., 9003
 mcp.start({
   transportType: "httpStream",
-  httpStream: { port: MCP_PORT },
+  httpStream: { host: "::", port: MCP_PORT },
 });
 logger.info(`Google MCP endpoint at http://localhost:${MCP_PORT}/mcp`);
 
