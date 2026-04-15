@@ -38,15 +38,17 @@ model CompanyProfile {
   /// Raw whole-payload dumps per endpoint — durable, ready for future
   /// field extraction without re-hitting the upstream. Keyed by
   /// endpoint number for auditability.
-  basicRaw            Json?     @map("basic_raw")            // endpoint 02
-  advancedRaw         Json?     @map("advanced_raw")         // endpoint 03 (chapter 'ogolny')
-  powiazaniaRaw       Json?     @map("powiazania_raw")       // endpoint 06
+  basicRaw                       Json?     @map("basic_raw")            // endpoint 02
+  advancedRaw                    Json?     @map("advanced_raw")         // endpoint 03 (chapter 'ogolny')
+  powiazaniaRaw                  Json?     @map("powiazania_raw")       // endpoint 06, aktualnosc=aktualne
+  powiazaniaHistoryczneRaw       Json?     @map("powiazania_historyczne_raw") // endpoint 06, aktualnosc=historyczne (Premium+)
 
   /// Per-endpoint fetch timestamps drive TTL decisions. Null means
   /// "never fetched" — caller should go upstream.
-  basicFetchedAt      DateTime? @map("basic_fetched_at")     @db.Timestamptz
-  advancedFetchedAt   DateTime? @map("advanced_fetched_at")  @db.Timestamptz
-  powiazaniaFetchedAt DateTime? @map("powiazania_fetched_at") @db.Timestamptz
+  basicFetchedAt                 DateTime? @map("basic_fetched_at")                  @db.Timestamptz
+  advancedFetchedAt              DateTime? @map("advanced_fetched_at")               @db.Timestamptz
+  powiazaniaFetchedAt            DateTime? @map("powiazania_fetched_at")             @db.Timestamptz
+  powiazaniaHistoryczneFetchedAt DateTime? @map("powiazania_historyczne_fetched_at") @db.Timestamptz
 
   createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz
   updatedAt           DateTime  @updatedAt      @map("updated_at") @db.Timestamptz

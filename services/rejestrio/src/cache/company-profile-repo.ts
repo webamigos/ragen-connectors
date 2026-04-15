@@ -123,4 +123,18 @@ export class CompanyProfileRepository {
       },
     });
   }
+
+  async upsertPowiazaniaHistoryczne(
+    krs: number,
+    raw: unknown,
+    fetchedAt: Date = new Date(),
+  ) {
+    return this.db.companyProfile.update({
+      where: { krs },
+      data: {
+        powiazaniaHistoryczneRaw: raw as never,
+        powiazaniaHistoryczneFetchedAt: fetchedAt,
+      },
+    });
+  }
 }

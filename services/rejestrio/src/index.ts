@@ -25,6 +25,7 @@ import { CompanyProfileRepository } from "./cache/company-profile-repo.js";
 import { FinancialDocumentRepository } from "./cache/financial-doc-repo.js";
 import { registerLookupCompany } from "./tools/lookup-company.js";
 import { registerGetKrsInfo } from "./tools/get-krs-info.js";
+import { registerGetKrsHistory } from "./tools/get-krs-history.js";
 import { registerGetFinancials } from "./tools/get-financials.js";
 
 const db = getDb();
@@ -69,6 +70,7 @@ const client = new RejestrioClient({
 const mcp = new FastMCP({ name: "Rejestrio", version: "0.1.0" });
 registerLookupCompany(mcp, { client, budget });
 registerGetKrsInfo(mcp, { client, budget, profiles });
+registerGetKrsHistory(mcp, { client, budget, profiles });
 registerGetFinancials(mcp, { client, budget, profiles, finDocs });
 
 // --- HTTP app (Hono) for health only ---
