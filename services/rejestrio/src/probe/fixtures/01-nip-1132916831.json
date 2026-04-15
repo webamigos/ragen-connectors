@@ -17,14 +17,14 @@
       },
       "glowna_osoba": {
         "id": "200325",
-        "imiona_i_nazwisko": "Piotr Paweł Piasecki"
+        "imiona_i_nazwisko": "Jan Kowalski"
       },
       "id": 634215,
       "kontakt": {
         "emaile": [
-          "biuro@piaseckigagala.pl"
+          "user@example.com"
         ],
-        "www": "https://www.piaseckigagala.pl"
+        "www": "https://example.com"
       },
       "krs_powiazania_liczby": {
         "aktualne": 4,

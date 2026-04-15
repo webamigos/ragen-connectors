@@ -225,7 +225,7 @@ async function main(): Promise<void> {
 
   if (TEST_COMPANIES.length === 0) {
     console.error(
-      '✗ TEST_COMPANIES is empty. Edit src/scripts/rejestrio-probe/companies.ts and add at least one entry.',
+      '✗ TEST_COMPANIES is empty. Edit src/probe/companies.ts and add at least one entry.',
     );
     process.exit(2);
   }

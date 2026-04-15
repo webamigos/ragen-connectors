@@ -48,6 +48,11 @@ export class RejestrioProbeClient {
         Authorization: this.apiKey,
         Accept: 'application/json',
       },
+      // Hard 30s ceiling — real endpoint 11 calls have been observed
+      // taking 40s+ for large filings, but those run through the
+      // production client. The probe is interactive; bail fast
+      // rather than hanging the terminal.
+      signal: AbortSignal.timeout(30_000),
     });
     const latencyMs = Date.now() - started;
 

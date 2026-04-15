@@ -37,7 +37,7 @@ const zOrgNames = z
 const zOrgStan = z
   .object({
     czy_dofinansowana_przez_ue: z.boolean().optional(),
-    czy_jest_na_gwp: z.boolean().optional(),
+    czy_jest_na_gpw: z.boolean().optional(),
     czy_otrzymala_pomoc_publiczna: z.boolean().optional(),
     czy_pozytku_publicznego: z.boolean().optional(),
     czy_spolka_skarbu_panstwa: z.boolean().optional(),
