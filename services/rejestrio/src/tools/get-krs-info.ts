@@ -78,6 +78,37 @@ type Powiazanie = {
   aktywne: boolean;
 };
 
+/**
+ * Share-ownership record for a single wspólnik (member of a sp. z o.o.)
+ * or akcjonariusz (shareholder of an S.A.). Extracted from endpoint
+ * 03 `ogolny` chapter's `dane_wspolnikow._obiekty`.
+ *
+ * Percentages are calculated when we have the share counts — the
+ * KRS doesn't store them directly; the field is always
+ * "X udziałów o łącznej wartości Y". The per-share value × count is
+ * the raw data; percentage = wspólnik's count / sum of all counts.
+ */
+export type Wspolnik = {
+  /** Person or organization. */
+  typ: "person" | "organization";
+  /** Full display name (imiona i nazwisko OR organization nazwa). */
+  nazwa: string;
+  /** Number of udziały (shares). Null when KRS didn't parse a numeric value. */
+  liczbaUdzialow: number | null;
+  /** Total share value in PLN. Null when not parsed. */
+  wartoscUdzialowPln: number | null;
+  /** Per-share value in PLN. Null when not parsed. */
+  cenaUdzialuPln: number | null;
+  /**
+   * Computed ownership percentage. Null when shares can't be summed
+   * (e.g. one of the rows had an unparseable count). Rounded to 2
+   * decimals.
+   */
+  procentUdzialow: number | null;
+  /** Does this wspólnik hold 100% of the shares (explicit KRS flag). */
+  posiadaCaloscAkcji: boolean | null;
+};
+
 export type GetKrsInfoSuccess = {
   success: true;
   krs: number;
@@ -97,6 +128,11 @@ export type GetKrsInfoSuccess = {
     naGpw: boolean;
   };
   ostatnieSprawozdanie: GlowneSprawozdanie | null;
+  /** Share capital of the company (kwota + waluta). */
+  kapitalZakladowy: { kwota: number; waluta: string } | null;
+  /** Parsed share-ownership table. Empty for wykreślone or filers
+   *  without dane_wspolnikow. */
+  wspolnicy: Wspolnik[];
   /** True when endpoint 03 had no chapter data (wykreślone / upadłe). */
   advancedEmpty: boolean;
   powiazania: Powiazanie[];
@@ -239,6 +275,7 @@ export async function handleGetKrsInfo(
       krsPadded,
       basic: basicParsed.data,
       advancedEmpty: isAdvancedEmpty(advancedParsed.data),
+      advancedRaw: advancedParsed.data,
       powiazania: powiazaniaParsed.data,
       sources: {
         basic: basicSource,
@@ -269,11 +306,149 @@ function basicPayloadFromResponse(
   };
 }
 
+/**
+ * Parse the share-ownership table out of endpoint 03's `ogolny`
+ * chapter. Rejestr.io wraps every field in `{_wartosc, _zakres}`
+ * so extraction is walking a specific shape; details live in
+ * docs/03-zaawansowane-dane-organizacji.md.
+ *
+ * Exported for direct unit testing against captured fixtures.
+ */
+export function extractWspolnicy(advancedRaw: unknown): {
+  kapitalZakladowy: { kwota: number; waluta: string } | null;
+  wspolnicy: Wspolnik[];
+} {
+  // Wykreślone / upadłe companies return an empty array from
+  // endpoint 03 — nothing to extract.
+  if (!advancedRaw || typeof advancedRaw !== "object" || Array.isArray(advancedRaw)) {
+    return { kapitalZakladowy: null, wspolnicy: [] };
+  }
+  const doc = advancedRaw as Record<string, unknown>;
+
+  const kapitalZakladowy = (() => {
+    const k = doc.wysokosc_kapitalu_zakladowego as
+      | { _wartosc?: { kwota?: number | string; waluta?: string } }
+      | undefined;
+    const kwotaRaw = k?._wartosc?.kwota;
+    const kwota =
+      typeof kwotaRaw === "number"
+        ? kwotaRaw
+        : typeof kwotaRaw === "string"
+          ? Number(kwotaRaw) || null
+          : null;
+    if (kwota == null) {
+      return null;
+    }
+    return { kwota, waluta: k?._wartosc?.waluta ?? "PLN" };
+  })();
+
+  const obiekty =
+    (doc.dane_wspolnikow as { _obiekty?: Record<string, unknown> } | undefined)
+      ?._obiekty ?? {};
+
+  const raw = Object.values(obiekty).map((entry) => {
+    const e = entry as Record<string, { _wartosc?: unknown }>;
+
+    // Person vs organization
+    const person = e.person?._wartosc as
+      | { nazwa?: string; imie?: string; nazwisko?: string }
+      | undefined;
+    const organization = e.organization?._wartosc as
+      | { nazwa?: string }
+      | undefined;
+
+    const typ: "person" | "organization" = organization ? "organization" : "person";
+    const nazwa =
+      person?.nazwa ??
+      [person?.imie, person?.nazwisko].filter(Boolean).join(" ") ??
+      organization?.nazwa ??
+      "Unknown";
+
+    const liczbaRaw = (
+      e.posiadane_przez_wspolnika_udzialy__liczba as
+        | { _wartosc?: number | string }
+        | undefined
+    )?._wartosc;
+    const liczbaUdzialow =
+      typeof liczbaRaw === "number"
+        ? liczbaRaw
+        : typeof liczbaRaw === "string"
+          ? Number(liczbaRaw) || null
+          : null;
+
+    const wartoscRaw = (
+      e.posiadane_przez_wspolnika_udzialy__wartosc as
+        | { _wartosc?: { kwota?: number | string } }
+        | undefined
+    )?._wartosc?.kwota;
+    const wartoscUdzialowPln =
+      typeof wartoscRaw === "number"
+        ? wartoscRaw
+        : typeof wartoscRaw === "string"
+          ? Number(wartoscRaw) || null
+          : null;
+
+    const cenaRaw = (
+      e.posiadane_przez_wspolnika_udzialy__cena_udzialu as
+        | { _wartosc?: { kwota?: number | string } }
+        | undefined
+    )?._wartosc?.kwota;
+    const cenaUdzialuPln =
+      typeof cenaRaw === "number"
+        ? cenaRaw
+        : typeof cenaRaw === "string"
+          ? Number(cenaRaw) || null
+          : null;
+
+    const caloscFlag = (
+      e.czy_wspolnik_posiada_calosc_akcji_spolki as
+        | { _wartosc?: string }
+        | undefined
+    )?._wartosc;
+    const posiadaCaloscAkcji =
+      caloscFlag === "TAK"
+        ? true
+        : caloscFlag === "NIE"
+          ? false
+          : null;
+
+    return {
+      typ,
+      nazwa,
+      liczbaUdzialow,
+      wartoscUdzialowPln,
+      cenaUdzialuPln,
+      posiadaCaloscAkcji,
+    };
+  });
+
+  // Percentage needs the total across all rows. If any row is null
+  // we can't reliably calculate — mark all percentages as null
+  // rather than report misleading values.
+  const totalUdzialy = raw.reduce<number | null>((acc, w) => {
+    if (acc == null || w.liczbaUdzialow == null) {
+      return null;
+    }
+    return acc + w.liczbaUdzialow;
+  }, 0);
+
+  const wspolnicy: Wspolnik[] = raw.map((w) => ({
+    ...w,
+    procentUdzialow:
+      totalUdzialy != null && totalUdzialy > 0 && w.liczbaUdzialow != null
+        ? Math.round((w.liczbaUdzialow / totalUdzialy) * 10000) / 100
+        : null,
+  }));
+
+  return { kapitalZakladowy, wspolnicy };
+}
+
 function composeResult(args: {
   krs: number;
   krsPadded: string;
   basic: BasicResponse;
   advancedEmpty: boolean;
+  advancedRaw: unknown;
   powiazania: z.infer<typeof powiazaniaResponseSchema>;
   sources: GetKrsInfoSuccess["sources"];
 }): GetKrsInfoSuccess {
@@ -352,6 +527,7 @@ function composeResult(args: {
           ?.czy_jest_na_gpw ?? false,
     },
     ostatnieSprawozdanie,
+    ...extractWspolnicy(args.advancedRaw),
     advancedEmpty: args.advancedEmpty,
     powiazania,
     sources: args.sources,
