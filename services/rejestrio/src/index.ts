@@ -26,7 +26,11 @@ import { FinancialDocumentRepository } from "./cache/financial-doc-repo.js";
 import { registerLookupCompany } from "./tools/lookup-company.js";
 import { registerGetKrsInfo } from "./tools/get-krs-info.js";
 import { registerGetKrsHistory } from "./tools/get-krs-history.js";
+import { registerGetKrsChapter } from "./tools/get-krs-chapter.js";
 import { registerGetFinancials } from "./tools/get-financials.js";
+import { registerGetPerson } from "./tools/get-person.js";
+import { registerGetPersonConnections } from "./tools/get-person-connections.js";
+import { registerGetBeneficialOwners } from "./tools/get-beneficial-owners.js";
 
 const db = getDb();
 const audit = new RequestAuditRepository(db);
@@ -71,7 +75,11 @@ const mcp = new FastMCP({ name: "Rejestrio", version: "0.1.0" });
 registerLookupCompany(mcp, { client, budget });
 registerGetKrsInfo(mcp, { client, budget, profiles });
 registerGetKrsHistory(mcp, { client, budget, profiles });
+registerGetKrsChapter(mcp, { client, budget });
 registerGetFinancials(mcp, { client, budget, profiles, finDocs });
+registerGetPerson(mcp, { client, budget });
+registerGetPersonConnections(mcp, { client, budget });
+registerGetBeneficialOwners(mcp, { client, budget });
 
 // --- HTTP app (Hono) for health only ---
 const app = new Hono();

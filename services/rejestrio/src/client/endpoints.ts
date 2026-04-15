@@ -7,7 +7,16 @@
  * pricing change.
  */
 
-export type EndpointId = "01" | "02" | "03" | "06" | "10" | "11";
+export type EndpointId =
+  | "01"
+  | "02"
+  | "03"
+  | "04"
+  | "05"
+  | "06"
+  | "07"
+  | "10"
+  | "11";
 
 export type PlanTier = "base" | "premium" | "biznes";
 
@@ -36,10 +45,25 @@ export const ENDPOINTS: Record<EndpointId, EndpointSpec> = {
     costPln: 0.05,
     minPlanTier: "base", // 'ogolny' chapter. Some chapters are Premium.
   },
+  "04": {
+    label: "dane-osoby",
+    costPln: 0.05,
+    minPlanTier: "base",
+  },
+  "05": {
+    label: "beneficjenci-rzeczywisci-crbr",
+    costPln: 0.05,
+    minPlanTier: "premium",
+  },
   "06": {
     label: "krs-powiazania",
     costPln: 0.05,
     minPlanTier: "base", // historical requires Premium — handled per-call
+  },
+  "07": {
+    label: "powiazania-osoby",
+    costPln: 0.05,
+    minPlanTier: "base", // historical variant requires Premium
   },
   "10": {
     label: "lista-dokumentow-finansowych",
