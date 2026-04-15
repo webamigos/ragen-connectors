@@ -20,6 +20,7 @@ import type { RejestrioClient } from "../client/rejestrio-client.js";
 import type { BudgetGuard } from "../audit/budget-guard.js";
 import { ENDPOINTS } from "../client/endpoints.js";
 import { searchResponseSchema } from "../schemas/search.js";
+import { parseCustomerId } from "./customer-id.js";
 
 export type LookupCompanyDeps = {
   client: RejestrioClient;
@@ -88,14 +89,6 @@ type ToolErrorResult = {
   success: false;
   error: string;
 };
-
-function parseCustomerId(customerId: string): { orgId: string | null; userId: string | null } {
-  const parts = customerId.split(":");
-  return {
-    orgId: parts[0] ?? null,
-    userId: parts[1] ?? null,
-  };
-}
 
 function normalizeResult(hit: SearchResult) {
   const krsRaw = hit.numery?.krs ?? hit.id;

@@ -52,7 +52,7 @@ const zNazwy = z
   })
   .passthrough();
 
-const zOrgSummary = z
+export const orgSummarySchema = z
   .object({
     id: zIntishId,
     nazwy: zNazwy,
@@ -66,8 +66,16 @@ const zOrgSummary = z
 export const searchResponseSchema = z
   .object({
     liczba_wszystkich_wynikow: z.number().int(),
-    wyniki: z.array(zOrgSummary),
+    wyniki: z.array(orgSummarySchema),
   })
   .passthrough();
 
 export type SearchResponse = z.infer<typeof searchResponseSchema>;
+export type OrgSummary = z.infer<typeof orgSummarySchema>;
+
+/**
+ * Endpoint 02 (`GET /org/{id}`) returns a single organisation with the
+ * same shape as one `wyniki[i]` from endpoint 01. Same schema.
+ */
+export const basicResponseSchema = orgSummarySchema;
+export type BasicResponse = z.infer<typeof basicResponseSchema>;
