@@ -26,7 +26,8 @@ ragen-mcp-ts/
 ├── services/
 │   ├── clickup/               # ClickUp MCP server (HTTP 8002, MCP 9002)
 │   ├── google/                # Google MCP server (HTTP 8001, MCP 9001) — Calendar, Drive, Analytics, Ads, Gmail
-│   └── hubspot/               # HubSpot MCP server (HTTP 8003, MCP 9003)
+│   ├── hubspot/               # HubSpot MCP server (HTTP 8003, MCP 9003)
+│   └── rejestrio/             # Rejestr.io MCP server (HTTP 8004, MCP 9004) — Polish KRS registry, B2B lead scoring
 └── .github/workflows/         # CI + Release
 ```
 
@@ -72,7 +73,7 @@ Each service requires these variables in `.env.local`:
 | `RAGEN_TOKEN_VAULT_URL`            | Yes      | ragen-token-vault service URL            |
 | `RAGEN_TOKEN_VAULT_SERVICE_SECRET` | Yes      | HMAC shared secret for vault auth        |
 | `OTEL_SERVICE_NAME`                | No       | OpenTelemetry service name (default per service) |
-| `PORT`                       | No       | HTTP server port (default: 8001/8002/8003) |
+| `PORT`                       | No       | HTTP server port (default: 8001/8002/8003/8004) |
 
 **ClickUp-specific:**
 
@@ -99,6 +100,21 @@ Each service requires these variables in `.env.local`:
 | `OAUTH_REDIRECT_URI`    | Yes      | OAuth callback URL                       |
 | `HUBSPOT_AUTH_DOMAIN`   | No       | Auth domain (default: `app.hubspot.com`) |
 
+**Rejestr.io-specific:** (no OAuth — single service-wide API key)
+
+| Variable                             | Required | Description                                            |
+| ------------------------------------ | -------- | ------------------------------------------------------ |
+| `REJESTRIO_API_KEY`                  | Yes      | Rejestr.io API key (bare token, NOT `Bearer <key>`)    |
+| `DATABASE_URL`                       | Yes      | Postgres URL for this service's cache DB (see below)   |
+| `REJESTRIO_BASE_URL`                 | No       | Default `https://rejestr.io/api/v2`                    |
+| `REJESTRIO_PLAN_TIER`                | No       | `base` \| `premium` \| `biznes` (default `base`)       |
+| `REJESTRIO_DEFAULT_DAILY_BUDGET_PLN` | No       | Per-org daily spend ceiling, default 20                |
+| `REJESTRIO_DISABLE_PAID_CALLS`       | No       | Kill-switch — serves cache only when `true`            |
+
+Unlike the OAuth services, Rejestr.io has its own Postgres database
+(cache of KRS data + per-call cost audit). Spin it up locally via
+`services/rejestrio/docker-compose.yml` (port 5434).
+
 ## Adding a New Service
 
 1. Copy an existing service directory (e.g., `services/clickup/`)
@@ -120,6 +136,7 @@ In `ragen-app`, configure which MCP server to use per provider:
 MCP_GOOGLE_SERVER_URL=http://localhost:9001/mcp
 CLICKUP_MCP_URL=http://localhost:9002/mcp
 HUBSPOT_MCP_URL=http://localhost:9003/mcp
+MCP_REJESTRIO_SERVER_URL=http://localhost:9004/mcp
 
 # Use official MCP servers (when accepted)
 CLICKUP_MCP_URL=https://mcp.clickup.com

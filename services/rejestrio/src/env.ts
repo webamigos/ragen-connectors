@@ -33,6 +33,13 @@ export const env = validateEnvVars(
       .enum(["true", "false"])
       .default("false")
       .transform((v) => v === "true"),
-    PORT: z.coerce.number().int().positive().default(8002),
+    /**
+     * Hono HTTP port. MCP httpStream runs on PORT + 1000.
+     *
+     * Avoid 8001–8003 — taken by google / clickup / hubspot
+     * respectively. 8004 is the next free slot across the monorepo
+     * (→ MCP stream on 9004).
+     */
+    PORT: z.coerce.number().int().positive().default(8004),
   }),
 );

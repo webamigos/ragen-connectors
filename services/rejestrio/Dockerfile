@@ -50,7 +50,7 @@ USER app
 ENV NODE_OPTIONS="--dns-result-order=ipv6first"
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
-  CMD curl --fail http://localhost:${PORT:-8002}/health || exit 1
+  CMD curl --fail http://localhost:${PORT:-8004}/health || exit 1
 
 # Entrypoint runs migrations then starts the server. Migrations are
 # idempotent — safe to run on every boot.

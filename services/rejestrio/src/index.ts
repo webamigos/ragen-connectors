@@ -99,7 +99,8 @@ serve(
 );
 
 // FastMCP http stream on PORT + 1000 — matches the google/hubspot
-// pattern so it's predictable where clients connect (9002 by default).
+// pattern so it's predictable where clients connect (9004 by default;
+// 9001–9003 are taken by google/clickup/hubspot).
 const mcpPort = env.PORT + 1000;
 void mcp.start({
   transportType: "httpStream",
