@@ -22,8 +22,10 @@ import { RejestrioClient } from "./client/rejestrio-client.js";
 import { RequestAuditRepository } from "./audit/request-audit-repo.js";
 import { BudgetGuard } from "./audit/budget-guard.js";
 import { CompanyProfileRepository } from "./cache/company-profile-repo.js";
+import { FinancialDocumentRepository } from "./cache/financial-doc-repo.js";
 import { registerLookupCompany } from "./tools/lookup-company.js";
 import { registerGetKrsInfo } from "./tools/get-krs-info.js";
+import { registerGetFinancials } from "./tools/get-financials.js";
 
 const db = getDb();
 const audit = new RequestAuditRepository(db);
@@ -33,6 +35,7 @@ const budget = new BudgetGuard({
   disabled: env.REJESTRIO_DISABLE_PAID_CALLS,
 });
 const profiles = new CompanyProfileRepository(db);
+const finDocs = new FinancialDocumentRepository(db);
 
 const client = new RejestrioClient({
   apiKey: env.REJESTRIO_API_KEY,
@@ -66,6 +69,7 @@ const client = new RejestrioClient({
 const mcp = new FastMCP({ name: "Rejestrio", version: "0.1.0" });
 registerLookupCompany(mcp, { client, budget });
 registerGetKrsInfo(mcp, { client, budget, profiles });
+registerGetFinancials(mcp, { client, budget, profiles, finDocs });
 
 // --- HTTP app (Hono) for health only ---
 const app = new Hono();
