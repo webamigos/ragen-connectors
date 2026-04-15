@@ -57,7 +57,9 @@ describe("handleLookupCompany", () => {
     );
 
     expect(result.success).toBe(true);
-    if (!result.success) return;
+    if (!result.success) {
+      return;
+    }
     expect(result.results.length).toBeGreaterThan(0);
     const first = result.results[0];
     expect(first.krs).toBe(Number(first.krs)); // numeric
@@ -153,7 +155,9 @@ describe("handleLookupCompany", () => {
     );
 
     expect(result.success).toBe(false);
-    if (result.success) return;
+    if (result.success) {
+      return;
+    }
     expect(result.error).toMatch(/401|API key/);
   });
 
