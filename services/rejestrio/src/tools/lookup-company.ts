@@ -17,12 +17,13 @@ import type { FastMCP } from "fastmcp";
 import { z } from "zod";
 import { logger } from "@ragen-mcp/core";
 import type { RejestrioClient } from "../client/rejestrio-client.js";
-import type { RequestAuditRepository } from "../audit/request-audit-repo.js";
+import type { BudgetGuard } from "../audit/budget-guard.js";
+import { ENDPOINTS } from "../client/endpoints.js";
 import { searchResponseSchema } from "../schemas/search.js";
 
 export type LookupCompanyDeps = {
   client: RejestrioClient;
-  audit: RequestAuditRepository;
+  budget: BudgetGuard;
 };
 
 const paramsSchema = z
@@ -127,7 +128,7 @@ type LookupCompanyParams = z.infer<typeof paramsSchema>;
  */
 export async function handleLookupCompany(
   input: LookupCompanyParams,
-  { client, audit }: LookupCompanyDeps,
+  { client, budget }: LookupCompanyDeps,
 ): Promise<ToolResult | ToolErrorResult> {
   const query: Record<string, string> = {};
   if (input.nip) {
@@ -142,7 +143,14 @@ export async function handleLookupCompany(
   const { orgId, userId } = parseCustomerId(input.customer_id);
 
   try {
-    const raw = await client.get("01", "/org", query);
+    await budget.assertAllowed(orgId, ENDPOINTS["01"].costPln);
+
+    const raw = await client.get(
+      "01",
+      "/org",
+      query,
+      { orgId, userId, nip: input.nip ?? null },
+    );
     const parsed = searchResponseSchema.safeParse(raw);
     if (!parsed.success) {
       // Permissive schemas on purpose — a failure here likely means
@@ -158,21 +166,9 @@ export async function handleLookupCompany(
       };
     }
 
-    const results = parsed.data.wyniki.map(normalizeResult);
-    await audit.record({
-      endpoint: "01",
-      httpStatus: 200,
-      latencyMs: 0, // onCallComplete hook already logged latency
-      costPln: 0, // already counted via onCallComplete
-      orgId,
-      userId,
-      nip: input.nip ?? null,
-      cached: false,
-    });
-
     return {
       success: true,
-      results,
+      results: parsed.data.wyniki.map(normalizeResult),
       totalFound: parsed.data.liczba_wszystkich_wynikow,
     };
   } catch (err) {

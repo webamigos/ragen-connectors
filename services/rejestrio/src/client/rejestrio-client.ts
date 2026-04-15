@@ -27,11 +27,25 @@ import {
   RejestrioRateLimitError,
 } from "./errors.js";
 
+/**
+ * Per-call metadata carried from the tool handler through the HTTP
+ * client and into the audit hook. This is the only way we can
+ * attribute cost to the right org — the client doesn't know about
+ * auth tenants at construction time.
+ */
+export type CallContext = {
+  orgId?: string | null;
+  userId?: string | null;
+  krs?: number | null;
+  nip?: string | null;
+};
+
 export type RejestrioCallOutcome = {
   endpoint: EndpointId;
   httpStatus: number;
   latencyMs: number;
   costPln: number;
+  ctx: CallContext;
   error?: unknown;
 };
 
@@ -94,11 +108,17 @@ export class RejestrioClient {
    * Run a GET request. Callers are responsible for passing the right
    * `endpoint` id so cost is attributed correctly — e.g. pass "01"
    * for `/org?nip=...`, "02" for `/org/{id}`, etc.
+   *
+   * `ctx` carries the calling org/user + the target company's
+   * identifiers so the audit hook can write a single, fully-attributed
+   * row per call. Pass an empty object if none of those are known
+   * (e.g. a health probe) — don't fake values.
    */
   async get(
     endpoint: EndpointId,
     path: string,
     query?: Record<string, string>,
+    ctx: CallContext = {},
   ): Promise<unknown> {
     const url = new URL(this.baseUrl + path);
     if (query) {
@@ -121,6 +141,7 @@ export class RejestrioClient {
           httpStatus: response.status,
           latencyMs,
           costPln: ENDPOINTS[endpoint].costPln,
+          ctx,
         };
 
         if (response.ok) {
@@ -167,6 +188,7 @@ export class RejestrioClient {
           httpStatus: 0,
           latencyMs,
           costPln: 0, // network errors never reached upstream — no charge
+          ctx,
           error: wrapped,
         };
         await this.invokeHook(outcome);

@@ -20,10 +20,16 @@ import { env } from "./env.js";
 import { getDb, disconnectDb } from "./db/client.js";
 import { RejestrioClient } from "./client/rejestrio-client.js";
 import { RequestAuditRepository } from "./audit/request-audit-repo.js";
+import { BudgetGuard } from "./audit/budget-guard.js";
 import { registerLookupCompany } from "./tools/lookup-company.js";
 
 const db = getDb();
 const audit = new RequestAuditRepository(db);
+const budget = new BudgetGuard({
+  audit,
+  defaultDailyBudgetPln: env.REJESTRIO_DEFAULT_DAILY_BUDGET_PLN,
+  disabled: env.REJESTRIO_DISABLE_PAID_CALLS,
+});
 
 const client = new RejestrioClient({
   apiKey: env.REJESTRIO_API_KEY,
@@ -31,11 +37,18 @@ const client = new RejestrioClient({
   onCallComplete: async (outcome) => {
     // Every upstream hit lands in the audit log, even failures —
     // we need the full cost picture, not just the successful calls.
+    // `ctx` carries the calling org/user + target identifiers so the
+    // row is fully attributed.
     await audit.record({
       endpoint: outcome.endpoint,
       httpStatus: outcome.httpStatus,
       latencyMs: outcome.latencyMs,
       costPln: outcome.costPln,
+      orgId: outcome.ctx.orgId ?? null,
+      userId: outcome.ctx.userId ?? null,
+      krs: outcome.ctx.krs ?? null,
+      nip: outcome.ctx.nip ?? null,
+      cached: false,
       error:
         outcome.error instanceof Error
           ? outcome.error.message
@@ -48,7 +61,7 @@ const client = new RejestrioClient({
 
 // --- MCP server ---
 const mcp = new FastMCP({ name: "Rejestrio", version: "0.1.0" });
-registerLookupCompany(mcp, { client, audit });
+registerLookupCompany(mcp, { client, budget });
 
 // --- HTTP app (Hono) for health only ---
 const app = new Hono();

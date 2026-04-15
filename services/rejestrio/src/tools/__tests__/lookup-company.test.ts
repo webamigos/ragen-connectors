@@ -8,7 +8,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { RejestrioClient } from "../../client/rejestrio-client.js";
-import { RequestAuditRepository } from "../../audit/request-audit-repo.js";
+import type { BudgetGuard } from "../../audit/budget-guard.js";
+import { RejestrioBudgetExceededError } from "../../client/errors.js";
 import { handleLookupCompany } from "../lookup-company.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -19,7 +20,8 @@ function loadFixture(name: string): unknown {
 }
 
 function stubFetch(response: Response) {
-  return vi.fn(async () => response);
+  // Typed as `typeof fetch` so mock.calls preserves the (url, init) tuple.
+  return vi.fn<typeof fetch>(async () => response);
 }
 
 function makeResponse(body: unknown, init: ResponseInit = {}): Response {
@@ -30,11 +32,18 @@ function makeResponse(body: unknown, init: ResponseInit = {}): Response {
   });
 }
 
-function fakeAudit(): RequestAuditRepository {
+function permissiveBudget(): BudgetGuard {
   return {
-    record: vi.fn(async () => {}),
-    spentTodayForOrg: vi.fn(async () => 0),
-  } as unknown as RequestAuditRepository;
+    assertAllowed: vi.fn(async () => {}),
+  } as unknown as BudgetGuard;
+}
+
+function strictBudget(err: Error): BudgetGuard {
+  return {
+    assertAllowed: vi.fn(async () => {
+      throw err;
+    }),
+  } as unknown as BudgetGuard;
 }
 
 describe("handleLookupCompany", () => {
@@ -49,11 +58,11 @@ describe("handleLookupCompany", () => {
       { apiKey: "test-key", baseUrl: "https://api.test/v2" },
       fetchStub,
     );
-    const audit = fakeAudit();
+    const budget = permissiveBudget();
 
     const result = await handleLookupCompany(
       { customer_id: "org1:user1:REJESTRIO", nip: "1132916831" },
-      { client, audit },
+      { client, budget },
     );
 
     expect(result.success).toBe(true);
@@ -74,11 +83,10 @@ describe("handleLookupCompany", () => {
       { apiKey: "test-key", baseUrl: "https://api.test/v2" },
       fetchStub,
     );
-    const audit = fakeAudit();
 
     await handleLookupCompany(
       { customer_id: "org1:user1:REJESTRIO", nip: "5260250995" },
-      { client, audit },
+      { client, budget: permissiveBudget() },
     );
 
     expect(fetchStub).toHaveBeenCalledOnce();
@@ -95,11 +103,10 @@ describe("handleLookupCompany", () => {
       { apiKey: "secret-token", baseUrl: "https://api.test/v2" },
       fetchStub,
     );
-    const audit = fakeAudit();
 
     await handleLookupCompany(
       { customer_id: "org1:user1:REJESTRIO", nip: "5260250995" },
-      { client, audit },
+      { client, budget: permissiveBudget() },
     );
 
     const init = fetchStub.mock.calls[0][1] as RequestInit;
@@ -109,27 +116,67 @@ describe("handleLookupCompany", () => {
     expect(headers.Authorization).not.toMatch(/^Bearer /);
   });
 
-  it("records an audit entry on success with the customer_id split out", async () => {
+  it("asks the budget guard before making any upstream call", async () => {
     const fixture = loadFixture("01-nip-5260250995.json");
     const fetchStub = stubFetch(makeResponse(fixture));
     const client = new RejestrioClient(
       { apiKey: "test-key", baseUrl: "https://api.test/v2" },
       fetchStub,
     );
-    const audit = fakeAudit();
+    const budget = permissiveBudget();
 
     await handleLookupCompany(
       { customer_id: "org-123:user-456:REJESTRIO", nip: "5260250995" },
-      { client, audit },
+      { client, budget },
     );
 
-    expect(audit.record).toHaveBeenCalled();
-    const call = (audit.record as ReturnType<typeof vi.fn>).mock.calls[0][0];
-    expect(call.endpoint).toBe("01");
-    expect(call.orgId).toBe("org-123");
-    expect(call.userId).toBe("user-456");
-    expect(call.nip).toBe("5260250995");
-    expect(call.cached).toBe(false);
+    expect(budget.assertAllowed).toHaveBeenCalledWith("org-123", 0.05);
+  });
+
+  it("forwards ctx (orgId, userId, nip) to the client for audit attribution", async () => {
+    const fixture = loadFixture("01-nip-5260250995.json");
+    const fetchStub = stubFetch(makeResponse(fixture));
+    const hook = vi.fn();
+    const client = new RejestrioClient(
+      {
+        apiKey: "test-key",
+        baseUrl: "https://api.test/v2",
+        onCallComplete: hook,
+      },
+      fetchStub,
+    );
+
+    await handleLookupCompany(
+      { customer_id: "org-123:user-456:REJESTRIO", nip: "5260250995" },
+      { client, budget: permissiveBudget() },
+    );
+
+    expect(hook).toHaveBeenCalledOnce();
+    const outcome = hook.mock.calls[0][0];
+    expect(outcome.ctx).toMatchObject({
+      orgId: "org-123",
+      userId: "user-456",
+      nip: "5260250995",
+    });
+  });
+
+  it("short-circuits on budget-exceeded without calling Rejestr.io", async () => {
+    const fetchStub = vi.fn();
+    const client = new RejestrioClient(
+      { apiKey: "test-key", baseUrl: "https://api.test/v2" },
+      fetchStub,
+    );
+    const budget = strictBudget(
+      new RejestrioBudgetExceededError("org-123", 20, 19.99),
+    );
+
+    const result = await handleLookupCompany(
+      { customer_id: "org-123:user-456:REJESTRIO", nip: "5260250995" },
+      { client, budget },
+    );
+
+    expect(result.success).toBe(false);
+    expect(fetchStub).not.toHaveBeenCalled();
   });
 
   it("surfaces a structured error when Rejestr.io returns 401", async () => {
@@ -147,11 +194,10 @@ describe("handleLookupCompany", () => {
       },
       fetchStub,
     );
-    const audit = fakeAudit();
 
     const result = await handleLookupCompany(
       { customer_id: "org1:user1:REJESTRIO", nip: "5260250995" },
-      { client, audit },
+      { client, budget: permissiveBudget() },
     );
 
     expect(result.success).toBe(false);
@@ -168,11 +214,10 @@ describe("handleLookupCompany", () => {
       { apiKey: "test-key", baseUrl: "https://api.test/v2" },
       fetchStub,
     );
-    const audit = fakeAudit();
 
     const result = await handleLookupCompany(
       { customer_id: "org1:user1:REJESTRIO", regon: "123456789" },
-      { client, audit },
+      { client, budget: permissiveBudget() },
     );
 
     expect(result.success).toBe(true);
