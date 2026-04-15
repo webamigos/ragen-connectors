@@ -228,9 +228,15 @@ export async function handleGetFinancials(
         continue;
       }
 
-      if (parsed.data === null) {
-        // czy_ma_json was lying / upstream didn't materialise it.
-        // Cache to avoid re-paying.
+      if (parsed.data === null || typeof parsed.data === "string") {
+        // Either czy_ma_json was lying (null), or the upstream
+        // returned a raw XHTML/XML string we can't parse from the
+        // MCP layer. Both cases cache as unavailable so we don't
+        // re-pay 0.50 PLN discovering the same thing next turn.
+        const reason =
+          parsed.data === null
+            ? "endpoint_11_returned_null"
+            : "endpoint_11_returned_non_json_string";
         if (rocznik != null) {
           await finDocs.upsert({
             companyKrs: krsNum,
@@ -240,14 +246,14 @@ export async function handleGetFinancials(
             documentId: docId,
             czyMaJson: true,
             source: "unavailable",
-            rawPayload: null,
+            rawPayload: parsed.data ?? null,
             fetchedAt: new Date(),
           });
         }
         statements.push({
           rocznik,
           source: "unavailable",
-          reason: "endpoint_11_returned_null",
+          reason,
           documentId: docId,
         });
         continue;

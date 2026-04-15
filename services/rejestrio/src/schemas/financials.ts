@@ -40,13 +40,20 @@ export type FinDocListPeriod = z.infer<typeof finDocListPeriodSchema>;
 export type FinDocListResponse = z.infer<typeof finDocListResponseSchema>;
 
 /**
- * Endpoint 11 response. Accepts both `null` (czy_ma_json=false case)
- * and an object. We don't narrow the object further until we have
- * non-null fixtures to validate against.
+ * Endpoint 11 response. Three shapes observed in the wild:
+ *   - `null` — the upstream document has no structured body (the
+ *     `czy_ma_json: false` case from endpoint 10).
+ *   - an object — JSON-encoded filing (the happy path).
+ *   - a raw string — occasionally XHTML/XML body returned inline
+ *     despite `czy_ma_json: true`. Caller treats this the same as
+ *     null for extraction purposes (we can't parse it reliably from
+ *     the MCP tool), but we still persist it so we don't re-pay
+ *     0.50 PLN re-fetching.
  */
 export const finDocResponseSchema = z.union([
   z.record(z.unknown()),
   z.null(),
+  z.string(),
 ]);
 
 export type FinDocResponse = z.infer<typeof finDocResponseSchema>;

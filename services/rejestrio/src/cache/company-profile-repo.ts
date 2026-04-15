@@ -37,10 +37,17 @@ export class CompanyProfileRepository {
     return row;
   }
 
-  /** Fresh-or-null lookup by NIP. */
+  /**
+   * Fresh-or-null lookup by NIP. One NIP can match several KRS entries
+   * (historical legal forms — see schema comment on `nip`); we return
+   * the most recently-updated one to favour the current legal form.
+   * Callers that need the full list of KRS forms for a NIP should
+   * lookup_company via the upstream API rather than this cache.
+   */
   async getFreshByNip(nip: string, ttlMs = CACHE_TTL_MS.krsInfo) {
-    const row = await this.db.companyProfile.findUnique({
+    const row = await this.db.companyProfile.findFirst({
       where: { nip },
+      orderBy: { updatedAt: "desc" },
     });
     if (!row || !isFresh(row.basicFetchedAt, ttlMs)) {
       return null;

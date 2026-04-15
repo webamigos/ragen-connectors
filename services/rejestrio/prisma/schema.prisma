@@ -21,8 +21,14 @@ model CompanyProfile {
   id                  Int       @id @default(autoincrement())
   krs                 Int       @unique
   krsPadded           String    @unique @map("krs_padded")
-  nip                 String?   @unique
-  regon               String?   @unique
+  // `nip` / `regon` are NOT unique — one NIP often maps to several KRS
+  // entries because the same business restructured over time (S.A. →
+  // sp. z o.o. sp.k. → sp. z o.o.). Originally modelled as @unique,
+  // which caused upserts on the 2nd/3rd historical form to blow up
+  // with P2002 because the NIP had already been inserted on a
+  // different row. Index but do not constrain.
+  nip                 String?
+  regon               String?
 
   nazwaPelna          String    @map("nazwa_pelna")
   nazwaSkrocona       String?   @map("nazwa_skrocona")
