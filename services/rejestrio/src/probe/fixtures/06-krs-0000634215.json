@@ -1,0 +1,81 @@
+[
+  {
+    "id": 200325,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2016-08-30",
+        "kierunek": "AKTYWNY",
+        "opis": "PREZES ZARZĄDU",
+        "typ": "KRS_BOARD"
+      },
+      {
+        "data_koniec": null,
+        "data_start": "2016-08-30",
+        "kierunek": "AKTYWNY",
+        "typ": "KRS_SHAREHOLDER"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 2,
+      "aktualne_organizacje": 1,
+      "przeszle": 2
+    },
+    "tozsamosc": {
+      "data_urodzenia": "1987-03-10",
+      "drugie_imiona": "Paweł",
+      "imie": "Piotr",
+      "imiona_i_nazwisko": "Piotr Paweł Piasecki",
+      "nazwisko": "Piasecki",
+      "plec": "M"
+    },
+    "typ": "osoba",
+    "organizacje_skrot": [
+      {
+        "id": 634215,
+        "nazwa_skrocona": "PIASECKI GĄGAŁA"
+      }
+    ]
+  },
+  {
+    "id": 200321,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2016-08-30",
+        "kierunek": "AKTYWNY",
+        "opis": "WICEPREZES ZARZĄDU",
+        "typ": "KRS_BOARD"
+      },
+      {
+        "data_koniec": null,
+        "data_start": "2016-08-30",
+        "kierunek": "AKTYWNY",
+        "typ": "KRS_SHAREHOLDER"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 4,
+      "aktualne_organizacje": 2,
+      "przeszle": 1
+    },
+    "tozsamosc": {
+      "data_urodzenia": "1987-05-25",
+      "imie": "Łukasz",
+      "imiona_i_nazwisko": "Łukasz Gągała",
+      "nazwisko": "Gągała",
+      "plec": "M"
+    },
+    "typ": "osoba",
+    "organizacje_skrot": [
+      {
+        "id": 634215,
+        "nazwa_skrocona": "PIASECKI GĄGAŁA"
+      },
+      {
+        "id": 1022572,
+        "nazwa_skrocona": "HORMEZA"
+      }
+    ]
+  }
+]

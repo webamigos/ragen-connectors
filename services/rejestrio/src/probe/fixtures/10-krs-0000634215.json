@@ -1,0 +1,215 @@
+[
+  {
+    "data_start": "2024-01-01",
+    "data_koniec": "2024-12-31",
+    "dokumenty": [
+      {
+        "czy_ma_json": true,
+        "id": 18286753,
+        "nazwa": "Rachunek zysków i strat"
+      },
+      {
+        "czy_ma_json": true,
+        "id": 18286750,
+        "nazwa": "Bilans"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 18286715,
+        "nazwa": "Informacja dodatkowa w załączniku."
+      },
+      {
+        "czy_ma_json": false,
+        "id": 18286710,
+        "nazwa": "Uchwała o podziale zysku bądź pokryciu straty"
+      }
+    ]
+  },
+  {
+    "data_start": "2023-01-01",
+    "data_koniec": "2023-12-31",
+    "dokumenty": [
+      {
+        "czy_ma_json": true,
+        "id": 16240208,
+        "nazwa": "Rachunek zysków i strat"
+      },
+      {
+        "czy_ma_json": true,
+        "id": 16240207,
+        "nazwa": "Bilans"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 16240161,
+        "nazwa": "Uchwała o podziale zysku bądź pokryciu straty"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 16240157,
+        "nazwa": "Informacja w załączniku"
+      }
+    ]
+  },
+  {
+    "data_start": "2022-01-01",
+    "data_koniec": "2022-12-31",
+    "dokumenty": [
+      {
+        "czy_ma_json": true,
+        "id": 13623756,
+        "nazwa": "Rachunek zysków i strat"
+      },
+      {
+        "czy_ma_json": true,
+        "id": 13623755,
+        "nazwa": "Bilans"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 13623732,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 13623733,
+        "nazwa": "Uchwała o podziale zysku bądź pokryciu straty"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 13623731,
+        "nazwa": "Informacja dodatkowa"
+      }
+    ]
+  },
+  {
+    "data_start": "2021-01-01",
+    "data_koniec": "2021-12-31",
+    "dokumenty": [
+      {
+        "czy_ma_json": true,
+        "id": 10749666,
+        "nazwa": "Rachunek zysków i strat"
+      },
+      {
+        "czy_ma_json": true,
+        "id": 10749662,
+        "nazwa": "Bilans"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 10748899,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 10748896,
+        "nazwa": "Informacja dodatkowa"
+      }
+    ]
+  },
+  {
+    "data_start": "2020-01-01",
+    "data_koniec": "2020-12-31",
+    "dokumenty": [
+      {
+        "czy_ma_json": true,
+        "id": 9207663,
+        "nazwa": "Rachunek zysków i strat"
+      },
+      {
+        "czy_ma_json": true,
+        "id": 9207660,
+        "nazwa": "Bilans"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 9207641,
+        "nazwa": "Uchwała o podziale zysku bądź pokryciu straty"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 9207637,
+        "nazwa": "Informacja dodatkowa"
+      }
+    ]
+  },
+  {
+    "data_start": "2019-01-01",
+    "data_koniec": "2019-12-31",
+    "dokumenty": [
+      {
+        "czy_ma_json": true,
+        "id": 5054741,
+        "nazwa": "Rachunek zysków i strat"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5054591,
+        "nazwa": "Informacje uzupełniające do bilansu"
+      },
+      {
+        "czy_ma_json": true,
+        "id": 5054740,
+        "nazwa": "Bilans"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5054592,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu rocznego sprawozdania finansowego"
+      }
+    ]
+  },
+  {
+    "data_start": "2018-01-01",
+    "data_koniec": "2018-12-31",
+    "dokumenty": [
+      {
+        "czy_ma_json": true,
+        "id": 2772847,
+        "nazwa": "Rachunek zysków i strat"
+      },
+      {
+        "czy_ma_json": true,
+        "id": 2772846,
+        "nazwa": "Bilans"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 2772701,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 2772700,
+        "nazwa": "Informacja dodatkowa"
+      }
+    ]
+  },
+  {
+    "data_start": "2017-01-01",
+    "data_koniec": "2017-12-31",
+    "dokumenty": [
+      {
+        "czy_ma_json": false,
+        "id": 2772704,
+        "nazwa": "Rachunek zysków i strat"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 2772702,
+        "nazwa": "Bilans"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 2772708,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 2772706,
+        "nazwa": "Informacja dodatkowa lub inny dokument z art. 48 ustawy o rachunkowości"
+      }
+    ]
+  }
+]
