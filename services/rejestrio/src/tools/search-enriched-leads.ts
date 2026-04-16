@@ -204,14 +204,17 @@ export function registerSearchEnrichedLeads(
   mcp.addTool({
     name: "search_enriched_leads",
     description:
-      "Query the local pool of already-enriched Polish companies (the " +
-      "rejestrio MCP cache). Filters by PKD prefix and revenue range. " +
+      "Query the local cache of Polish companies previously fetched from " +
+      "Rejestr.io. Filters by PKD prefix and revenue range. " +
       "Use this when the user asks \"pokaż leady z branży X z przychodem > Y\" " +
-      "or similar aggregate questions over companies already in the pool. " +
+      "or similar aggregate questions. " +
       "IT sector = PKD prefix '62'. Budownictwo = '41'-'43'. Finanse = '64'-'66'. " +
       "Returns at most `limit` results (default 20, max 100) sorted by revenue. " +
-      "NOT a substitute for `lookup_company` — this only finds matches in " +
-      "companies we've already enriched. No upstream API cost.",
+      "NOT a substitute for `lookup_company` — this only finds matches among " +
+      "companies previously fetched via get_krs_info / get_financials. " +
+      "No upstream API cost. In Polish replies describe results as " +
+      "\"firmy pobrane z Rejestr.io\" or \"zapisane w lokalnej bazie\", " +
+      "never \"wzbogacone\" (ambiguous with \"enriched financially\").",
     parameters: paramsSchema,
     execute: async (input) =>
       JSON.stringify(await handleSearchEnrichedLeads(input, deps)),
