@@ -136,6 +136,10 @@ export async function handleGetFinancials(
     }
 
     // --- tier 2 path ---
+    logger.info(
+      { krs: krsNum, years },
+      "get_financials: entering tier-2 (endpoint 10 + 11)",
+    );
     const listRaw = await client.get(
       "10",
       `/org/${krsApi}/krs-dokumenty`,
@@ -157,6 +161,15 @@ export async function handleGetFinancials(
     // Periods are returned most-recent-first by the API. Take the
     // top N (most recent `years` periods).
     const periods = listParsed.data.slice(0, years);
+    logger.info(
+      {
+        krs: krsNum,
+        periodsAvailable: listParsed.data.length,
+        periodsTaken: periods.length,
+        years,
+      },
+      "get_financials: endpoint 10 returned periods",
+    );
     const statements: Statement[] = [];
 
     // The tier-1 snapshot from basic-data can fill in the latest
@@ -200,27 +213,58 @@ export async function handleGetFinancials(
           reason: "no_czy_ma_json_document_in_period",
         };
         if (rocznik != null) {
-          await finDocs.upsert({
-            companyKrs: krsNum,
-            rocznik,
-            dataOd: parseDateOrNull(period.data_start),
-            dataDo: parseDateOrNull(period.data_koniec),
-            documentId: null,
-            czyMaJson: false,
-            source: "unavailable",
-            rawPayload: null,
-          });
+          logger.info(
+            { krs: krsNum, rocznik, reason: "no_czy_ma_json_document" },
+            "get_financials: persisting unavailable row",
+          );
+          try {
+            await finDocs.upsert({
+              companyKrs: krsNum,
+              rocznik,
+              dataOd: parseDateOrNull(period.data_start),
+              dataDo: parseDateOrNull(period.data_koniec),
+              documentId: null,
+              czyMaJson: false,
+              source: "unavailable",
+              rawPayload: null,
+            });
+          } catch (writeErr) {
+            logger.error(
+              {
+                err: writeErr instanceof Error ? writeErr.message : String(writeErr),
+                krs: krsNum,
+                rocznik,
+              },
+              "get_financials: finDocs.upsert FAILED for unavailable row",
+            );
+          }
         }
         statements.push(entry);
         continue;
       }
 
       const docId = Number(candidate.id);
+      logger.info(
+        { krs: krsNum, rocznik, docId, czyMaJson: candidate.czy_ma_json },
+        "get_financials: calling endpoint 11 for candidate doc",
+      );
       const raw = await client.get(
         "11",
         `/org/${krsApi}/krs-dokumenty/${docId}`,
         undefined,
         { ...ctx },
+      );
+      logger.info(
+        {
+          krs: krsNum,
+          rocznik,
+          docId,
+          rawType:
+            raw === null ? "null" : typeof raw === "string" ? "string" : typeof raw,
+          rawLengthIfString:
+            typeof raw === "string" ? raw.length : undefined,
+        },
+        "get_financials: endpoint 11 response received",
       );
       const parsed = finDocResponseSchema.safeParse(raw);
       if (!parsed.success) {
@@ -247,17 +291,33 @@ export async function handleGetFinancials(
             ? "endpoint_11_returned_null"
             : "endpoint_11_returned_non_json_string";
         if (rocznik != null) {
-          await finDocs.upsert({
-            companyKrs: krsNum,
-            rocznik,
-            dataOd: parseDateOrNull(period.data_start),
-            dataDo: parseDateOrNull(period.data_koniec),
-            documentId: docId,
-            czyMaJson: true,
-            source: "unavailable",
-            rawPayload: parsed.data ?? null,
-            fetchedAt: new Date(),
-          });
+          logger.info(
+            { krs: krsNum, rocznik, docId, reason },
+            "get_financials: persisting unavailable row (null/string response)",
+          );
+          try {
+            await finDocs.upsert({
+              companyKrs: krsNum,
+              rocznik,
+              dataOd: parseDateOrNull(period.data_start),
+              dataDo: parseDateOrNull(period.data_koniec),
+              documentId: docId,
+              czyMaJson: true,
+              source: "unavailable",
+              rawPayload: parsed.data ?? null,
+              fetchedAt: new Date(),
+            });
+          } catch (writeErr) {
+            logger.error(
+              {
+                err: writeErr instanceof Error ? writeErr.message : String(writeErr),
+                krs: krsNum,
+                rocznik,
+                docId,
+              },
+              "get_financials: finDocs.upsert FAILED for unavailable (null/string) row",
+            );
+          }
         }
         statements.push({
           rocznik,
@@ -270,22 +330,46 @@ export async function handleGetFinancials(
 
       const figures = extractHeadlineFigures(parsed.data) ?? {};
       if (rocznik != null) {
-        await finDocs.upsert({
-          companyKrs: krsNum,
-          rocznik,
-          dataOd: parseDateOrNull(period.data_start),
-          dataDo: parseDateOrNull(period.data_koniec),
-          documentId: docId,
-          czyMaJson: true,
-          source: "fin_document",
-          rawPayload: parsed.data,
-          przychody: figures.przychody,
-          koszty: figures.koszty,
-          zysk: figures.zysk,
-          aktywa: figures.aktywa,
-          pasywa: figures.pasywa,
-          podatek: figures.podatek,
-        });
+        logger.info(
+          {
+            krs: krsNum,
+            rocznik,
+            docId,
+            figures: {
+              przychody: figures.przychody,
+              zysk: figures.zysk,
+            },
+          },
+          "get_financials: persisting fin_document row",
+        );
+        try {
+          await finDocs.upsert({
+            companyKrs: krsNum,
+            rocznik,
+            dataOd: parseDateOrNull(period.data_start),
+            dataDo: parseDateOrNull(period.data_koniec),
+            documentId: docId,
+            czyMaJson: true,
+            source: "fin_document",
+            rawPayload: parsed.data,
+            przychody: figures.przychody,
+            koszty: figures.koszty,
+            zysk: figures.zysk,
+            aktywa: figures.aktywa,
+            pasywa: figures.pasywa,
+            podatek: figures.podatek,
+          });
+        } catch (writeErr) {
+          logger.error(
+            {
+              err: writeErr instanceof Error ? writeErr.message : String(writeErr),
+              krs: krsNum,
+              rocznik,
+              docId,
+            },
+            "get_financials: finDocs.upsert FAILED for fin_document row",
+          );
+        }
       }
       statements.push({
         rocznik,
@@ -411,6 +495,10 @@ async function persistTier1Snapshot(
   tier1: Statement,
 ): Promise<void> {
   if (tier1.rocznik == null) {
+    logger.info(
+      { companyKrs },
+      "persistTier1Snapshot: skipped — tier-1 snapshot has no rocznik",
+    );
     return;
   }
   try {
@@ -428,6 +516,10 @@ async function persistTier1Snapshot(
       pasywa: tier1.pasywa ?? null,
       podatek: tier1.podatek ?? null,
     });
+    logger.info(
+      { companyKrs, rocznik: tier1.rocznik },
+      "persistTier1Snapshot: mirror row written (source=basic_snapshot)",
+    );
   } catch (err) {
     logger.warn(
       { err: err instanceof Error ? err.message : String(err), companyKrs },
