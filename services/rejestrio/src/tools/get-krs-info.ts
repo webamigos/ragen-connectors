@@ -126,6 +126,19 @@ export type GetKrsInfoSuccess = {
     wLikwidacji: boolean;
     wZawieszeniu: boolean;
     naGpw: boolean;
+    /**
+     * Size category from ustawa o rachunkowości. Derived by Rejestr.io
+     * from filed statements — null for entities that haven't filed.
+     * Values: "mikro" | "mala" | "duza_srednia" | "ngo". Requires
+     * Biznes plan to be populated in basic-data responses.
+     *
+     * Note: this is a BAND, not an exact headcount. The "Zatrudnienie:
+     * N" number shown on the rejestr.io website comes from parsing
+     * the XBRL financial statement body (endpoint 11 when
+     * czy_ma_json=true), which we don't extract yet. Track as
+     * follow-up.
+     */
+    wielkosc: string | null;
   };
   ostatnieSprawozdanie: GlowneSprawozdanie | null;
   /** Share capital of the company (kwota + waluta). */
@@ -525,6 +538,7 @@ function composeResult(args: {
       naGpw:
         (args.basic.stan as unknown as { czy_jest_na_gpw?: boolean })
           ?.czy_jest_na_gpw ?? false,
+      wielkosc: args.basic.stan?.wielkosc ?? null,
     },
     ostatnieSprawozdanie,
     ...extractWspolnicy(args.advancedRaw),
