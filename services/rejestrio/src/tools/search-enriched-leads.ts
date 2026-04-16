@@ -118,7 +118,10 @@ export async function handleSearchEnrichedLeads(
       financialDocuments: { some: finDocWhere },
     };
     if (input.pkdPrefix) {
-      companyWhere.pkdGlowny = { startsWith: input.pkdPrefix };
+      // Match against the numeric PKD 2007 code stored in
+      // `pkd_code` (e.g. "62.01.Z"). Descriptions in pkd_glowny
+      // are the Polish text which can't be reliably prefix-matched.
+      companyWhere.pkdCode = { startsWith: input.pkdPrefix };
     }
 
     const rows = await db.companyProfile.findMany({

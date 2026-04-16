@@ -106,6 +106,10 @@ export class CompanyProfileRepository {
       data: {
         advancedRaw: raw as never,
         advancedFetchedAt: fetchedAt,
+        // Opportunistically extract the numeric PKD 2007 code from
+        // the ogolny chapter. Stays null when the shape doesn't
+        // match (e.g. wykreślone entities that return `[]`).
+        pkdCode: extractPkdCodeFromAdvanced(raw),
       },
     });
   }
@@ -137,4 +141,32 @@ export class CompanyProfileRepository {
       },
     });
   }
+}
+
+/**
+ * Pull the numeric PKD 2007 code (e.g. "62.01.Z") out of endpoint 03
+ * ogolny chapter's `przedmiot_przewazajacej_dzialalnosci_
+ * przedsiebiorcy._obiekty["1"]._wartosc.symbol` array-of-strings
+ * shape: `["62", "01", "Z"]` → `"62.01.Z"`. Returns null when the
+ * shape doesn't match (wykreślone entities yield `[]`).
+ *
+ * Exported for unit testing.
+ */
+export function extractPkdCodeFromAdvanced(raw: unknown): string | null {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    return null;
+  }
+  const d = raw as Record<string, unknown>;
+  const przewaz = d.przedmiot_przewazajacej_dzialalnosci_przedsiebiorcy as
+    | { _obiekty?: Record<string, { _wartosc?: { symbol?: unknown } }> }
+    | undefined;
+  const first = przewaz?._obiekty?.["1"]?._wartosc?.symbol;
+  if (!Array.isArray(first)) {
+    return null;
+  }
+  const parts = first.filter((p): p is string => typeof p === "string");
+  if (parts.length === 0) {
+    return null;
+  }
+  return parts.join(".");
 }

@@ -30,26 +30,27 @@ function makeDb(rows: FakeRow[]): {
 }
 
 function fakeRow(
-  overrides: Partial<FakeRow> & { krs: number; przychody: number },
+  overrides: { krs: number; przychody: number } & Partial<FakeRow>,
 ): FakeRow {
-  return {
-    krs: overrides.krs,
+  const { krs, przychody, ...rest } = overrides;
+  const base: FakeRow = {
+    krs,
     nip: "0000000000",
-    nazwaPelna: `Company ${overrides.krs}`,
+    nazwaPelna: `Company ${krs}`,
     pkdGlowny: "62.01.Z — Działalność związana z oprogramowaniem",
     formaPrawna: "SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
     financialDocuments: [
       {
         rocznik: 2024,
-        przychody: overrides.przychody,
-        zysk: overrides.przychody * 0.1,
-        aktywa: overrides.przychody * 0.5,
+        przychody,
+        zysk: przychody * 0.1,
+        aktywa: przychody * 0.5,
         source: "basic_snapshot",
         fetchedAt: new Date(),
       },
     ],
-    ...overrides,
   };
+  return { ...base, ...rest };
 }
 
 describe("search_enriched_leads", () => {
@@ -75,12 +76,12 @@ describe("search_enriched_leads", () => {
     expect(findMany).toHaveBeenCalledOnce();
     const args = findMany.mock.calls[0][0] as {
       where: {
-        pkdGlowny?: { startsWith?: string };
+        pkdCode?: { startsWith?: string };
         financialDocuments: { some: { przychody?: unknown } };
       };
       take: number;
     };
-    expect(args.where.pkdGlowny).toEqual({ startsWith: "62" });
+    expect(args.where.pkdCode).toEqual({ startsWith: "62" });
     expect(args.where.financialDocuments.some).toMatchObject({
       przychody: { gte: 3_000_000, lte: 50_000_000, not: null },
     });

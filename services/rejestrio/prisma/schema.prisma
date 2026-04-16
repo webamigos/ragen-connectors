@@ -33,7 +33,15 @@ model CompanyProfile {
   nazwaPelna          String    @map("nazwa_pelna")
   nazwaSkrocona       String?   @map("nazwa_skrocona")
   formaPrawna         String?   @map("forma_prawna")
+  /// Human-readable PKD 2007 description from endpoint 02's
+  /// `stan.pkd_przewazajace_dzial`. Useful for display.
   pkdGlowny           String?   @map("pkd_glowny")
+  /// Numeric PKD 2007 code (e.g. "62.01.Z") extracted from endpoint
+  /// 03 `ogolny` chapter's `przedmiot_przewazajacej_dzialalnosci...`.
+  /// Populated only after `get_krs_info` hits endpoint 03. Used by
+  /// `search_enriched_leads` to filter by sector prefix
+  /// (e.g. "62" = IT / software).
+  pkdCode             String?   @map("pkd_code")
 
   /// Raw whole-payload dumps per endpoint — durable, ready for future
   /// field extraction without re-hitting the upstream. Keyed by
@@ -57,6 +65,7 @@ model CompanyProfile {
 
   @@index([nip])
   @@index([pkdGlowny])
+  @@index([pkdCode])
   @@map("company_profiles")
 }
 
