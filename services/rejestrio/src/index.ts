@@ -31,6 +31,7 @@ import { registerGetFinancials } from "./tools/get-financials.js";
 import { registerGetPerson } from "./tools/get-person.js";
 import { registerGetPersonConnections } from "./tools/get-person-connections.js";
 import { registerGetBeneficialOwners } from "./tools/get-beneficial-owners.js";
+import { registerSearchEnrichedLeads } from "./tools/search-enriched-leads.js";
 
 const db = getDb();
 const audit = new RequestAuditRepository(db);
@@ -80,6 +81,7 @@ registerGetFinancials(mcp, { client, budget, profiles, finDocs });
 registerGetPerson(mcp, { client, budget });
 registerGetPersonConnections(mcp, { client, budget });
 registerGetBeneficialOwners(mcp, { client, budget });
+registerSearchEnrichedLeads(mcp, { db });
 
 // --- HTTP app (Hono) for health only ---
 const app = new Hono();
