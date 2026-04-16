@@ -100,7 +100,7 @@ describe("handleGetFinancials — tier 1 (years=1)", () => {
       advancedFetchedAt: null,
       powiazaniaFetchedAt: null,
     });
-    const { repo: finDocs } = finDocsStub();
+    const { repo: finDocs, upserts } = finDocsStub();
 
     const result = await handleGetFinancials(
       { customer_id: "o:u:R", krs: 634215, years: 1 },
@@ -116,6 +116,18 @@ describe("handleGetFinancials — tier 1 (years=1)", () => {
     expect(result.statements[0].source).toBe("basic_snapshot");
     expect(result.statements[0].przychody).toBeGreaterThan(0);
     expect(fetchStub).not.toHaveBeenCalled();
+    // Mirror: tier-1 snapshot is persisted to financial_documents
+    // with source='basic_snapshot' so the table reflects every known
+    // year regardless of which path served the data.
+    expect(upserts).toHaveBeenCalledOnce();
+    const row = upserts.mock.calls[0][0] as {
+      source: string;
+      companyKrs: number;
+      rocznik: number;
+    };
+    expect(row.source).toBe("basic_snapshot");
+    expect(row.companyKrs).toBe(634215);
+    expect(row.rocznik).toBeGreaterThan(2020);
   });
 
   it("fetches basic from endpoint 02 when not yet cached", async () => {
@@ -281,7 +293,11 @@ describe("handleGetFinancials — tier 2 historical", () => {
     expect(result.statements[0].source).toBe("basic_snapshot");
     // No endpoint 11 call needed because tier-1 pre-empted.
     expect(fetchStub).toHaveBeenCalledTimes(1);
-    expect(upserts).not.toHaveBeenCalled();
+    // The tier-1 snapshot IS persisted now (basic_snapshot mirror in
+    // financial_documents) — expected single upsert for that row.
+    expect(upserts).toHaveBeenCalledOnce();
+    const mirror = upserts.mock.calls[0][0] as { source: string };
+    expect(mirror.source).toBe("basic_snapshot");
   });
 
   it("extracts headline figures when endpoint 11 returns glowne_pola shape", async () => {

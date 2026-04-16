@@ -118,6 +118,13 @@ export async function handleGetFinancials(
     if (years === 1) {
       const tier1 = extractTier1(basicResponse);
       if (tier1) {
+        // Mirror the snapshot into `financial_documents` so the table
+        // reflects all known financials regardless of which path
+        // served the data. Before this, tier-1 hits stayed only in
+        // `company_profiles.basic_raw` and the user wondered why
+        // `financial_documents` was empty despite many calls. The
+        // mirror is idempotent — upsert keyed by (krs, rocznik).
+        await persistTier1Snapshot(finDocs, krsNum, tier1);
         return {
           success: true,
           krs: krsNum,
@@ -167,6 +174,8 @@ export async function handleGetFinancials(
         rocznik != null &&
         tier1Snapshot.rocznik === rocznik
       ) {
+        // Mirror for the same reason as the fast-path above.
+        await persistTier1Snapshot(finDocs, krsNum, tier1Snapshot);
         statements.push(tier1Snapshot);
         continue;
       }
@@ -382,6 +391,49 @@ function extractTier1(
     pasywa: spr.glowne_pola.pasywa?.wartosc,
     podatek: spr.glowne_pola.podatek_dochodowy?.wartosc,
   };
+}
+
+/**
+ * Mirror a tier-1 (basic-snapshot) result into `financial_documents`.
+ *
+ * Idempotent: the repository upsert is keyed by (krs, rocznik), so
+ * calling this repeatedly for the same year just refreshes the row's
+ * `fetched_at`. Silently no-ops when rocznik is missing — we can't
+ * key the row otherwise and the same record will land next time a
+ * year-aware call fires.
+ *
+ * Failures are swallowed with a log line. The caller (chat turn)
+ * must NOT fail just because a best-effort mirror write went wrong.
+ */
+async function persistTier1Snapshot(
+  finDocs: FinancialDocumentRepository,
+  companyKrs: number,
+  tier1: Statement,
+): Promise<void> {
+  if (tier1.rocznik == null) {
+    return;
+  }
+  try {
+    await finDocs.upsert({
+      companyKrs,
+      rocznik: tier1.rocznik,
+      documentId: null,
+      czyMaJson: false,
+      source: "basic_snapshot",
+      rawPayload: null,
+      przychody: tier1.przychody ?? null,
+      koszty: tier1.koszty ?? null,
+      zysk: tier1.zysk ?? null,
+      aktywa: tier1.aktywa ?? null,
+      pasywa: tier1.pasywa ?? null,
+      podatek: tier1.podatek ?? null,
+    });
+  } catch (err) {
+    logger.warn(
+      { err: err instanceof Error ? err.message : String(err), companyKrs },
+      "persistTier1Snapshot: mirror write failed (best-effort, not user-facing)",
+    );
+  }
 }
 
 async function loadCachedRocznik(
