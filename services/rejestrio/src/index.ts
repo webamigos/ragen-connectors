@@ -73,7 +73,7 @@ const client = new RejestrioClient({
 // --- MCP server ---
 const mcp = new FastMCP({ name: "Rejestrio", version: "0.1.0" });
 registerLookupCompany(mcp, { client, budget });
-registerGetKrsInfo(mcp, { client, budget, profiles });
+registerGetKrsInfo(mcp, { client, budget, profiles, finDocs });
 registerGetKrsHistory(mcp, { client, budget, profiles });
 registerGetKrsChapter(mcp, { client, budget });
 registerGetFinancials(mcp, { client, budget, profiles, finDocs });

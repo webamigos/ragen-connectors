@@ -33,12 +33,18 @@ import {
   isAdvancedEmpty,
 } from "../schemas/advanced.js";
 import { powiazaniaResponseSchema } from "../schemas/powiazania.js";
+import type { FinancialDocumentRepository } from "../cache/financial-doc-repo.js";
+import {
+  extractTier1Snapshot,
+  persistTier1Snapshot,
+} from "../cache/tier1-snapshot.js";
 import { parseCustomerId } from "./customer-id.js";
 
 export type GetKrsInfoDeps = {
   client: RejestrioClient;
   budget: BudgetGuard;
   profiles: CompanyProfileRepository;
+  finDocs: FinancialDocumentRepository;
 };
 
 const paramsSchema = z.object({
@@ -167,7 +173,7 @@ export type GetKrsInfoError = {
  */
 export async function handleGetKrsInfo(
   input: GetKrsInfoParams,
-  { client, budget, profiles }: GetKrsInfoDeps,
+  { client, budget, profiles, finDocs }: GetKrsInfoDeps,
 ): Promise<GetKrsInfoSuccess | GetKrsInfoError> {
   const krsNum = Number(String(input.krs).replace(/^0+/, "") || "0");
   const krsApi = toApiKrs(krsNum);
@@ -218,6 +224,17 @@ export async function handleGetKrsInfo(
         basicPayloadFromResponse(basicParsed.data, basicRaw),
         now,
       );
+    }
+
+    // Mirror the ostatnie_sprawozdanie snapshot into
+    // `financial_documents` if basic-data carried one. Makes the
+    // table the single source of truth for "everything we know
+    // about this company's financials" regardless of whether the
+    // chat invoked get_krs_info or get_financials. Fires on both
+    // upstream-fetch and cache-hit paths (upsert is idempotent).
+    const tier1 = extractTier1Snapshot(basicRaw);
+    if (tier1) {
+      await persistTier1Snapshot(finDocs, krsNum, tier1);
     }
 
     // ---- advanced (endpoint 03, chapter 'ogolny') ----

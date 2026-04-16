@@ -23,6 +23,11 @@ import type { RejestrioClient } from "../client/rejestrio-client.js";
 import type { BudgetGuard } from "../audit/budget-guard.js";
 import type { CompanyProfileRepository } from "../cache/company-profile-repo.js";
 import type { FinancialDocumentRepository } from "../cache/financial-doc-repo.js";
+import {
+  extractTier1Snapshot,
+  persistTier1Snapshot,
+  type Tier1Snapshot,
+} from "../cache/tier1-snapshot.js";
 import { ENDPOINTS, toApiKrs, toCanonicalKrs } from "../client/endpoints.js";
 import { CACHE_TTL_MS, isFresh } from "../cache/ttl.js";
 import { basicResponseSchema } from "../schemas/search.js";
@@ -446,86 +451,15 @@ async function ensureBasic(args: {
   return { basicResponse: parsed.data };
 }
 
-function extractTier1(
-  basic: z.infer<typeof basicResponseSchema>,
-): Statement | null {
-  type SprShape = {
-    rocznik?: number;
-    glowne_pola?: {
-      przychody?: { wartosc?: number };
-      koszty?: { wartosc?: number };
-      zysk?: { wartosc?: number };
-      aktywa?: { wartosc?: number };
-      pasywa?: { wartosc?: number };
-      podatek_dochodowy?: { wartosc?: number };
-    };
-  };
-  const spr = (basic as unknown as { ostatnie_sprawozdanie?: SprShape })
-    .ostatnie_sprawozdanie;
-  if (!spr?.glowne_pola) {
-    return null;
-  }
-  return {
-    rocznik: spr.rocznik ?? null,
-    source: "basic_snapshot",
-    przychody: spr.glowne_pola.przychody?.wartosc,
-    koszty: spr.glowne_pola.koszty?.wartosc,
-    zysk: spr.glowne_pola.zysk?.wartosc,
-    aktywa: spr.glowne_pola.aktywa?.wartosc,
-    pasywa: spr.glowne_pola.pasywa?.wartosc,
-    podatek: spr.glowne_pola.podatek_dochodowy?.wartosc,
-  };
-}
-
 /**
- * Mirror a tier-1 (basic-snapshot) result into `financial_documents`.
- *
- * Idempotent: the repository upsert is keyed by (krs, rocznik), so
- * calling this repeatedly for the same year just refreshes the row's
- * `fetched_at`. Silently no-ops when rocznik is missing — we can't
- * key the row otherwise and the same record will land next time a
- * year-aware call fires.
- *
- * Failures are swallowed with a log line. The caller (chat turn)
- * must NOT fail just because a best-effort mirror write went wrong.
+ * Local alias — tier-1 extraction + persistence now lives in
+ * `src/cache/tier1-snapshot.ts` so both `get_financials` and
+ * `get_krs_info` can call it. Kept as a function-renamed passthrough
+ * rather than changing every call site because the local shape
+ * matches `Statement` one-for-one.
  */
-async function persistTier1Snapshot(
-  finDocs: FinancialDocumentRepository,
-  companyKrs: number,
-  tier1: Statement,
-): Promise<void> {
-  if (tier1.rocznik == null) {
-    logger.info(
-      { companyKrs },
-      "persistTier1Snapshot: skipped — tier-1 snapshot has no rocznik",
-    );
-    return;
-  }
-  try {
-    await finDocs.upsert({
-      companyKrs,
-      rocznik: tier1.rocznik,
-      documentId: null,
-      czyMaJson: false,
-      source: "basic_snapshot",
-      rawPayload: null,
-      przychody: tier1.przychody ?? null,
-      koszty: tier1.koszty ?? null,
-      zysk: tier1.zysk ?? null,
-      aktywa: tier1.aktywa ?? null,
-      pasywa: tier1.pasywa ?? null,
-      podatek: tier1.podatek ?? null,
-    });
-    logger.info(
-      { companyKrs, rocznik: tier1.rocznik },
-      "persistTier1Snapshot: mirror row written (source=basic_snapshot)",
-    );
-  } catch (err) {
-    logger.warn(
-      { err: err instanceof Error ? err.message : String(err), companyKrs },
-      "persistTier1Snapshot: mirror write failed (best-effort, not user-facing)",
-    );
-  }
+function extractTier1(basic: unknown): (Statement & Tier1Snapshot) | null {
+  return extractTier1Snapshot(basic) as (Statement & Tier1Snapshot) | null;
 }
 
 async function loadCachedRocznik(

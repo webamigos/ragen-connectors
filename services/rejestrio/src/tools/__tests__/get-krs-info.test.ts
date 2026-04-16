@@ -12,8 +12,38 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { RejestrioClient } from "../../client/rejestrio-client.js";
 import type { BudgetGuard } from "../../audit/budget-guard.js";
 import type { CompanyProfileRepository } from "../../cache/company-profile-repo.js";
+import type { FinancialDocumentRepository } from "../../cache/financial-doc-repo.js";
 import { RejestrioBudgetExceededError } from "../../client/errors.js";
 import { handleGetKrsInfo } from "../get-krs-info.js";
+
+/**
+ * No-op finDocs fixture. get_krs_info mirrors tier-1 snapshots into
+ * financial_documents for the "single source of truth" view, but the
+ * tests here don't assert on that behaviour (the dedicated
+ * `get-financials.test.ts` already covers mirror-write semantics).
+ */
+function noopFinDocs(): FinancialDocumentRepository {
+  return {
+    findByKrs: vi.fn(async () => []),
+    isRocznikFresh: vi.fn(async () => false),
+    upsert: vi.fn(async () => undefined),
+  } as unknown as FinancialDocumentRepository;
+}
+
+function spyFinDocs(): {
+  repo: FinancialDocumentRepository;
+  upsert: ReturnType<typeof vi.fn>;
+} {
+  const upsert = vi.fn(async () => undefined);
+  return {
+    repo: {
+      findByKrs: vi.fn(async () => []),
+      isRocznikFresh: vi.fn(async () => false),
+      upsert,
+    } as unknown as FinancialDocumentRepository,
+    upsert,
+  };
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FIXTURES = path.resolve(__dirname, "../../probe/fixtures");
@@ -103,7 +133,7 @@ describe("handleGetKrsInfo", () => {
 
     const result = await handleGetKrsInfo(
       { customer_id: "org-1:user-1:REJESTRIO", krs: "0000634215" },
-      { client, budget: permissiveBudget(), profiles },
+      { client, budget: permissiveBudget(), profiles, finDocs: noopFinDocs() },
     );
 
     expect(result.success).toBe(true);
@@ -138,7 +168,7 @@ describe("handleGetKrsInfo", () => {
 
     const result = await handleGetKrsInfo(
       { customer_id: "org-1:user-1:REJESTRIO", krs: 634215 },
-      { client, budget: permissiveBudget(), profiles },
+      { client, budget: permissiveBudget(), profiles, finDocs: noopFinDocs() },
     );
 
     expect(result.success).toBe(true);
@@ -172,7 +202,7 @@ describe("handleGetKrsInfo", () => {
 
     const result = await handleGetKrsInfo(
       { customer_id: "org-1:user-1:REJESTRIO", krs: "0000634215" },
-      { client, budget: permissiveBudget(), profiles },
+      { client, budget: permissiveBudget(), profiles, finDocs: noopFinDocs() },
     );
 
     expect(result.success).toBe(true);
@@ -214,7 +244,7 @@ describe("handleGetKrsInfo", () => {
 
     const result = await handleGetKrsInfo(
       { customer_id: "org-1:user-1:REJESTRIO", krs: 634215 },
-      { client, budget: permissiveBudget(), profiles },
+      { client, budget: permissiveBudget(), profiles, finDocs: noopFinDocs() },
     );
 
     expect(result.success).toBe(true);
@@ -246,7 +276,7 @@ describe("handleGetKrsInfo", () => {
 
     const result = await handleGetKrsInfo(
       { customer_id: "org-1:user-1:REJESTRIO", krs: "0000458061" },
-      { client, budget: permissiveBudget(), profiles },
+      { client, budget: permissiveBudget(), profiles, finDocs: noopFinDocs() },
     );
 
     expect(result.success).toBe(true);
@@ -271,7 +301,7 @@ describe("handleGetKrsInfo", () => {
 
     const result = await handleGetKrsInfo(
       { customer_id: "org-1:user-1:REJESTRIO", krs: 634215 },
-      { client, budget: strict, profiles },
+      { client, budget: strict, profiles, finDocs: noopFinDocs() },
     );
 
     expect(result.success).toBe(false);
@@ -293,7 +323,7 @@ describe("handleGetKrsInfo", () => {
 
       const result = await handleGetKrsInfo(
         { customer_id: "org-1:user-1:REJESTRIO", krs },
-        { client, budget: permissiveBudget(), profiles },
+        { client, budget: permissiveBudget(), profiles, finDocs: noopFinDocs() },
       );
 
       expect(result.success).toBe(true);
@@ -303,5 +333,51 @@ describe("handleGetKrsInfo", () => {
       expect(result.krs).toBe(634215);
       expect(result.krsPadded).toBe("0000634215");
     }
+  });
+
+  it("mirrors the basic-data snapshot into financial_documents when glowne_pola is populated", async () => {
+    const basic = loadFixture("02-krs-0000634215.json");
+    const advanced = loadFixture("03-krs-0000634215-ogolny.json");
+    const powiazania = loadFixture("06-krs-0000634215.json");
+    const fetchStub = queuedFetch([basic, advanced, powiazania]);
+    const client = new RejestrioClient(
+      { apiKey: "k", baseUrl: "https://api.test/v2" },
+      fetchStub,
+    );
+    const { profiles } = repoWith(null);
+    const { repo: finDocs, upsert } = spyFinDocs();
+
+    await handleGetKrsInfo(
+      { customer_id: "org-1:user-1:REJESTRIO", krs: 634215 },
+      { client, budget: permissiveBudget(), profiles, finDocs },
+    );
+
+    expect(upsert).toHaveBeenCalledOnce();
+    const row = upsert.mock.calls[0][0] as {
+      source: string;
+      companyKrs: number;
+    };
+    expect(row.source).toBe("basic_snapshot");
+    expect(row.companyKrs).toBe(634215);
+  });
+
+  it("does NOT mirror when basic has no glowne_pola (GPW/consolidated filer)", async () => {
+    const basic = loadFixture("02-krs-0000010681.json");
+    const advanced = loadFixture("03-krs-0000010681-ogolny.json");
+    const powiazania = loadFixture("06-krs-0000010681.json");
+    const fetchStub = queuedFetch([basic, advanced, powiazania]);
+    const client = new RejestrioClient(
+      { apiKey: "k", baseUrl: "https://api.test/v2" },
+      fetchStub,
+    );
+    const { profiles } = repoWith(null);
+    const { repo: finDocs, upsert } = spyFinDocs();
+
+    await handleGetKrsInfo(
+      { customer_id: "org-1:user-1:REJESTRIO", krs: 10681 },
+      { client, budget: permissiveBudget(), profiles, finDocs },
+    );
+
+    expect(upsert).not.toHaveBeenCalled();
   });
 });
