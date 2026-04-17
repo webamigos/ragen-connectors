@@ -1,0 +1,505 @@
+{
+  "forma_prawna": {
+    "_wartosc": "SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2016-08-30"
+    }
+  },
+  "nip": {
+    "_wartosc": "1132916831",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 2,
+      "wpis_wprowadzajacy_data": "2016-08-30"
+    }
+  },
+  "regon": {
+    "_wartosc": "365285652",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 3,
+      "wpis_wprowadzajacy_data": "2016-09-01"
+    }
+  },
+  "nazwa_krotka": {
+    "_wartosc": "PIASECKI GĄGAŁA",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2016-08-30"
+    }
+  },
+  "nazwa": {
+    "_wartosc": "PIASECKI GĄGAŁA SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2016-08-30"
+    }
+  },
+  "czy_przedsiebiorca_prowadzi_dzialalnosc_gospodarcza_z_innymi_podmiotami": {
+    "_wartosc": false,
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2016-08-30"
+    }
+  },
+  "opp": {
+    "_wartosc": false,
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2016-08-30"
+    }
+  },
+  "siedziba": {
+    "_wartosc": "kraj POLSKA, woj. MAZOWIECKIE, powiat WARSZAWA, gmina WARSZAWA, miejsc. WARSZAWA",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2016-08-30"
+    }
+  },
+  "adres": {
+    "_wartosc": {
+      "panstwo": "Polska",
+      "poczta": "Warszawa",
+      "kod_pocztowy": "03-828",
+      "miasto": "Warszawa",
+      "ulica": "Mińska",
+      "nr_domu": "75",
+      "id": "628505",
+      "nr_mieszkania": null
+    },
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 24,
+      "wpis_wprowadzajacy_data": "2025-06-30"
+    }
+  },
+  "adres_znormalizowany": {
+    "_wartosc": {
+      "panstwo": "Polska",
+      "poczta": "Warszawa",
+      "kod_pocztowy": "03-828",
+      "miasto": "Warszawa",
+      "ulica": "Mińska",
+      "nr_domu": "75",
+      "id": "628505",
+      "nr_mieszkania": null,
+      "longitude": 21.073262212166,
+      "latitude": 52.252108573379
+    },
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 24,
+      "wpis_wprowadzajacy_data": "2025-06-30"
+    }
+  },
+  "www": {
+    "_wartosc": "WWW.PIASECKIGAGALA.PL",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 9,
+      "wpis_wprowadzajacy_data": "2020-05-04"
+    }
+  },
+  "czas_na_jaki_zostala_utworzona_organizacja": {
+    "_wartosc": "NIEOZNACZONY",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2016-08-30"
+    }
+  },
+  "czy_wspolnik_moze_miec": {
+    "_wartosc": "WIĘKSZĄ LICZBĘ UDZIAŁÓW",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2016-08-30"
+    }
+  },
+  "wysokosc_kapitalu_zakladowego": {
+    "_wartosc": {
+      "kwota": 5000,
+      "waluta": "ZŁ"
+    },
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2016-08-30"
+    }
+  },
+  "dane_wspolnikow": {
+    "_obiekty": {
+      "1": {
+        "posiadane_przez_wspolnika_udzialy": {
+          "_wartosc": "51 udziałów o łącznej wartości 2.550,00 złotych",
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 1,
+            "wpis_wprowadzajacy_data": "2016-08-30"
+          }
+        },
+        "czy_wspolnik_posiada_calosc_akcji_spolki": {
+          "_wartosc": "NIE",
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 1,
+            "wpis_wprowadzajacy_data": "2016-08-30"
+          }
+        },
+        "person": {
+          "_wartosc": {
+            "imie": "Piotr Paweł",
+            "nazwisko": "Piasecki",
+            "nazwa": "Piotr Paweł Piasecki",
+            "id": "200325",
+            "plec": "M",
+            "data_urodzenia": "1987-03-10"
+          },
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 1,
+            "wpis_wprowadzajacy_data": "2016-08-30"
+          }
+        },
+        "posiadane_przez_wspolnika_udzialy__wartosc": {
+          "_wartosc": {
+            "kwota": "2550.00",
+            "waluta": "zł"
+          },
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 1,
+            "wpis_wprowadzajacy_data": "2016-08-30"
+          }
+        },
+        "posiadane_przez_wspolnika_udzialy__liczba": {
+          "_wartosc": 51,
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 1,
+            "wpis_wprowadzajacy_data": "2016-08-30"
+          }
+        },
+        "posiadane_przez_wspolnika_udzialy__cena_udzialu": {
+          "_wartosc": {
+            "kwota": "50.00",
+            "waluta": "zł"
+          },
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 1,
+            "wpis_wprowadzajacy_data": "2016-08-30"
+          }
+        }
+      },
+      "2": {
+        "posiadane_przez_wspolnika_udzialy": {
+          "_wartosc": "49 udziałów o łącznej wartości 2.450,00 złotych",
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 1,
+            "wpis_wprowadzajacy_data": "2016-08-30"
+          }
+        },
+        "czy_wspolnik_posiada_calosc_akcji_spolki": {
+          "_wartosc": "NIE",
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 1,
+            "wpis_wprowadzajacy_data": "2016-08-30"
+          }
+        },
+        "person": {
+          "_wartosc": {
+            "imie": "Łukasz",
+            "nazwisko": "Gągała",
+            "nazwa": "Łukasz Gągała",
+            "id": "200321",
+            "plec": "M",
+            "data_urodzenia": "1987-05-25"
+          },
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 1,
+            "wpis_wprowadzajacy_data": "2016-08-30"
+          }
+        },
+        "posiadane_przez_wspolnika_udzialy__wartosc": {
+          "_wartosc": {
+            "kwota": "2450.00",
+            "waluta": "zł"
+          },
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 1,
+            "wpis_wprowadzajacy_data": "2016-08-30"
+          }
+        },
+        "posiadane_przez_wspolnika_udzialy__liczba": {
+          "_wartosc": 49,
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 1,
+            "wpis_wprowadzajacy_data": "2016-08-30"
+          }
+        },
+        "posiadane_przez_wspolnika_udzialy__cena_udzialu": {
+          "_wartosc": {
+            "kwota": "50.00",
+            "waluta": "zł"
+          },
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 1,
+            "wpis_wprowadzajacy_data": "2016-08-30"
+          }
+        }
+      }
+    },
+    "_wartosc": {
+      "obiekty": [
+        1,
+        2
+      ],
+      "obiekty_liczba_aktualnych": 2,
+      "obiekty_liczba_wszystkich": 2
+    },
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2016-08-30"
+    }
+  },
+  "organ_reprezentacji": {
+    "_obiekty": {
+      "1": {
+        "nazwa_organu_reprezentacji_podmiotu": {
+          "_wartosc": "Zarząd",
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 1,
+            "wpis_wprowadzajacy_data": "2016-08-30"
+          }
+        },
+        "sposob_reprezentacji_podmiotu": {
+          "_wartosc": "1. W przypadku, gdy zarząd jest wieloosobowy, do składania oświadczeń majątkowych i niemajątkowych w imieniu spółki uprawniony jest każdy członek zarządu samodzielnie. 2. Do zaciągania w imieniu spółki zobowiązań powyżej 5. 000,00 (słownie: pięć tysięcy) złotych jednorazowo, a przy czynnościach ciągłych powyżej 100. 000,00 (słownie: stu tysięcy) - w skali roku, wymagane jest uzyskanie wewnętrznej akceptacji prezesa zarządu lub wiceprezesa zarządu wyrażonej w formie dokumentowej.",
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 15,
+            "wpis_wprowadzajacy_data": "2022-06-10"
+          }
+        },
+        "dane_osob": {
+          "_obiekty": {
+            "1": {
+              "funkcja_w_organie": {
+                "_wartosc": {
+                  "nazwa": "PREZES ZARZĄDU",
+                  "cechy": [
+                    "CEO"
+                  ]
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 1,
+                  "wpis_wprowadzajacy_data": "2016-08-30"
+                }
+              },
+              "czy_osoba_wchodzaca_w_sklad_zarzadu_zostala_zawieszona_w_czynnosciach": {
+                "_wartosc": "NIE",
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 1,
+                  "wpis_wprowadzajacy_data": "2016-08-30"
+                }
+              },
+              "person": {
+                "_wartosc": {
+                  "imie": "Piotr Paweł",
+                  "nazwisko": "Piasecki",
+                  "nazwa": "Piotr Paweł Piasecki",
+                  "id": "200325",
+                  "plec": "M",
+                  "data_urodzenia": "1987-03-10"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 1,
+                  "wpis_wprowadzajacy_data": "2016-08-30"
+                }
+              }
+            },
+            "2": {
+              "funkcja_w_organie": {
+                "_wartosc": {
+                  "nazwa": "WICEPREZES ZARZĄDU"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 15,
+                  "wpis_wprowadzajacy_data": "2022-06-10"
+                }
+              },
+              "czy_osoba_wchodzaca_w_sklad_zarzadu_zostala_zawieszona_w_czynnosciach": {
+                "_wartosc": "NIE",
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 1,
+                  "wpis_wprowadzajacy_data": "2016-08-30"
+                }
+              },
+              "person": {
+                "_wartosc": {
+                  "imie": "Łukasz",
+                  "nazwisko": "Gągała",
+                  "nazwa": "Łukasz Gągała",
+                  "id": "200321",
+                  "plec": "M",
+                  "data_urodzenia": "1987-05-25"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 1,
+                  "wpis_wprowadzajacy_data": "2016-08-30"
+                }
+              }
+            }
+          },
+          "_wartosc": {
+            "obiekty": [
+              1,
+              2
+            ],
+            "obiekty_liczba_aktualnych": 2,
+            "obiekty_liczba_wszystkich": 3
+          },
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 20,
+            "wpis_wprowadzajacy_data": "2024-03-20"
+          }
+        }
+      }
+    },
+    "_wartosc": {
+      "obiekty": [
+        1
+      ],
+      "obiekty_liczba_aktualnych": 1,
+      "obiekty_liczba_wszystkich": 1
+    },
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2016-08-30"
+    }
+  },
+  "dzien_konczacy_pierwszy_rok_obrotowy_za_ktory_nalezy_zlozyc_sprawozdanie_finansowe": {
+    "_wartosc": "31.12.2016",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2016-08-30"
+    }
+  },
+  "przedmiot_przewazajacej_dzialalnosci_przedsiebiorcy": {
+    "_obiekty": {
+      "1": {
+        "_wartosc": {
+          "symbol": [
+            "69",
+            "20",
+            "Z"
+          ],
+          "opis": "Działalność rachunkowo-księgowa; Doradztwo podatkowe",
+          "scheme": "pkd2007"
+        },
+        "_zakres": {
+          "wpis_wprowadzajacy_numer": 1,
+          "wpis_wprowadzajacy_data": "2016-08-30"
+        }
+      }
+    },
+    "_wartosc": {
+      "obiekty": [
+        1
+      ],
+      "obiekty_liczba_aktualnych": 1,
+      "obiekty_liczba_wszystkich": 1
+    },
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2016-08-30"
+    }
+  },
+  "przedmiot_pozostalej_dzialalnosci_przedsiebiorcy": {
+    "_obiekty": {
+      "1": {
+        "_wartosc": {
+          "symbol": [
+            "69",
+            "10",
+            "Z"
+          ],
+          "opis": "Działalność prawnicza",
+          "scheme": "pkd2007"
+        },
+        "_zakres": {
+          "wpis_wprowadzajacy_numer": 15,
+          "wpis_wprowadzajacy_data": "2022-06-10"
+        }
+      },
+      "2": {
+        "_wartosc": {
+          "symbol": [
+            "62",
+            "01",
+            "Z"
+          ],
+          "opis": "Działalność związana z oprogramowaniem",
+          "scheme": "pkd2007"
+        },
+        "_zakres": {
+          "wpis_wprowadzajacy_numer": 15,
+          "wpis_wprowadzajacy_data": "2022-06-10"
+        }
+      },
+      "3": {
+        "_wartosc": {
+          "symbol": [
+            "62",
+            "09",
+            "Z"
+          ],
+          "opis": "Pozostała działalność usługowa w zakresie technologii informatycznych i komputerowych",
+          "scheme": "pkd2007"
+        },
+        "_zakres": {
+          "wpis_wprowadzajacy_numer": 15,
+          "wpis_wprowadzajacy_data": "2022-06-10"
+        }
+      },
+      "4": {
+        "_wartosc": {
+          "symbol": [
+            "62",
+            "02",
+            "Z"
+          ],
+          "opis": "Działalność związana z doradztwem w zakresie informatyki",
+          "scheme": "pkd2007"
+        },
+        "_zakres": {
+          "wpis_wprowadzajacy_numer": 15,
+          "wpis_wprowadzajacy_data": "2022-06-10"
+        }
+      },
+      "5": {
+        "_wartosc": {
+          "symbol": [
+            "62",
+            "03",
+            "Z"
+          ],
+          "opis": "Działalność związana z zarządzaniem urządzeniami informatycznymi",
+          "scheme": "pkd2007"
+        },
+        "_zakres": {
+          "wpis_wprowadzajacy_numer": 15,
+          "wpis_wprowadzajacy_data": "2022-06-10"
+        }
+      }
+    },
+    "_wartosc": {
+      "obiekty": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "obiekty_liczba_aktualnych": 5,
+      "obiekty_liczba_wszystkich": 5
+    },
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 15,
+      "wpis_wprowadzajacy_data": "2022-06-10"
+    }
+  },
+  "krs": {
+    "_wartosc": "0000634215",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2016-08-30"
+    }
+  }
+}

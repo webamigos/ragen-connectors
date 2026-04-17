@@ -1,0 +1,1241 @@
+[
+  {
+    "id": 3594513,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2026-03-02",
+        "kierunek": "AKTYWNY",
+        "typ": "KRS_SUPERVISION"
+      }
+    ],
+    "tozsamosc": {
+      "drugie_imiona": "",
+      "imie": "Usman",
+      "imiona_i_nazwisko": "Usman Javaid",
+      "nazwisko": "Javaid"
+    },
+    "typ": "osoba-bez-pesel"
+  },
+  {
+    "id": 3419600,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2024-10-08",
+        "kierunek": "AKTYWNY",
+        "typ": "KRS_SUPERVISION"
+      }
+    ],
+    "tozsamosc": {
+      "drugie_imiona": "",
+      "imie": "Etienne",
+      "imiona_i_nazwisko": "Etienne Vincens De Tapol",
+      "nazwisko": "Vincens De Tapol"
+    },
+    "typ": "osoba-bez-pesel"
+  },
+  {
+    "id": 3419599,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2024-10-08",
+        "kierunek": "AKTYWNY",
+        "typ": "KRS_SUPERVISION"
+      }
+    ],
+    "tozsamosc": {
+      "drugie_imiona": "",
+      "imie": "Marie-Noëlle",
+      "imiona_i_nazwisko": "Marie-Noëlle Jégo-Laveissiere",
+      "nazwisko": "Jégo-Laveissiere"
+    },
+    "typ": "osoba-bez-pesel"
+  },
+  {
+    "id": 1332075,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2024-05-20",
+        "kierunek": "AKTYWNY",
+        "typ": "KRS_SUPERVISION"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 5,
+      "aktualne_organizacje": 5,
+      "przeszle": 28
+    },
+    "tozsamosc": {
+      "data_urodzenia": "1964-07-01",
+      "drugie_imiona": "Jacek",
+      "imie": "Adam",
+      "imiona_i_nazwisko": "Adam Jacek Uszpolewicz",
+      "nazwisko": "Uszpolewicz",
+      "plec": "M"
+    },
+    "typ": "osoba",
+    "organizacje_skrot": [
+      {
+        "id": 527407,
+        "nazwa_skrocona": "\"MUSICA BEATA\" FUNDACJA IM. BEATY GABOR"
+      },
+      {
+        "id": 995956,
+        "nazwa_skrocona": "WELLYSA"
+      },
+      {
+        "id": 160673,
+        "nazwa_skrocona": "FUNDACJA WWF POLSKA"
+      }
+    ]
+  },
+  {
+    "id": 3285751,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2023-09-14",
+        "kierunek": "AKTYWNY",
+        "opis": "PREZES ZARZĄDU",
+        "typ": "KRS_BOARD"
+      }
+    ],
+    "tozsamosc": {
+      "drugie_imiona": "",
+      "imie": "Liudmila",
+      "imiona_i_nazwisko": "Liudmila Climoc",
+      "nazwisko": "Climoc"
+    },
+    "typ": "osoba-bez-pesel"
+  },
+  {
+    "id": 3271403,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2023-08-17",
+        "kierunek": "AKTYWNY",
+        "typ": "KRS_SUPERVISION"
+      }
+    ],
+    "tozsamosc": {
+      "drugie_imiona": "",
+      "imie": "Clarisse",
+      "imiona_i_nazwisko": "Clarisse Heriard Dubreuil",
+      "nazwisko": "Heriard Dubreuil"
+    },
+    "typ": "osoba-bez-pesel"
+  },
+  {
+    "adres": {
+      "kod": "02-326",
+      "miejscowosc": "Warszawa",
+      "nr_domu": "160",
+      "panstwo": "Polska",
+      "poczta": "Warszawa",
+      "teryt": {
+        "gmina": "146501",
+        "powiat": "1465",
+        "wojewodztwo": "14"
+      },
+      "ulica": "Al. Aleje Jerozolimskie"
+    },
+    "glowna_osoba": {
+      "id": "852326",
+      "imiona_i_nazwisko": "Dariusz Krzysztof Chróścielewski"
+    },
+    "id": 937615,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2022-10-24",
+        "kierunek": "PASYWNY",
+        "typ": "KRS_SHAREHOLDER"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 9,
+      "przeszle": 9
+    },
+    "krs_rejestry": {
+      "rejestr_przedsiebiorcow_data_wpisu": "2021-12-08"
+    },
+    "krs_wpisy": {
+      "najnowszy_data": "2025-07-10",
+      "najnowszy_numer": 22,
+      "pierwszy_data": "2021-12-08"
+    },
+    "metadane": {
+      "krs_odpis_synchronizacja_data_czas": "2026-03-20 03:24:48"
+    },
+    "nazwy": {
+      "pelna": "INTERKAM SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+      "skrocona": "INTERKAM"
+    },
+    "numery": {
+      "krs": "0000937615",
+      "nip": "8371503159",
+      "regon": "750129569"
+    },
+    "stan": {
+      "czy_dofinansowana_przez_ue": false,
+      "czy_jest_na_gpw": false,
+      "czy_otrzymala_pomoc_publiczna": false,
+      "czy_pozytku_publicznego": false,
+      "czy_spolka_skarbu_panstwa": false,
+      "czy_wykreslona": false,
+      "forma_prawna": "SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+      "pkd_przewazajace_dzial": "Telekomunikacja",
+      "w_likwidacji": false,
+      "w_upadlosci": false,
+      "w_zawieszeniu": false,
+      "wielkosc": "duza_srednia"
+    },
+    "typ": "organizacja"
+  },
+  {
+    "id": 1135541,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2022-05-24",
+        "kierunek": "AKTYWNY",
+        "typ": "KRS_SUPERVISION"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 3,
+      "aktualne_organizacje": 3,
+      "przeszle": 14
+    },
+    "tozsamosc": {
+      "data_urodzenia": "1970-10-07",
+      "drugie_imiona": "Marcin",
+      "imie": "Bartosz",
+      "imiona_i_nazwisko": "Bartosz Marcin Dobrzyński",
+      "nazwisko": "Dobrzyński",
+      "plec": "M"
+    },
+    "typ": "osoba",
+    "organizacje_skrot": [
+      {
+        "id": 541234,
+        "nazwa_skrocona": "NOWY KAPITAŁ ZIEMSKI"
+      },
+      {
+        "id": 10681,
+        "nazwa_skrocona": "ORANGE POLSKA"
+      },
+      {
+        "id": 1028035,
+        "nazwa_skrocona": "PETTERSON CAPITAL ALTERNATYWNA SPÓŁKA INWESTYCYJNA"
+      }
+    ]
+  },
+  {
+    "id": 2992976,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2021-08-23",
+        "kierunek": "AKTYWNY",
+        "typ": "KRS_SUPERVISION"
+      }
+    ],
+    "tozsamosc": {
+      "drugie_imiona": "Anne Françoise",
+      "imie": "Bénédicte",
+      "imiona_i_nazwisko": "Bénédicte David",
+      "nazwisko": "David"
+    },
+    "typ": "osoba-bez-pesel"
+  },
+  {
+    "id": 2992977,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2021-08-23",
+        "kierunek": "AKTYWNY",
+        "typ": "KRS_SUPERVISION"
+      }
+    ],
+    "tozsamosc": {
+      "drugie_imiona": "",
+      "imie": "Philippe",
+      "imiona_i_nazwisko": "Philippe Béguin",
+      "nazwisko": "Béguin"
+    },
+    "typ": "osoba-bez-pesel"
+  },
+  {
+    "adres": {
+      "kod": "02-326",
+      "miejscowosc": "Warszawa",
+      "nr_domu": "160",
+      "panstwo": "Polska",
+      "poczta": "Warszawa",
+      "teryt": {
+        "gmina": "146501",
+        "powiat": "1465",
+        "wojewodztwo": "14"
+      },
+      "ulica": "Aleje Jerozolimskie"
+    },
+    "id": 861724,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2020-12-02",
+        "kierunek": "PASYWNY",
+        "typ": "KRS_SHAREHOLDER"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 9,
+      "przeszle": 7
+    },
+    "krs_rejestry": {
+      "rejestr_przedsiebiorcow_data_wpisu": "2020-09-24"
+    },
+    "krs_wpisy": {
+      "najnowszy_data": "2026-04-02",
+      "najnowszy_numer": 34,
+      "pierwszy_data": "2020-09-24"
+    },
+    "metadane": {
+      "krs_odpis_synchronizacja_data_czas": "2026-04-03 08:59:32"
+    },
+    "nazwy": {
+      "pelna": "ŚWIATŁOWÓD INWESTYCJE SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+      "skrocona": "ŚWIATŁOWÓD INWESTYCJE"
+    },
+    "numery": {
+      "krs": "0000861724",
+      "nip": "5252837160",
+      "regon": "387117660"
+    },
+    "stan": {
+      "czy_dofinansowana_przez_ue": false,
+      "czy_jest_na_gpw": false,
+      "czy_otrzymala_pomoc_publiczna": false,
+      "czy_pozytku_publicznego": false,
+      "czy_spolka_skarbu_panstwa": false,
+      "czy_wykreslona": false,
+      "forma_prawna": "SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+      "pkd_przewazajace_dzial": "Telekomunikacja",
+      "w_likwidacji": false,
+      "w_upadlosci": false,
+      "w_zawieszeniu": false
+    },
+    "typ": "organizacja"
+  },
+  {
+    "id": 871169,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2020-09-18",
+        "kierunek": "AKTYWNY",
+        "opis": "CZŁONEK ZARZĄDU",
+        "typ": "KRS_BOARD"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 6,
+      "aktualne_organizacje": 6,
+      "przeszle": 4
+    },
+    "tozsamosc": {
+      "data_urodzenia": "1979-07-11",
+      "drugie_imiona": "Marek",
+      "imie": "Jacek",
+      "imiona_i_nazwisko": "Jacek Marek Kunicki",
+      "nazwisko": "Kunicki",
+      "plec": "M"
+    },
+    "typ": "osoba",
+    "organizacje_skrot": [
+      {
+        "id": 387452,
+        "nazwa_skrocona": "NETWORKS"
+      },
+      {
+        "id": 493136,
+        "nazwa_skrocona": "TELEKOMUNIKACJA POLSKA"
+      },
+      {
+        "id": 10681,
+        "nazwa_skrocona": "ORANGE POLSKA"
+      }
+    ]
+  },
+  {
+    "adres": {
+      "kod": "02-326",
+      "miejscowosc": "Warszawa",
+      "nr_domu": "160",
+      "nr_mieszkania": "A/3/087",
+      "panstwo": "Polska",
+      "poczta": "Warszawa",
+      "teryt": {
+        "gmina": "146501",
+        "powiat": "1465",
+        "wojewodztwo": "14"
+      },
+      "ulica": "Al. Jerozolimskie"
+    },
+    "id": 493136,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2020-02-25",
+        "kierunek": "PASYWNY",
+        "typ": "KRS_SHAREHOLDER"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 2,
+      "przeszle": 3
+    },
+    "krs_rejestry": {
+      "rejestr_przedsiebiorcow_data_wpisu": "2014-01-08"
+    },
+    "krs_wpisy": {
+      "najnowszy_data": "2025-07-08",
+      "najnowszy_numer": 28,
+      "pierwszy_data": "2014-01-08"
+    },
+    "metadane": {
+      "krs_odpis_synchronizacja_data_czas": "2025-12-26 22:45:04"
+    },
+    "nazwy": {
+      "pelna": "TELEKOMUNIKACJA POLSKA SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+      "skrocona": "TELEKOMUNIKACJA POLSKA"
+    },
+    "numery": {
+      "krs": "0000493136",
+      "nip": "7010408485",
+      "regon": "147055257"
+    },
+    "stan": {
+      "czy_dofinansowana_przez_ue": false,
+      "czy_jest_na_gpw": false,
+      "czy_otrzymala_pomoc_publiczna": false,
+      "czy_pozytku_publicznego": false,
+      "czy_spolka_skarbu_panstwa": false,
+      "czy_wykreslona": false,
+      "forma_prawna": "SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+      "pkd_przewazajace_dzial": "Telekomunikacja",
+      "w_likwidacji": false,
+      "w_upadlosci": false,
+      "w_zawieszeniu": false,
+      "wielkosc": "mikro"
+    },
+    "typ": "organizacja"
+  },
+  {
+    "adres": {
+      "kod": "02-305",
+      "miejscowosc": "Warszawa",
+      "nr_domu": "134",
+      "panstwo": "Polska",
+      "poczta": "Warszawa",
+      "teryt": {
+        "gmina": "146501",
+        "powiat": "1465",
+        "wojewodztwo": "14"
+      },
+      "ulica": "Aleje Jerozolimskie"
+    },
+    "id": 138707,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2019-07-09",
+        "kierunek": "PASYWNY",
+        "typ": "KRS_SHAREHOLDER"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 10,
+      "przeszle": 14
+    },
+    "krs_rejestry": {
+      "rejestr_przedsiebiorcow_data_wpisu": "2002-11-18"
+    },
+    "krs_wpisy": {
+      "najnowszy_data": "2026-03-17",
+      "najnowszy_numer": 80,
+      "pierwszy_data": "2002-11-18"
+    },
+    "metadane": {
+      "krs_odpis_synchronizacja_data_czas": "2026-03-18 17:10:57"
+    },
+    "nazwy": {
+      "pelna": "BLUESOFT SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+      "skrocona": "BLUESOFT"
+    },
+    "numery": {
+      "duns": "422158455",
+      "krs": "0000138707",
+      "nip": "5262667699",
+      "regon": "015274190"
+    },
+    "stan": {
+      "czy_dofinansowana_przez_ue": false,
+      "czy_jest_na_gpw": false,
+      "czy_otrzymala_pomoc_publiczna": true,
+      "czy_pozytku_publicznego": false,
+      "czy_spolka_skarbu_panstwa": false,
+      "czy_wykreslona": false,
+      "forma_prawna": "SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+      "pkd_przewazajace_dzial": "Działalność związana z oprogramowaniem i doradztwem w zakresie informatyki oraz działalność powiązana",
+      "w_likwidacji": false,
+      "w_upadlosci": false,
+      "w_zawieszeniu": false,
+      "wielkosc": "duza_srednia"
+    },
+    "typ": "organizacja"
+  },
+  {
+    "id": 1391502,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2019-06-07",
+        "kierunek": "AKTYWNY",
+        "typ": "KRS_SUPERVISION"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 4,
+      "aktualne_organizacje": 4,
+      "przeszle": 33
+    },
+    "tozsamosc": {
+      "data_urodzenia": "1968-04-15",
+      "drugie_imiona": "Aleksandra",
+      "imie": "Monika",
+      "imiona_i_nazwisko": "Monika Aleksandra Nachyła",
+      "nazwisko": "Nachyła",
+      "plec": "F"
+    },
+    "typ": "osoba",
+    "organizacje_skrot": [
+      {
+        "id": 10681,
+        "nazwa_skrocona": "ORANGE POLSKA"
+      },
+      {
+        "id": 28131,
+        "nazwa_skrocona": "NATIONALE-NEDERLANDEN TOWARZYSTWO UBEZPIECZEŃ NA ŻYCIE"
+      },
+      {
+        "id": 647311,
+        "nazwa_skrocona": "NATIONALE-NEDERLANDEN TOWARZYSTWO UBEZPIECZEŃ"
+      }
+    ]
+  },
+  {
+    "id": 418388,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2018-11-28",
+        "kierunek": "AKTYWNY",
+        "opis": "CZŁONEK ZARZĄDU",
+        "typ": "KRS_BOARD"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 7,
+      "aktualne_organizacje": 7,
+      "przeszle": 1
+    },
+    "tozsamosc": {
+      "data_urodzenia": "1961-08-07",
+      "drugie_imiona": "Tadeusz",
+      "imie": "Piotr",
+      "imiona_i_nazwisko": "Piotr Tadeusz Jaworski",
+      "nazwisko": "Jaworski",
+      "plec": "M"
+    },
+    "typ": "osoba",
+    "organizacje_skrot": [
+      {
+        "id": 658416,
+        "nazwa_skrocona": "REDGRASS HOME SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ OSIEDLE STRZENIÓWKA"
+      },
+      {
+        "id": 10681,
+        "nazwa_skrocona": "ORANGE POLSKA"
+      },
+      {
+        "id": 387452,
+        "nazwa_skrocona": "NETWORKS"
+      }
+    ]
+  },
+  {
+    "id": 543465,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2018-11-28",
+        "kierunek": "AKTYWNY",
+        "opis": "CZŁONEK ZARZĄDU",
+        "typ": "KRS_BOARD"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 4,
+      "aktualne_organizacje": 4,
+      "przeszle": 13
+    },
+    "tozsamosc": {
+      "data_urodzenia": "1974-09-16",
+      "drugie_imiona": "Ryszard",
+      "imie": "Witold",
+      "imiona_i_nazwisko": "Witold Ryszard Drożdż",
+      "nazwisko": "Drożdż",
+      "plec": "M"
+    },
+    "typ": "osoba",
+    "organizacje_skrot": [
+      {
+        "id": 241397,
+        "nazwa_skrocona": "FUNDACJA ORANGE"
+      },
+      {
+        "id": 10681,
+        "nazwa_skrocona": "ORANGE POLSKA"
+      },
+      {
+        "id": 937892,
+        "nazwa_skrocona": "FUNDACJA FORUM BEZPIECZEŃSTWA"
+      }
+    ]
+  },
+  {
+    "id": 2892276,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2018-05-15",
+        "kierunek": "AKTYWNY",
+        "typ": "KRS_SUPERVISION"
+      }
+    ],
+    "tozsamosc": {
+      "drugie_imiona": "",
+      "imie": "Jean-Marc",
+      "imiona_i_nazwisko": "Jean-Marc Vignolles",
+      "nazwisko": "Vignolles"
+    },
+    "typ": "osoba-bez-pesel"
+  },
+  {
+    "adres": {
+      "kod": "02-326",
+      "miejscowosc": "Warszawa",
+      "nr_domu": "160",
+      "panstwo": "Polska",
+      "poczta": "Warszawa",
+      "teryt": {
+        "gmina": "146501",
+        "powiat": "1465",
+        "wojewodztwo": "14"
+      },
+      "ulica": "Aleje Jerozolimskie"
+    },
+    "glowna_osoba": {
+      "id": "1397630",
+      "imiona_i_nazwisko": "Janusz Ludwik Szreder"
+    },
+    "id": 4093,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2017-09-28",
+        "kierunek": "PASYWNY",
+        "typ": "KRS_ONLY_SHAREHOLDER"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 17,
+      "przeszle": 36
+    },
+    "krs_rejestry": {
+      "rejestr_przedsiebiorcow_data_wpisu": "2001-04-02"
+    },
+    "krs_wpisy": {
+      "najnowszy_data": "2026-01-16",
+      "najnowszy_numer": 89,
+      "pierwszy_data": "2001-04-02"
+    },
+    "metadane": {
+      "krs_odpis_synchronizacja_data_czas": "2026-01-17 08:14:28"
+    },
+    "nazwy": {
+      "pelna": "PRACOWNICZE TOWARZYSTWO EMERYTALNE ORANGE POLSKA SPÓŁKA AKCYJNA",
+      "skrocona": "PRACOWNICZE TOWARZYSTWO EMERYTALNE ORANGE POLSKA"
+    },
+    "numery": {
+      "duns": "368187097",
+      "krs": "0000004093",
+      "nip": "5262524787",
+      "regon": "017257036"
+    },
+    "stan": {
+      "czy_dofinansowana_przez_ue": false,
+      "czy_jest_na_gpw": false,
+      "czy_otrzymala_pomoc_publiczna": false,
+      "czy_pozytku_publicznego": false,
+      "czy_spolka_skarbu_panstwa": false,
+      "czy_wykreslona": false,
+      "forma_prawna": "SPÓŁKA AKCYJNA",
+      "w_likwidacji": false,
+      "w_upadlosci": false,
+      "w_zawieszeniu": false,
+      "wielkosc": "duza_srednia"
+    },
+    "typ": "organizacja"
+  },
+  {
+    "id": 2892370,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2016-08-22",
+        "kierunek": "AKTYWNY",
+        "typ": "KRS_SUPERVISION"
+      }
+    ],
+    "tozsamosc": {
+      "drugie_imiona": "Russell",
+      "imie": "John",
+      "imiona_i_nazwisko": "John Houlden",
+      "nazwisko": "Houlden"
+    },
+    "typ": "osoba-bez-pesel"
+  },
+  {
+    "id": 448646,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2015-11-06",
+        "kierunek": "AKTYWNY",
+        "opis": "CZŁONEK ZARZĄDU",
+        "typ": "KRS_BOARD"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 5,
+      "aktualne_organizacje": 5,
+      "przeszle": 5
+    },
+    "tozsamosc": {
+      "data_urodzenia": "1965-08-30",
+      "drugie_imiona": "Katarzyna",
+      "imie": "Bożena",
+      "imiona_i_nazwisko": "Bożena Katarzyna Leśniewska",
+      "nazwisko": "Leśniewska",
+      "plec": "F"
+    },
+    "typ": "osoba",
+    "organizacje_skrot": [
+      {
+        "id": 10681,
+        "nazwa_skrocona": "ORANGE POLSKA"
+      },
+      {
+        "id": 241397,
+        "nazwa_skrocona": "FUNDACJA ORANGE"
+      },
+      {
+        "id": 385043,
+        "nazwa_skrocona": "INTEGRATED SOLUTIONS"
+      }
+    ]
+  },
+  {
+    "id": 618337,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2015-11-06",
+        "kierunek": "AKTYWNY",
+        "opis": "CZŁONEK ZARZĄDU",
+        "typ": "KRS_BOARD"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 3,
+      "aktualne_organizacje": 3,
+      "przeszle": 3
+    },
+    "tozsamosc": {
+      "data_urodzenia": "1964-10-04",
+      "drugie_imiona": "Barbara",
+      "imie": "Jolanta",
+      "imiona_i_nazwisko": "Jolanta Barbara Dudek",
+      "nazwisko": "Dudek",
+      "plec": "F"
+    },
+    "typ": "osoba",
+    "organizacje_skrot": [
+      {
+        "id": 10681,
+        "nazwa_skrocona": "ORANGE POLSKA"
+      },
+      {
+        "id": 241397,
+        "nazwa_skrocona": "FUNDACJA ORANGE"
+      },
+      {
+        "id": 937615,
+        "nazwa_skrocona": "INTERKAM"
+      }
+    ]
+  },
+  {
+    "adres": {
+      "kod": "02-326",
+      "miejscowosc": "Warszawa",
+      "nr_domu": "160",
+      "panstwo": "Polska",
+      "poczta": "Warszawa",
+      "teryt": {
+        "gmina": "146501",
+        "powiat": "1465",
+        "wojewodztwo": "14"
+      },
+      "ulica": "Al. Aleje Jerozolimskie"
+    },
+    "glowna_osoba": {
+      "id": "3295904",
+      "imiona_i_nazwisko": "Anna Katarzyna Sidło"
+    },
+    "id": 43165,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2015-09-25",
+        "kierunek": "PASYWNY",
+        "typ": "KRS_SHAREHOLDER"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 2,
+      "przeszle": 36
+    },
+    "krs_rejestry": {
+      "rejestr_przedsiebiorcow_data_wpisu": "2001-09-11"
+    },
+    "krs_wpisy": {
+      "najnowszy_data": "2025-07-04",
+      "najnowszy_numer": 85,
+      "pierwszy_data": "2001-09-11"
+    },
+    "metadane": {
+      "krs_odpis_synchronizacja_data_czas": "2026-02-01 12:49:54"
+    },
+    "nazwy": {
+      "pelna": "ORANGE SZKOLENIA SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+      "skrocona": "ORANGE SZKOLENIA"
+    },
+    "numery": {
+      "duns": "422507939",
+      "krs": "0000043165",
+      "nip": "5252140186",
+      "regon": "016098630"
+    },
+    "stan": {
+      "czy_dofinansowana_przez_ue": false,
+      "czy_jest_na_gpw": false,
+      "czy_otrzymala_pomoc_publiczna": true,
+      "czy_pozytku_publicznego": false,
+      "czy_spolka_skarbu_panstwa": false,
+      "czy_wykreslona": false,
+      "forma_prawna": "SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+      "pkd_przewazajace_dzial": "Edukacja",
+      "w_likwidacji": false,
+      "w_upadlosci": false,
+      "w_zawieszeniu": false,
+      "wielkosc": "duza_srednia"
+    },
+    "typ": "organizacja"
+  },
+  {
+    "id": 1210442,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2015-05-14",
+        "kierunek": "AKTYWNY",
+        "typ": "KRS_SUPERVISION"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 2,
+      "aktualne_organizacje": 2,
+      "przeszle": 13
+    },
+    "tozsamosc": {
+      "data_urodzenia": "1959-03-27",
+      "imie": "Maria",
+      "imiona_i_nazwisko": "Maria Pasło Wiśniewska",
+      "nazwisko": "Pasło Wiśniewska",
+      "plec": "F"
+    },
+    "typ": "osoba",
+    "organizacje_skrot": [
+      {
+        "id": 10681,
+        "nazwa_skrocona": "ORANGE POLSKA"
+      },
+      {
+        "id": 145371,
+        "nazwa_skrocona": "FUNDACJA INSTYTUT ARTES LIBERALES"
+      }
+    ]
+  },
+  {
+    "adres": {
+      "kod": "01-207",
+      "miejscowosc": "Warszawa",
+      "nr_domu": "30",
+      "panstwo": "Polska",
+      "poczta": "Warszawa",
+      "teryt": {
+        "gmina": "146501",
+        "powiat": "1465",
+        "wojewodztwo": "14"
+      },
+      "ulica": "Karolkowa"
+    },
+    "glowna_osoba": {
+      "id": "180409",
+      "imiona_i_nazwisko": "Andrzej Antoni Zając"
+    },
+    "id": 385043,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2014-07-10",
+        "kierunek": "PASYWNY",
+        "typ": "KRS_SHAREHOLDER"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 7,
+      "przeszle": 10
+    },
+    "krs_rejestry": {
+      "rejestr_przedsiebiorcow_data_wpisu": "2011-04-29"
+    },
+    "krs_wpisy": {
+      "najnowszy_data": "2025-10-16",
+      "najnowszy_numer": 60,
+      "pierwszy_data": "2011-04-29"
+    },
+    "metadane": {
+      "krs_odpis_synchronizacja_data_czas": "2026-02-12 00:44:45"
+    },
+    "nazwy": {
+      "pelna": "INTEGRATED SOLUTIONS SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+      "skrocona": "INTEGRATED SOLUTIONS"
+    },
+    "numery": {
+      "krs": "0000385043",
+      "nip": "5252506859",
+      "regon": "142924560"
+    },
+    "stan": {
+      "czy_dofinansowana_przez_ue": false,
+      "czy_jest_na_gpw": false,
+      "czy_otrzymala_pomoc_publiczna": false,
+      "czy_pozytku_publicznego": false,
+      "czy_spolka_skarbu_panstwa": false,
+      "czy_wykreslona": false,
+      "forma_prawna": "SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+      "pkd_przewazajace_dzial": "Handel hurtowy, z wyłączeniem handlu pojazdami samochodowymi",
+      "w_likwidacji": false,
+      "w_upadlosci": false,
+      "w_zawieszeniu": false
+    },
+    "typ": "organizacja"
+  },
+  {
+    "id": 1399604,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2014-04-07",
+        "kierunek": "AKTYWNY",
+        "opis": "CZŁONEK ZARZĄDU",
+        "typ": "KRS_BOARD"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 2,
+      "aktualne_organizacje": 2,
+      "przeszle": 10
+    },
+    "tozsamosc": {
+      "data_urodzenia": "1973-02-08",
+      "drugie_imiona": "Mateusz",
+      "imie": "Maciej",
+      "imiona_i_nazwisko": "Maciej Mateusz Nowohoński",
+      "nazwisko": "Nowohoński",
+      "plec": "M"
+    },
+    "typ": "osoba",
+    "organizacje_skrot": [
+      {
+        "id": 10681,
+        "nazwa_skrocona": "ORANGE POLSKA"
+      },
+      {
+        "id": 861724,
+        "nazwa_skrocona": "ŚWIATŁOWÓD INWESTYCJE"
+      }
+    ]
+  },
+  {
+    "adres": {
+      "kod": "00-728",
+      "miejscowosc": "Warszawa",
+      "nr_domu": "3",
+      "panstwo": "Polska",
+      "poczta": "Warszawa",
+      "teryt": {
+        "gmina": "146501",
+        "powiat": "1465",
+        "wojewodztwo": "14"
+      },
+      "ulica": "Józefa Piusa Dziekońskiego"
+    },
+    "glowna_osoba": {
+      "id": "419794",
+      "imiona_i_nazwisko": "Maciej Robert Zengel"
+    },
+    "id": 387452,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2014-03-17",
+        "kierunek": "PASYWNY",
+        "typ": "KRS_SHAREHOLDER"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 10,
+      "przeszle": 38
+    },
+    "krs_rejestry": {
+      "rejestr_przedsiebiorcow_data_wpisu": "2011-05-26"
+    },
+    "krs_wpisy": {
+      "najnowszy_data": "2025-11-27",
+      "najnowszy_numer": 64,
+      "pierwszy_data": "2011-05-26"
+    },
+    "metadane": {
+      "krs_odpis_synchronizacja_data_czas": "2026-02-19 03:44:58"
+    },
+    "nazwy": {
+      "pelna": "NETWORKS SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+      "skrocona": "NETWORKS"
+    },
+    "numery": {
+      "krs": "0000387452",
+      "nip": "5272656214",
+      "regon": "142953840"
+    },
+    "stan": {
+      "czy_dofinansowana_przez_ue": false,
+      "czy_jest_na_gpw": false,
+      "czy_otrzymala_pomoc_publiczna": false,
+      "czy_pozytku_publicznego": false,
+      "czy_spolka_skarbu_panstwa": false,
+      "czy_wykreslona": false,
+      "forma_prawna": "SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+      "pkd_przewazajace_dzial": "Naprawa i konserwacja komputerów i artykułów użytku osobistego i domowego",
+      "w_likwidacji": false,
+      "w_upadlosci": false,
+      "w_zawieszeniu": false,
+      "wielkosc": "duza_srednia"
+    },
+    "typ": "organizacja"
+  },
+  {
+    "adres": {
+      "kod": "02-326",
+      "miejscowosc": "Warszawa",
+      "nr_domu": "160",
+      "panstwo": "Polska",
+      "poczta": "Warszawa",
+      "teryt": {
+        "gmina": "146501",
+        "powiat": "1465",
+        "wojewodztwo": "14"
+      },
+      "ulica": "Al. Aleje Jerozolimskie"
+    },
+    "glowna_osoba": {
+      "id": "2799062",
+      "imiona_i_nazwisko": "Grzegorz Bartłomiej Marek"
+    },
+    "id": 281910,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2014-01-15",
+        "kierunek": "PASYWNY",
+        "typ": "KRS_ONLY_SHAREHOLDER"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 5,
+      "przeszle": 26
+    },
+    "krs_rejestry": {
+      "rejestr_przedsiebiorcow_data_wpisu": "2007-06-01"
+    },
+    "krs_wpisy": {
+      "najnowszy_data": "2025-08-19",
+      "najnowszy_numer": 71,
+      "pierwszy_data": "2007-06-01"
+    },
+    "metadane": {
+      "krs_odpis_synchronizacja_data_czas": "2026-03-27 22:57:29"
+    },
+    "nazwy": {
+      "pelna": "ORANGE RETAIL SPÓŁKA AKCYJNA",
+      "skrocona": "ORANGE RETAIL"
+    },
+    "numery": {
+      "duns": "422135355",
+      "krs": "0000281910",
+      "nip": "5130137941",
+      "regon": "120477120"
+    },
+    "stan": {
+      "czy_dofinansowana_przez_ue": false,
+      "czy_jest_na_gpw": false,
+      "czy_otrzymala_pomoc_publiczna": true,
+      "czy_pozytku_publicznego": false,
+      "czy_spolka_skarbu_panstwa": false,
+      "czy_wykreslona": false,
+      "forma_prawna": "SPÓŁKA AKCYJNA",
+      "pkd_przewazajace_dzial": "Handel hurtowy, z wyłączeniem handlu pojazdami samochodowymi",
+      "w_likwidacji": false,
+      "w_upadlosci": false,
+      "w_zawieszeniu": false,
+      "wielkosc": "duza_srednia"
+    },
+    "typ": "organizacja"
+  },
+  {
+    "id": 1390346,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2013-10-29",
+        "kierunek": "AKTYWNY",
+        "typ": "KRS_SUPERVISION"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 7,
+      "aktualne_organizacje": 7,
+      "przeszle": 37
+    },
+    "tozsamosc": {
+      "data_urodzenia": "1967-01-16",
+      "drugie_imiona": "Krzysztof",
+      "imie": "Maciej",
+      "imiona_i_nazwisko": "Maciej Krzysztof Witucki",
+      "nazwisko": "Witucki",
+      "plec": "M"
+    },
+    "typ": "osoba",
+    "organizacje_skrot": [
+      {
+        "id": 319089,
+        "nazwa_skrocona": "FUNDACJA \"CENTRUM IM. PROFESORA BRONISŁAWA GEREMKA\""
+      },
+      {
+        "id": 10681,
+        "nazwa_skrocona": "ORANGE POLSKA"
+      },
+      {
+        "id": 378184,
+        "nazwa_skrocona": "KRYNICA VITAMIN"
+      }
+    ]
+  },
+  {
+    "id": 2892365,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2013-06-18",
+        "kierunek": "AKTYWNY",
+        "typ": "KRS_SUPERVISION"
+      }
+    ],
+    "tozsamosc": {
+      "drugie_imiona": "",
+      "imie": "Marc",
+      "imiona_i_nazwisko": "Marc Ricau",
+      "nazwisko": "Ricau"
+    },
+    "typ": "osoba-bez-pesel"
+  },
+  {
+    "id": 1390348,
+    "krs_powiazania_kwerendowane": [
+      {
+        "data_koniec": null,
+        "data_start": "2011-02-17",
+        "kierunek": "AKTYWNY",
+        "opis": "CZŁONEK ZARZĄDU",
+        "typ": "KRS_BOARD"
+      }
+    ],
+    "krs_powiazania_liczby": {
+      "aktualne": 4,
+      "aktualne_organizacje": 4,
+      "przeszle": 2
+    },
+    "tozsamosc": {
+      "data_urodzenia": "1964-12-14",
+      "imie": "Jacek",
+      "imiona_i_nazwisko": "Jacek Kowalski",
+      "nazwisko": "Kowalski",
+      "plec": "M"
+    },
+    "typ": "osoba",
+    "organizacje_skrot": [
+      {
+        "id": 190972,
+        "nazwa_skrocona": "FUNDACJA \"CIVIS POLONUS\""
+      },
+      {
+        "id": 10681,
+        "nazwa_skrocona": "ORANGE POLSKA"
+      },
+      {
+        "id": 4093,
+        "nazwa_skrocona": "PRACOWNICZE TOWARZYSTWO EMERYTALNE ORANGE POLSKA"
+      }
+    ]
+  }
+]

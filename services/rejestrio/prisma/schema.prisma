@@ -1,0 +1,142 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Cache of company profiles retrieved from Rejestr.io.
+///
+/// Populated lazily on first `lookup_company` / `get_krs_info` call.
+/// TTLs are applied per-field (basic vs advanced vs powiązania) because
+/// those endpoints are independent upstream calls and can go stale
+/// at different rates.
+///
+/// `krs` is the stable integer identifier (no leading zeros); we also
+/// store the canonical 10-digit padded form in `krsPadded` for
+/// convenient display / grepping.
+model CompanyProfile {
+  id                  Int       @id @default(autoincrement())
+  krs                 Int       @unique
+  krsPadded           String    @unique @map("krs_padded")
+  // `nip` / `regon` are NOT unique — one NIP often maps to several KRS
+  // entries because the same business restructured over time (S.A. →
+  // sp. z o.o. sp.k. → sp. z o.o.). Originally modelled as @unique,
+  // which caused upserts on the 2nd/3rd historical form to blow up
+  // with P2002 because the NIP had already been inserted on a
+  // different row. Index but do not constrain.
+  nip                 String?
+  regon               String?
+
+  nazwaPelna          String    @map("nazwa_pelna")
+  nazwaSkrocona       String?   @map("nazwa_skrocona")
+  formaPrawna         String?   @map("forma_prawna")
+  /// Human-readable PKD 2007 description from endpoint 02's
+  /// `stan.pkd_przewazajace_dzial`. Useful for display.
+  pkdGlowny           String?   @map("pkd_glowny")
+  /// Numeric PKD 2007 code (e.g. "62.01.Z") extracted from endpoint
+  /// 03 `ogolny` chapter's `przedmiot_przewazajacej_dzialalnosci...`.
+  /// Populated only after `get_krs_info` hits endpoint 03. Used by
+  /// `search_enriched_leads` to filter by sector prefix
+  /// (e.g. "62" = IT / software).
+  pkdCode             String?   @map("pkd_code")
+
+  /// Raw whole-payload dumps per endpoint — durable, ready for future
+  /// field extraction without re-hitting the upstream. Keyed by
+  /// endpoint number for auditability.
+  basicRaw                       Json?     @map("basic_raw")            // endpoint 02
+  advancedRaw                    Json?     @map("advanced_raw")         // endpoint 03 (chapter 'ogolny')
+  powiazaniaRaw                  Json?     @map("powiazania_raw")       // endpoint 06, aktualnosc=aktualne
+  powiazaniaHistoryczneRaw       Json?     @map("powiazania_historyczne_raw") // endpoint 06, aktualnosc=historyczne (Premium+)
+
+  /// Per-endpoint fetch timestamps drive TTL decisions. Null means
+  /// "never fetched" — caller should go upstream.
+  basicFetchedAt                 DateTime? @map("basic_fetched_at")                  @db.Timestamptz
+  advancedFetchedAt              DateTime? @map("advanced_fetched_at")               @db.Timestamptz
+  powiazaniaFetchedAt            DateTime? @map("powiazania_fetched_at")             @db.Timestamptz
+  powiazaniaHistoryczneFetchedAt DateTime? @map("powiazania_historyczne_fetched_at") @db.Timestamptz
+
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt           DateTime  @updatedAt      @map("updated_at") @db.Timestamptz
+
+  financialDocuments  FinancialDocument[]
+
+  @@index([nip])
+  @@index([pkdGlowny])
+  @@index([pkdCode])
+  @@map("company_profiles")
+}
+
+/// Per-year financial statements fetched from Rejestr.io endpoint 11.
+///
+/// Endpoint 11 returns null when the underlying document has no
+/// structured JSON (`czy_ma_json: false` case, typical for
+/// GPW/consolidated filers). We still persist a row in that case with
+/// `rawPayload = null` and `source = 'unavailable'`, so the next call
+/// doesn't waste another 0.50 PLN rediscovering the same gap.
+model FinancialDocument {
+  id           Int       @id @default(autoincrement())
+  companyKrs   Int       @map("company_krs")
+  rocznik      Int?
+  dataOd       DateTime? @map("data_od") @db.Date
+  dataDo       DateTime? @map("data_do") @db.Date
+
+  /// Extracted headline numbers (when available). All denominated in
+  /// PLN — the upstream always returns złoty unless the company's
+  /// kapitał zakładowy is in euro (<100 orgs).
+  przychody    Float?
+  koszty       Float?
+  zysk         Float?
+  aktywa       Float?
+  pasywa       Float?
+  podatek      Float?
+
+  /// Upstream document identifier (from endpoint 10 listing).
+  documentId   Int?      @map("document_id")
+  czyMaJson    Boolean   @map("czy_ma_json")
+  source       String    // "fin_document" | "unavailable" | "basic_snapshot"
+
+  /// Whole payload of endpoint 11 for this document, or null when
+  /// `czy_ma_json = false`.
+  rawPayload   Json?     @map("raw_payload")
+
+  fetchedAt    DateTime  @map("fetched_at") @db.Timestamptz
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  company      CompanyProfile @relation(fields: [companyKrs], references: [krs], onDelete: Cascade)
+
+  @@unique([companyKrs, rocznik])
+  @@index([companyKrs])
+  @@map("financial_documents")
+}
+
+/// Cost attribution for every upstream Rejestr.io call. Lets us answer
+/// "how much did Rejestr.io cost us this month" and "which org is
+/// driving the bill" — both are must-haves given 0.50 PLN-per-call
+/// pricing on endpoint 11.
+model RequestAudit {
+  id         Int       @id @default(autoincrement())
+  endpoint   String    // "01" | "02" | "03" | "06" | "10" | "11"
+  krs        Int?
+  nip        String?
+  costPln    Float     @map("cost_pln")
+  httpStatus Int       @map("http_status")
+  latencyMs  Int       @map("latency_ms")
+
+  /// MCP caller context — set by the tool handler from the tool's
+  /// `customer_id` input param.
+  orgId      String?   @map("org_id")
+  userId     String?   @map("user_id")
+
+  cached     Boolean   @default(false)
+  error      String?
+
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([createdAt])
+  @@index([orgId, createdAt])
+  @@index([endpoint, createdAt])
+  @@map("request_audits")
+}

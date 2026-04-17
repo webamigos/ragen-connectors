@@ -1,0 +1,31 @@
+# Local dev stack for the rejestrio MCP service.
+# Only contains what this service owns (its Postgres).
+# Other ragen-mcp services get their own compose files in their own
+# service dirs — matches the ragen-token-vault pattern.
+#
+# Usage:
+#   cd services/rejestrio && docker compose up -d postgres
+#   npm run db:migrate:dev
+#   npm run dev
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: rejestrio-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pass123}
+      POSTGRES_DB: ${POSTGRES_DB:-rejestrio}
+    ports:
+      # 5432 taken by ragen-app's main postgres, 5433 by ragen-token-vault.
+      - "${POSTGRES_PORT:-5434}:5432"
+    volumes:
+      - rejestrio_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  rejestrio_pgdata:

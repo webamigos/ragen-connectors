@@ -1,0 +1,910 @@
+{
+  "forma_prawna": {
+    "_wartosc": "SPÓŁKA AKCYJNA",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2001-05-02"
+    }
+  },
+  "regon": {
+    "_wartosc": "012100784",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2001-05-02"
+    }
+  },
+  "nip": {
+    "_wartosc": "5260250995",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 20,
+      "wpis_wprowadzajacy_data": "2007-04-27"
+    }
+  },
+  "nazwa_krotka": {
+    "_wartosc": "ORANGE POLSKA",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 47,
+      "wpis_wprowadzajacy_data": "2013-12-31"
+    }
+  },
+  "nazwa": {
+    "_wartosc": "ORANGE POLSKA SPÓŁKA AKCYJNA",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 47,
+      "wpis_wprowadzajacy_data": "2013-12-31"
+    }
+  },
+  "czy_przedsiebiorca_prowadzi_dzialalnosc_gospodarcza_z_innymi_podmiotami": {
+    "_wartosc": false,
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2001-05-02"
+    }
+  },
+  "dane_o_wczesniejszej_rejestracji": {
+    "_wartosc": "RHB 29979 SĄD REJONOWY DLA M.ST. WARSZAWY",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2001-05-02"
+    }
+  },
+  "siedziba": {
+    "_wartosc": "kraj POLSKA, woj. MAZOWIECKIE, powiat M. ST. WARSZAWA, gmina M. ST. WARSZAWA, miejsc. WARSZAWA",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 11,
+      "wpis_wprowadzajacy_data": "2004-03-15"
+    }
+  },
+  "adres": {
+    "_wartosc": {
+      "panstwo": "Polska",
+      "poczta": "Warszawa",
+      "kod_pocztowy": "02-326",
+      "miasto": "Warszawa",
+      "ulica": "Al. Jerozolimskie",
+      "nr_domu": "160",
+      "id": "109754",
+      "nr_mieszkania": null
+    },
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 47,
+      "wpis_wprowadzajacy_data": "2013-12-31"
+    }
+  },
+  "adres_znormalizowany": {
+    "_wartosc": {
+      "panstwo": "Polska",
+      "poczta": "Warszawa",
+      "kod_pocztowy": "02-326",
+      "miasto": "Warszawa",
+      "ulica": "Aleje Jerozolimskie",
+      "nr_domu": "160",
+      "id": "109754",
+      "nr_mieszkania": null,
+      "longitude": 20.946146519889,
+      "latitude": 52.208573007598
+    },
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 47,
+      "wpis_wprowadzajacy_data": "2013-12-31"
+    }
+  },
+  "www": {
+    "_wartosc": "ORANGE.PL",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 110,
+      "wpis_wprowadzajacy_data": "2021-08-23"
+    }
+  },
+  "czas_na_jaki_zostala_utworzona_organizacja": {
+    "_wartosc": "NIEOZNACZONY",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2001-05-02"
+    }
+  },
+  "czy_statut_przyznaje_uprawnienia_osobiste_okreslonym_akcjonariuszom": {
+    "_wartosc": true,
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2001-05-02"
+    }
+  },
+  "czy_obligatoriusze_maja_prawo_do_udzialu_w_zysku": {
+    "_wartosc": false,
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2001-05-02"
+    }
+  },
+  "wysokosc_kapitalu_zakladowego": {
+    "_wartosc": {
+      "kwota": 3937072437,
+      "waluta": "ZŁ"
+    },
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 44,
+      "wpis_wprowadzajacy_data": "2013-06-18"
+    }
+  },
+  "kwotowe_okreslenie_czesci_kapitalu_wplaconego": {
+    "_wartosc": {
+      "kwota": 3937072437,
+      "waluta": "ZŁ"
+    },
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 49,
+      "wpis_wprowadzajacy_data": "2014-02-20"
+    }
+  },
+  "wartosc_nominalna_warunkowego_podwyzszenia_kapitalu_zakladowego": {
+    "_wartosc": {
+      "kwota": 21339000,
+      "waluta": "ZŁ"
+    },
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 17,
+      "wpis_wprowadzajacy_data": "2006-06-30"
+    }
+  },
+  "organ_reprezentacji": {
+    "_obiekty": {
+      "1": {
+        "nazwa_organu_reprezentacji_podmiotu": {
+          "_wartosc": "Zarząd Spółki",
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 1,
+            "wpis_wprowadzajacy_data": "2001-05-02"
+          }
+        },
+        "sposob_reprezentacji_podmiotu": {
+          "_wartosc": "Prezes łącznie z członkiem zarządu",
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 1,
+            "wpis_wprowadzajacy_data": "2001-05-02"
+          }
+        },
+        "dane_osob": {
+          "_obiekty": {
+            "25": {
+              "funkcja_w_organie": {
+                "_wartosc": {
+                  "nazwa": "CZŁONEK ZARZĄDU"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 36,
+                  "wpis_wprowadzajacy_data": "2011-02-17"
+                }
+              },
+              "czy_osoba_wchodzaca_w_sklad_zarzadu_zostala_zawieszona_w_czynnosciach": {
+                "_wartosc": "NIE",
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 36,
+                  "wpis_wprowadzajacy_data": "2011-02-17"
+                }
+              },
+              "person": {
+                "_wartosc": {
+                  "imie": "Jacek",
+                  "nazwisko": "Kowalski",
+                  "nazwa": "Jacek Kowalski",
+                  "id": "1390348",
+                  "plec": "M",
+                  "data_urodzenia": "1964-12-14"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 36,
+                  "wpis_wprowadzajacy_data": "2011-02-17"
+                }
+              }
+            },
+            "29": {
+              "funkcja_w_organie": {
+                "_wartosc": {
+                  "nazwa": "CZŁONEK ZARZĄDU"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 51,
+                  "wpis_wprowadzajacy_data": "2014-04-07"
+                }
+              },
+              "czy_osoba_wchodzaca_w_sklad_zarzadu_zostala_zawieszona_w_czynnosciach": {
+                "_wartosc": "NIE",
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 51,
+                  "wpis_wprowadzajacy_data": "2014-04-07"
+                }
+              },
+              "person": {
+                "_wartosc": {
+                  "imie": "Maciej Mateusz",
+                  "nazwisko": "Nowohoński",
+                  "nazwa": "Maciej Mateusz Nowohoński",
+                  "id": "1399604",
+                  "plec": "M",
+                  "data_urodzenia": "1973-02-08"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 51,
+                  "wpis_wprowadzajacy_data": "2014-04-07"
+                }
+              }
+            },
+            "31": {
+              "funkcja_w_organie": {
+                "_wartosc": {
+                  "nazwa": "CZŁONEK ZARZĄDU"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 57,
+                  "wpis_wprowadzajacy_data": "2015-11-06"
+                }
+              },
+              "czy_osoba_wchodzaca_w_sklad_zarzadu_zostala_zawieszona_w_czynnosciach": {
+                "_wartosc": "NIE",
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 57,
+                  "wpis_wprowadzajacy_data": "2015-11-06"
+                }
+              },
+              "person": {
+                "_wartosc": {
+                  "imie": "Bożena Katarzyna",
+                  "nazwisko": "Leśniewska",
+                  "nazwa": "Bożena Katarzyna Leśniewska",
+                  "id": "448646",
+                  "plec": "F",
+                  "data_urodzenia": "1965-08-30"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 57,
+                  "wpis_wprowadzajacy_data": "2015-11-06"
+                }
+              }
+            },
+            "32": {
+              "funkcja_w_organie": {
+                "_wartosc": {
+                  "nazwa": "CZŁONEK ZARZĄDU"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 57,
+                  "wpis_wprowadzajacy_data": "2015-11-06"
+                }
+              },
+              "czy_osoba_wchodzaca_w_sklad_zarzadu_zostala_zawieszona_w_czynnosciach": {
+                "_wartosc": "NIE",
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 57,
+                  "wpis_wprowadzajacy_data": "2015-11-06"
+                }
+              },
+              "person": {
+                "_wartosc": {
+                  "imie": "Jolanta Barbara",
+                  "nazwisko": "Dudek",
+                  "nazwa": "Jolanta Barbara Dudek",
+                  "id": "618337",
+                  "plec": "F",
+                  "data_urodzenia": "1964-10-04"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 57,
+                  "wpis_wprowadzajacy_data": "2015-11-06"
+                }
+              }
+            },
+            "34": {
+              "funkcja_w_organie": {
+                "_wartosc": {
+                  "nazwa": "CZŁONEK ZARZĄDU"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 79,
+                  "wpis_wprowadzajacy_data": "2018-11-28"
+                }
+              },
+              "czy_osoba_wchodzaca_w_sklad_zarzadu_zostala_zawieszona_w_czynnosciach": {
+                "_wartosc": "NIE",
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 79,
+                  "wpis_wprowadzajacy_data": "2018-11-28"
+                }
+              },
+              "person": {
+                "_wartosc": {
+                  "imie": "Piotr Tadeusz",
+                  "nazwisko": "Jaworski",
+                  "nazwa": "Piotr Tadeusz Jaworski",
+                  "id": "418388",
+                  "plec": "M",
+                  "data_urodzenia": "1961-08-07"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 79,
+                  "wpis_wprowadzajacy_data": "2018-11-28"
+                }
+              }
+            },
+            "35": {
+              "funkcja_w_organie": {
+                "_wartosc": {
+                  "nazwa": "CZŁONEK ZARZĄDU"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 79,
+                  "wpis_wprowadzajacy_data": "2018-11-28"
+                }
+              },
+              "czy_osoba_wchodzaca_w_sklad_zarzadu_zostala_zawieszona_w_czynnosciach": {
+                "_wartosc": "NIE",
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 79,
+                  "wpis_wprowadzajacy_data": "2018-11-28"
+                }
+              },
+              "person": {
+                "_wartosc": {
+                  "imie": "Witold Ryszard",
+                  "nazwisko": "Drożdż",
+                  "nazwa": "Witold Ryszard Drożdż",
+                  "id": "543465",
+                  "plec": "M",
+                  "data_urodzenia": "1974-09-16"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 79,
+                  "wpis_wprowadzajacy_data": "2018-11-28"
+                }
+              }
+            },
+            "36": {
+              "funkcja_w_organie": {
+                "_wartosc": {
+                  "nazwa": "CZŁONEK ZARZĄDU"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 98,
+                  "wpis_wprowadzajacy_data": "2020-09-18"
+                }
+              },
+              "czy_osoba_wchodzaca_w_sklad_zarzadu_zostala_zawieszona_w_czynnosciach": {
+                "_wartosc": "NIE",
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 98,
+                  "wpis_wprowadzajacy_data": "2020-09-18"
+                }
+              },
+              "person": {
+                "_wartosc": {
+                  "imie": "Jacek Marek",
+                  "nazwisko": "Kunicki",
+                  "nazwa": "Jacek Marek Kunicki",
+                  "id": "871169",
+                  "plec": "M",
+                  "data_urodzenia": "1979-07-11"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 98,
+                  "wpis_wprowadzajacy_data": "2020-09-18"
+                }
+              }
+            },
+            "38": {
+              "funkcja_w_organie": {
+                "_wartosc": {
+                  "nazwa": "PREZES ZARZĄDU",
+                  "cechy": [
+                    "CEO"
+                  ]
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 131,
+                  "wpis_wprowadzajacy_data": "2023-09-14"
+                }
+              },
+              "czy_osoba_wchodzaca_w_sklad_zarzadu_zostala_zawieszona_w_czynnosciach": {
+                "_wartosc": "NIE",
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 131,
+                  "wpis_wprowadzajacy_data": "2023-09-14"
+                }
+              },
+              "person": {
+                "_wartosc": {
+                  "imie": "Liudmila",
+                  "nazwisko": "Climoc",
+                  "nazwa": "Liudmila Climoc"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 131,
+                  "wpis_wprowadzajacy_data": "2023-09-14"
+                }
+              }
+            }
+          },
+          "_wartosc": {
+            "obiekty": [
+              25,
+              29,
+              31,
+              32,
+              34,
+              35,
+              36,
+              38
+            ],
+            "obiekty_liczba_aktualnych": 8,
+            "obiekty_liczba_wszystkich": 38
+          },
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 131,
+            "wpis_wprowadzajacy_data": "2023-09-14"
+          }
+        }
+      }
+    },
+    "_wartosc": {
+      "obiekty": [
+        1
+      ],
+      "obiekty_liczba_aktualnych": 1,
+      "obiekty_liczba_wszystkich": 1
+    },
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2001-05-02"
+    }
+  },
+  "organ_nadzoru": {
+    "_obiekty": {
+      "1": {
+        "nazwa_organu": {
+          "_wartosc": "Rada Nadzorcza",
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 1,
+            "wpis_wprowadzajacy_data": "2001-05-02"
+          }
+        },
+        "dane_osob": {
+          "_obiekty": {
+            "74": {
+              "person": {
+                "_wartosc": {
+                  "imie": "Marc",
+                  "nazwisko": "Ricau",
+                  "nazwa": "Marc Ricau"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 44,
+                  "wpis_wprowadzajacy_data": "2013-06-18"
+                }
+              }
+            },
+            "75": {
+              "person": {
+                "_wartosc": {
+                  "imie": "Maciej Krzysztof",
+                  "nazwisko": "Witucki",
+                  "nazwa": "Maciej Krzysztof Witucki",
+                  "id": "1390346",
+                  "plec": "M",
+                  "data_urodzenia": "1967-01-16"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 46,
+                  "wpis_wprowadzajacy_data": "2013-10-29"
+                }
+              }
+            },
+            "77": {
+              "person": {
+                "_wartosc": {
+                  "imie": "John Russell",
+                  "nazwisko": "Houlden",
+                  "nazwa": "John Russell Houlden"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 62,
+                  "wpis_wprowadzajacy_data": "2016-08-22"
+                }
+              }
+            },
+            "80": {
+              "person": {
+                "_wartosc": {
+                  "imie": "Maria",
+                  "nazwisko": "Pasło Wiśniewska",
+                  "nazwa": "Maria Pasło Wiśniewska",
+                  "id": "1210442",
+                  "plec": "F",
+                  "data_urodzenia": "1959-03-27"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 55,
+                  "wpis_wprowadzajacy_data": "2015-05-14"
+                }
+              }
+            },
+            "85": {
+              "person": {
+                "_wartosc": {
+                  "imie": "Jean-Marc",
+                  "nazwisko": "Vignolles",
+                  "nazwa": "Jean-Marc Vignolles"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 77,
+                  "wpis_wprowadzajacy_data": "2018-05-15"
+                }
+              }
+            },
+            "86": {
+              "person": {
+                "_wartosc": {
+                  "imie": "Monika Aleksandra",
+                  "nazwisko": "Nachyła",
+                  "nazwa": "Monika Aleksandra Nachyła",
+                  "id": "1391502",
+                  "plec": "F",
+                  "data_urodzenia": "1968-04-15"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 88,
+                  "wpis_wprowadzajacy_data": "2019-06-07"
+                }
+              }
+            },
+            "88": {
+              "person": {
+                "_wartosc": {
+                  "imie": "Marie-Noëlle",
+                  "nazwisko": "Jégo-Laveissiere",
+                  "nazwa": "Marie-Noëlle Jégo-Laveissiere"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 144,
+                  "wpis_wprowadzajacy_data": "2024-10-08"
+                }
+              }
+            },
+            "89": {
+              "person": {
+                "_wartosc": {
+                  "imie": "Bénédicte Anne Françoise",
+                  "nazwisko": "David",
+                  "nazwa": "Bénédicte Anne Françoise David"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 110,
+                  "wpis_wprowadzajacy_data": "2021-08-23"
+                }
+              }
+            },
+            "90": {
+              "person": {
+                "_wartosc": {
+                  "imie": "Philippe",
+                  "nazwisko": "Béguin",
+                  "nazwa": "Philippe Béguin"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 110,
+                  "wpis_wprowadzajacy_data": "2021-08-23"
+                }
+              }
+            },
+            "92": {
+              "person": {
+                "_wartosc": {
+                  "imie": "Bartosz Marcin",
+                  "nazwisko": "Dobrzyński",
+                  "nazwa": "Bartosz Marcin Dobrzyński",
+                  "id": "1135541",
+                  "plec": "M",
+                  "data_urodzenia": "1970-10-07"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 119,
+                  "wpis_wprowadzajacy_data": "2022-05-24"
+                }
+              }
+            },
+            "93": {
+              "person": {
+                "_wartosc": {
+                  "imie": "Clarisse",
+                  "nazwisko": "Heriard Dubreuil",
+                  "nazwa": "Clarisse Heriard Dubreuil"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 130,
+                  "wpis_wprowadzajacy_data": "2023-08-17"
+                }
+              }
+            },
+            "95": {
+              "person": {
+                "_wartosc": {
+                  "imie": "Adam Jacek",
+                  "nazwisko": "Uszpolewicz",
+                  "nazwa": "Adam Jacek Uszpolewicz",
+                  "id": "1332075",
+                  "plec": "M",
+                  "data_urodzenia": "1964-07-01"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 141,
+                  "wpis_wprowadzajacy_data": "2024-05-20"
+                }
+              }
+            },
+            "96": {
+              "person": {
+                "_wartosc": {
+                  "imie": "Etienne",
+                  "nazwisko": "Vincens De Tapol",
+                  "nazwa": "Etienne Vincens De Tapol"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 144,
+                  "wpis_wprowadzajacy_data": "2024-10-08"
+                }
+              }
+            },
+            "97": {
+              "person": {
+                "_wartosc": {
+                  "imie": "Usman",
+                  "nazwisko": "Javaid",
+                  "nazwa": "Usman Javaid"
+                },
+                "_zakres": {
+                  "wpis_wprowadzajacy_numer": 157,
+                  "wpis_wprowadzajacy_data": "2026-03-02"
+                }
+              }
+            }
+          },
+          "_wartosc": {
+            "obiekty": [
+              74,
+              75,
+              77,
+              80,
+              85,
+              86,
+              88,
+              89,
+              90,
+              92,
+              93,
+              95,
+              96,
+              97
+            ],
+            "obiekty_liczba_aktualnych": 14,
+            "obiekty_liczba_wszystkich": 97
+          },
+          "_zakres": {
+            "wpis_wprowadzajacy_numer": 157,
+            "wpis_wprowadzajacy_data": "2026-03-02"
+          }
+        }
+      }
+    },
+    "_wartosc": {
+      "obiekty": [
+        1
+      ],
+      "obiekty_liczba_aktualnych": 1,
+      "obiekty_liczba_wszystkich": 1
+    },
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2001-05-02"
+    }
+  },
+  "dzien_konczacy_pierwszy_rok_obrotowy_za_ktory_nalezy_zlozyc_sprawozdanie_finansowe": {
+    "_wartosc": "31.12.2001",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 55,
+      "wpis_wprowadzajacy_data": "2015-05-14"
+    }
+  },
+  "przedmiot_przewazajacej_dzialalnosci_przedsiebiorcy": {
+    "_obiekty": {
+      "1": {
+        "_wartosc": {
+          "symbol": [
+            "61",
+            "10",
+            "Z"
+          ],
+          "opis": "Działalność w zakresie telekomunikacji przewodowej",
+          "scheme": "pkd2007"
+        },
+        "_zakres": {
+          "wpis_wprowadzajacy_numer": 54,
+          "wpis_wprowadzajacy_data": "2015-02-16"
+        }
+      }
+    },
+    "_wartosc": {
+      "obiekty": [
+        1
+      ],
+      "obiekty_liczba_aktualnych": 1,
+      "obiekty_liczba_wszystkich": 1
+    },
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 54,
+      "wpis_wprowadzajacy_data": "2015-02-16"
+    }
+  },
+  "przedmiot_pozostalej_dzialalnosci_przedsiebiorcy": {
+    "_obiekty": {
+      "206": {
+        "_wartosc": {
+          "symbol": [
+            "47",
+            "42",
+            "Z"
+          ],
+          "opis": "Sprzedaż detaliczna sprzętu telekomunikacyjnego prowadzona w wyspecjalizowanych sklepach",
+          "scheme": "pkd2007"
+        },
+        "_zakres": {
+          "wpis_wprowadzajacy_numer": 54,
+          "wpis_wprowadzajacy_data": "2015-02-16"
+        }
+      },
+      "207": {
+        "_wartosc": {
+          "symbol": [
+            "61",
+            "20",
+            "Z"
+          ],
+          "opis": "Działalność w zakresie telekomunikacji bezprzewodowej, z wyłączeniem telekomunikacji satelitarnej",
+          "scheme": "pkd2007"
+        },
+        "_zakres": {
+          "wpis_wprowadzajacy_numer": 54,
+          "wpis_wprowadzajacy_data": "2015-02-16"
+        }
+      },
+      "209": {
+        "_wartosc": {
+          "symbol": [
+            "61",
+            "90",
+            "Z"
+          ],
+          "opis": "Działalność w zakresie pozostałej telekomunikacji",
+          "scheme": "pkd2007"
+        },
+        "_zakres": {
+          "wpis_wprowadzajacy_numer": 54,
+          "wpis_wprowadzajacy_data": "2015-02-16"
+        }
+      },
+      "210": {
+        "_wartosc": {
+          "symbol": [
+            "69",
+            "20",
+            "Z"
+          ],
+          "opis": "Działalność rachunkowo-księgowa; Doradztwo podatkowe",
+          "scheme": "pkd2007"
+        },
+        "_zakres": {
+          "wpis_wprowadzajacy_numer": 54,
+          "wpis_wprowadzajacy_data": "2015-02-16"
+        }
+      },
+      "211": {
+        "_wartosc": {
+          "symbol": [
+            "95",
+            "12",
+            "Z"
+          ],
+          "opis": "Naprawa i konserwacja sprzętu (tele)komunikacyjnego",
+          "scheme": "pkd2007"
+        },
+        "_zakres": {
+          "wpis_wprowadzajacy_numer": 54,
+          "wpis_wprowadzajacy_data": "2015-02-16"
+        }
+      },
+      "212": {
+        "_wartosc": {
+          "symbol": [
+            "62",
+            "02",
+            "Z"
+          ],
+          "opis": "Działalność związana z doradztwem w zakresie informatyki",
+          "scheme": "pkd2007"
+        },
+        "_zakres": {
+          "wpis_wprowadzajacy_numer": 54,
+          "wpis_wprowadzajacy_data": "2015-02-16"
+        }
+      },
+      "213": {
+        "_wartosc": {
+          "symbol": [
+            "64",
+            "99",
+            "Z"
+          ],
+          "opis": "Pozostała finansowa działalność usługowa, gdzie indziej niesklasyfikowana, z wyłączeniem ubezpieczeń i funduszów emerytalnych",
+          "scheme": "pkd2007"
+        },
+        "_zakres": {
+          "wpis_wprowadzajacy_numer": 54,
+          "wpis_wprowadzajacy_data": "2015-02-16"
+        }
+      },
+      "214": {
+        "_wartosc": {
+          "symbol": [
+            "78",
+            "10",
+            "Z"
+          ],
+          "opis": "Działalność związana z wyszukiwaniem miejsc pracy i pozyskiwaniem pracowników",
+          "scheme": "pkd2007"
+        },
+        "_zakres": {
+          "wpis_wprowadzajacy_numer": 145,
+          "wpis_wprowadzajacy_data": "2024-11-27"
+        }
+      },
+      "215": {
+        "_wartosc": {
+          "symbol": [
+            "78",
+            "30",
+            "Z"
+          ],
+          "opis": "Pozostała działalność związana z udostępnianiem pracowników",
+          "scheme": "pkd2007"
+        },
+        "_zakres": {
+          "wpis_wprowadzajacy_numer": 145,
+          "wpis_wprowadzajacy_data": "2024-11-27"
+        }
+      }
+    },
+    "_wartosc": {
+      "obiekty": [
+        206,
+        207,
+        209,
+        210,
+        211,
+        212,
+        213,
+        214,
+        215
+      ],
+      "obiekty_liczba_aktualnych": 9,
+      "obiekty_liczba_wszystkich": 215
+    },
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 145,
+      "wpis_wprowadzajacy_data": "2024-11-27"
+    }
+  },
+  "krs": {
+    "_wartosc": "0000010681",
+    "_zakres": {
+      "wpis_wprowadzajacy_numer": 1,
+      "wpis_wprowadzajacy_data": "2001-05-02"
+    }
+  }
+}
