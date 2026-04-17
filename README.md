@@ -115,6 +115,29 @@ Unlike the OAuth services, Rejestr.io has its own Postgres database
 (cache of KRS data + per-call cost audit). Spin it up locally via
 `services/rejestrio/docker-compose.yml` (port 5434).
 
+## Testing with MCP Inspector
+
+Use the [MCP Inspector](https://github.com/modelcontextprotocol/inspector) to interactively test tools without connecting through ragen-app.
+
+```bash
+# Install globally (once)
+npx @modelcontextprotocol/inspector
+
+# Or run directly — point at a running MCP server
+npx @modelcontextprotocol/inspector --cli http://localhost:9001/mcp   # Google
+npx @modelcontextprotocol/inspector --cli http://localhost:9002/mcp   # ClickUp
+npx @modelcontextprotocol/inspector --cli http://localhost:9003/mcp   # HubSpot
+npx @modelcontextprotocol/inspector --cli http://localhost:9004/mcp   # Rejestrio
+```
+
+The Inspector opens a web UI where you can:
+- Browse available tools and their schemas
+- Call tools with custom arguments and see raw responses
+- Verify `customer_id` handling and parameter validation
+- Debug connection issues before testing through ragen-app
+
+For services that require authentication headers (e.g. `x-customer-id`), pass them via the Inspector's header configuration.
+
 ## Adding a New Service
 
 1. Copy an existing service directory (e.g., `services/clickup/`)
