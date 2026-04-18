@@ -1,0 +1,78 @@
+{
+  "adres": {
+    "kod": "02-326",
+    "miejscowosc": "Warszawa",
+    "nr_domu": "160",
+    "panstwo": "Polska",
+    "poczta": "Warszawa",
+    "teryt": {
+      "gmina": "146501",
+      "powiat": "1465",
+      "wojewodztwo": "14"
+    },
+    "ulica": "Al. Jerozolimskie"
+  },
+  "glowna_osoba": {
+    "imiona_i_nazwisko": "Liudmila Climoc"
+  },
+  "id": 10681,
+  "kontakt": {
+    "emaile": [
+      "9ad84245b3664c6890c21a770e34a058@logtracker.orange.pl",
+      "ZZSS.GESUT@orange.com"
+    ],
+    "www": "https://www.orange.pl"
+  },
+  "krs_powiazania_liczby": {
+    "aktualne": 31,
+    "przeszle": 148
+  },
+  "krs_rejestry": {
+    "rejestr_przedsiebiorcow_data_wpisu": "2001-05-02"
+  },
+  "krs_wpisy": {
+    "najnowszy_data": "2026-03-02",
+    "najnowszy_numer": 157,
+    "pierwszy_data": "2001-05-02"
+  },
+  "metadane": {
+    "krs_odpis_synchronizacja_data_czas": "2026-03-03 08:17:16",
+    "krs_rozdzialy_dostepne": [
+      "ogolny",
+      "akcje",
+      "przeksztalcenia",
+      "wzmianki"
+    ]
+  },
+  "nazwy": {
+    "pelna": "ORANGE POLSKA SPÓŁKA AKCYJNA",
+    "skrocona": "ORANGE POLSKA"
+  },
+  "numery": {
+    "duns": "422193756",
+    "krs": "0000010681",
+    "nip": "5260250995",
+    "regon": "012100784"
+  },
+  "ostatnie_sprawozdanie": {
+    "data_do": "2024-12-31",
+    "data_od": "2024-01-01",
+    "id": 3440837,
+    "rocznik": 2024,
+    "rocznik_przyblizony": 2024
+  },
+  "stan": {
+    "czy_dofinansowana_przez_ue": true,
+    "czy_jest_na_gpw": true,
+    "czy_otrzymala_pomoc_publiczna": true,
+    "czy_pozytku_publicznego": false,
+    "czy_spolka_skarbu_panstwa": false,
+    "czy_wykreslona": false,
+    "forma_prawna": "SPÓŁKA AKCYJNA",
+    "pkd_przewazajace_dzial": "Telekomunikacja",
+    "w_likwidacji": false,
+    "w_upadlosci": false,
+    "w_zawieszeniu": false
+  },
+  "typ": "organizacja"
+}

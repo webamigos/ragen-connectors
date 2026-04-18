@@ -1,0 +1,38 @@
+{
+  "name": "@ragen-mcp/rejestrio",
+  "version": "0.1.0",
+  "description": "Multi-tenant MCP server for Polish company registries (Rejestr.io; future: GUS BIR1, Wappalyzer)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "prisma generate && tsc -p tsconfig.build.json",
+    "dev": "tsx watch --env-file=.env.local src/index.ts",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "generate:types": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:migrate:dev": "prisma migrate dev",
+    "probe": "tsx --env-file=.env.local src/probe/probe.ts",
+    "probe:dry": "tsx --env-file=.env.local src/probe/probe.ts -- --dry-run",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.11",
+    "@prisma/adapter-pg": "^7.3.0",
+    "@prisma/client": "^7.3.0",
+    "@ragen-mcp/core": "*",
+    "fastmcp": "^3.34.0",
+    "hono": "^4.12.8",
+    "pg": "^8.13.1",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.11.0",
+    "prisma": "^7.3.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.1"
+  }
+}

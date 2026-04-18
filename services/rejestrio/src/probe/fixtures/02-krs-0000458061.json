@@ -1,0 +1,66 @@
+{
+  "adres": {
+    "kod": "20-262",
+    "miejscowosc": "Lublin",
+    "nr_domu": "1",
+    "nr_mieszkania": "I/10",
+    "panstwo": "Polska",
+    "poczta": "Lublin",
+    "teryt": {
+      "gmina": "066301",
+      "powiat": "0663",
+      "wojewodztwo": "06"
+    },
+    "ulica": "Dobrzańskiego"
+  },
+  "id": 458061,
+  "kontakt": {
+    "emaile": [
+      "info@benfimedia.pl"
+    ],
+    "www": "http://www.benfimedia.pl"
+  },
+  "krs_powiazania_liczby": {
+    "aktualne": 0,
+    "przeszle": 2
+  },
+  "krs_rejestry": {
+    "rejestr_przedsiebiorcow_data_wpisu": "2013-04-11",
+    "rejestr_przedsiebiorcow_data_wykreslenia": "2018-05-15"
+  },
+  "krs_wpisy": {
+    "najnowszy_data": "2018-05-15",
+    "najnowszy_numer": 2,
+    "najnowszy_przed_wykresleniem_data": "2013-04-11",
+    "najnowszy_przed_wykresleniem_numer": 1,
+    "pierwszy_data": "2013-04-11",
+    "wykreslenie_uprawomocnienie_data": "2018-06-19"
+  },
+  "metadane": {
+    "krs_odpis_synchronizacja_data_czas": "2022-12-09 19:55:46",
+    "krs_rozdzialy_dostepne": [
+      "ogolny",
+      "przeksztalcenia"
+    ]
+  },
+  "nazwy": {
+    "pelna": "BENFI MEDIA SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+    "skrocona": "BENFI MEDIA"
+  },
+  "numery": {
+    "krs": "0000458061"
+  },
+  "stan": {
+    "czy_dofinansowana_przez_ue": false,
+    "czy_jest_na_gpw": false,
+    "czy_otrzymala_pomoc_publiczna": false,
+    "czy_pozytku_publicznego": false,
+    "czy_spolka_skarbu_panstwa": false,
+    "czy_wykreslona": true,
+    "forma_prawna": "SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+    "w_likwidacji": false,
+    "w_upadlosci": false,
+    "w_zawieszeniu": false
+  },
+  "typ": "organizacja"
+}

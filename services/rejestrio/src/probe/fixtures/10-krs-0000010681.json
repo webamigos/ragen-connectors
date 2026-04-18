@@ -1,0 +1,480 @@
+[
+  {
+    "data_start": "2024-01-01",
+    "data_koniec": "2024-12-31",
+    "dokumenty": [
+      {
+        "czy_ma_json": false,
+        "id": 16663716,
+        "nazwa": "Sprawozdanie z działalności"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 16663720,
+        "nazwa": "Sprawozdanie z działalności jednostki dominującej oraz sprawozdanie z działalności grupy kapitałowej"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 16663711,
+        "nazwa": "Roczne sprawozdanie finansowe"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 16663705,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 16663706,
+        "nazwa": "Uchwała o podziale zysku bądź pokryciu straty"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 16663719,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu skonsolidowanego rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 16663708,
+        "nazwa": "Opinia biegłego rewidenta / sprawozdanie z badania rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 16663709,
+        "nazwa": "Sprawozdanie z atestacji sprawozdawczości zrównoważonego rozwoju"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 16663710,
+        "nazwa": "Opinia biegłego rewidenta / sprawozdanie z badania skonsolidowanego rocznego sprawozdania finansowego grupy kapitałowej"
+      }
+    ]
+  },
+  {
+    "data_start": "2023-01-01",
+    "data_koniec": "2023-12-31",
+    "dokumenty": [
+      {
+        "czy_ma_json": false,
+        "id": 14154193,
+        "nazwa": "Sprawozdanie z działalności jednostki dominującej oraz sprawozdanie z działalności grupy kapitałowej"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 14154227,
+        "nazwa": "Sprawozdanie z działalności"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 14154226,
+        "nazwa": "Roczne sprawozdanie finansowe"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 14154210,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 14154212,
+        "nazwa": "Uchwała o podziale zysku bądź pokryciu straty"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 14154223,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu skonsolidowanego rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 14154216,
+        "nazwa": "Opinia biegłego rewidenta / sprawozdanie z badania rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 14154225,
+        "nazwa": "Opinia biegłego rewidenta / sprawozdanie z badania skonsolidowanego rocznego sprawozdania finansowego grupy kapitałowej"
+      }
+    ]
+  },
+  {
+    "data_start": "2022-01-01",
+    "data_koniec": "2022-12-31",
+    "dokumenty": [
+      {
+        "czy_ma_json": false,
+        "id": 12748868,
+        "nazwa": "Sprawozdanie z działalności"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 12748869,
+        "nazwa": "Sprawozdanie z działalności jednostki dominującej oraz sprawozdanie z działalności grupy kapitałowej"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 12748867,
+        "nazwa": "Roczne sprawozdanie finansowe"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 12748784,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 12748788,
+        "nazwa": "Uchwała o podziale zysku bądź pokryciu straty"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 12748808,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu skonsolidowanego rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 12748799,
+        "nazwa": "Opinia biegłego rewidenta / sprawozdanie z badania rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 12748811,
+        "nazwa": "Opinia biegłego rewidenta / sprawozdanie z badania skonsolidowanego rocznego sprawozdania finansowego grupy kapitałowej"
+      }
+    ]
+  },
+  {
+    "data_start": "2021-01-01",
+    "data_koniec": "2021-12-31",
+    "dokumenty": [
+      {
+        "czy_ma_json": false,
+        "id": 9828190,
+        "nazwa": "Sprawozdanie z działalności jednostki dominującej oraz sprawozdanie z działalności grupy kapitałowej"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 10475252,
+        "nazwa": "Skonsolidowane roczne sprawozdanie finansowe"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 11299978,
+        "nazwa": "Roczne sprawozdanie finansowe"
+      }
+    ]
+  },
+  {
+    "data_start": "2020-01-01",
+    "data_koniec": "2020-12-31",
+    "dokumenty": [
+      {
+        "czy_ma_json": false,
+        "id": 8117504,
+        "nazwa": "Sprawozdanie z działalności"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 8315896,
+        "nazwa": "Sprawozdanie z działalności jednostki dominującej oraz sprawozdanie z działalności grupy kapitałowej"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 8117510,
+        "nazwa": "Skonsolidowane roczne sprawozdanie finansowe"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 9827913,
+        "nazwa": "Roczne sprawozdanie finansowe"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 8117489,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 8117527,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu skonsolidowanego rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 8117503,
+        "nazwa": "Opinia biegłego rewidenta / sprawozdanie z badania skonsolidowanego rocznego sprawozdania finansowego grupy kapitałowej"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 8676019,
+        "nazwa": "Opinia biegłego rewidenta / sprawozdanie z badania rocznego sprawozdania finansowego"
+      }
+    ]
+  },
+  {
+    "data_start": "2019-01-01",
+    "data_koniec": "2019-12-31",
+    "dokumenty": [
+      {
+        "czy_ma_json": false,
+        "id": 8724379,
+        "nazwa": "Sprawozdanie z działalności"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 8724374,
+        "nazwa": "Roczne sprawozdanie finansowe"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 8724385,
+        "nazwa": "Skonsolidowane roczne sprawozdanie finansowe"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 8724380,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 8724382,
+        "nazwa": "Uchwała o podziale zysku bądź pokryciu straty"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 8724389,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu skonsolidowanego rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 8724378,
+        "nazwa": "Opinia biegłego rewidenta / sprawozdanie z badania rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 8724390,
+        "nazwa": "Opinia biegłego rewidenta / sprawozdanie z badania skonsolidowanego rocznego sprawozdania finansowego grupy kapitałowej"
+      }
+    ]
+  },
+  {
+    "data_start": "2018-01-01",
+    "data_koniec": "2018-12-31",
+    "dokumenty": [
+      {
+        "czy_ma_json": false,
+        "id": 5974992,
+        "nazwa": "Sprawozdanie z działalności jednostki dominującej oraz sprawozdanie z działalności grupy kapitałowej"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5974991,
+        "nazwa": "Roczne sprawozdanie finansowe"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5974996,
+        "nazwa": "Skonsolidowane roczne sprawozdanie finansowe"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5974988,
+        "nazwa": "Uchwała o podziale zysku bądź pokryciu straty"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5974989,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5974990,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu skonsolidowanego rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5974993,
+        "nazwa": "Opinia biegłego rewidenta / sprawozdanie z badania rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5974995,
+        "nazwa": "Opinia biegłego rewidenta / sprawozdanie z badania skonsolidowanego rocznego sprawozdania finansowego grupy kapitałowej"
+      }
+    ]
+  },
+  {
+    "data_start": "2017-01-01",
+    "data_koniec": "2017-12-31",
+    "dokumenty": [
+      {
+        "czy_ma_json": false,
+        "id": 5966538,
+        "nazwa": "Sprawozdanie z działalności"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966545,
+        "nazwa": "Sprawozdanie z działalności jednostki dominującej"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966552,
+        "nazwa": "Sprawozdanie z działalności jednostki dominującej"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966558,
+        "nazwa": "Sprawozdanie z działalności"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966526,
+        "nazwa": "Rachunek zysków i strat"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966533,
+        "nazwa": "Skonsolidowany rachunek zysków i strat"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966544,
+        "nazwa": "Skonsolidowany rachunek zysków i strat"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966549,
+        "nazwa": "Rachunek zysków i strat"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966525,
+        "nazwa": "Bilans"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966536,
+        "nazwa": "Skonsolidowany bilans"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966543,
+        "nazwa": "Skonsolidowany bilans"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966550,
+        "nazwa": "Bilans"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966531,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966535,
+        "nazwa": "Uchwała o podziale zysku bądź pokryciu straty"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966540,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu skonsolidowanego rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966547,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu skonsolidowanego rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966556,
+        "nazwa": "Uchwała lub postanowienie o zatwierdzeniu rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966557,
+        "nazwa": "Uchwała o podziale zysku bądź pokryciu straty"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966530,
+        "nazwa": "Opinia biegłego rewidenta / sprawozdanie z badania rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966539,
+        "nazwa": "Opinia biegłego rewidenta / sprawozdanie z badania skonsolidowanego rocznego sprawozdania finansowego grupy kapitałowej"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966546,
+        "nazwa": "Opinia biegłego rewidenta / sprawozdanie z badania skonsolidowanego rocznego sprawozdania finansowego grupy kapitałowej"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966554,
+        "nazwa": "Opinia biegłego rewidenta / sprawozdanie z badania rocznego sprawozdania finansowego"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966524,
+        "nazwa": "Zestawienie zmian w kapitale (funduszu) własnym"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966528,
+        "nazwa": "Rachunek przepływów pieniężnych"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966529,
+        "nazwa": "Informacja dodatkowa lub inny dokument z art. 48 ustawy o rachunkowości"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966532,
+        "nazwa": "Skonsolidowane zestawienie zmian w kapitale (funduszu) własnym"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966534,
+        "nazwa": "Informacja dodatkowa"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966537,
+        "nazwa": "Skonsolidowany rachunek przepływów pieniężnych"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966541,
+        "nazwa": "Skonsolidowane zestawienie zmian w kapitale (funduszu) własnym"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966542,
+        "nazwa": "Skonsolidowany rachunek przepływów pieniężnych"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966548,
+        "nazwa": "Informacja dodatkowa"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966551,
+        "nazwa": "Zestawienie zmian w kapitale (funduszu) własnym"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966553,
+        "nazwa": "Rachunek przepływów pieniężnych"
+      },
+      {
+        "czy_ma_json": false,
+        "id": 5966555,
+        "nazwa": "Informacja dodatkowa lub inny dokument z art. 48 ustawy o rachunkowości"
+      }
+    ]
+  }
+]

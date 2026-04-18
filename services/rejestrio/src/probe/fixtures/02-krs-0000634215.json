@@ -1,0 +1,96 @@
+{
+  "adres": {
+    "kod": "03-828",
+    "miejscowosc": "Warszawa",
+    "nr_domu": "75",
+    "panstwo": "Polska",
+    "poczta": "Warszawa",
+    "teryt": {
+      "gmina": "146501",
+      "powiat": "1465",
+      "wojewodztwo": "14"
+    },
+    "ulica": "Mińska"
+  },
+  "glowna_osoba": {
+    "id": "200325",
+    "imiona_i_nazwisko": "Piotr Paweł Piasecki"
+  },
+  "id": 634215,
+  "kontakt": {
+    "emaile": [
+      "biuro@piaseckigagala.pl"
+    ],
+    "www": "https://www.piaseckigagala.pl"
+  },
+  "krs_powiazania_liczby": {
+    "aktualne": 4,
+    "przeszle": 1
+  },
+  "krs_rejestry": {
+    "rejestr_przedsiebiorcow_data_wpisu": "2016-08-30"
+  },
+  "krs_wpisy": {
+    "najnowszy_data": "2026-01-02",
+    "najnowszy_numer": 27,
+    "pierwszy_data": "2016-08-30"
+  },
+  "metadane": {
+    "krs_odpis_synchronizacja_data_czas": "2026-01-04 19:14:31",
+    "krs_rozdzialy_dostepne": [
+      "ogolny",
+      "przeksztalcenia",
+      "wzmianki"
+    ]
+  },
+  "nazwy": {
+    "pelna": "PIASECKI GĄGAŁA SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+    "skrocona": "PIASECKI GĄGAŁA"
+  },
+  "numery": {
+    "krs": "0000634215",
+    "nip": "1132916831",
+    "regon": "365285652"
+  },
+  "ostatnie_sprawozdanie": {
+    "data_do": "2024-12-31",
+    "data_od": "2024-01-01",
+    "glowne_pola": {
+      "aktywa": {
+        "wartosc": 636946.28
+      },
+      "koszty": {
+        "wartosc": 2925887.47
+      },
+      "pasywa": {
+        "wartosc": 636946.28
+      },
+      "podatek_dochodowy": {
+        "wartosc": 10653
+      },
+      "przychody": {
+        "wartosc": 3029247.85
+      },
+      "zysk": {
+        "wartosc": 92707.38
+      }
+    },
+    "id": 3788534,
+    "rocznik": 2024,
+    "rocznik_przyblizony": 2024
+  },
+  "stan": {
+    "czy_dofinansowana_przez_ue": false,
+    "czy_jest_na_gpw": false,
+    "czy_otrzymala_pomoc_publiczna": true,
+    "czy_pozytku_publicznego": false,
+    "czy_spolka_skarbu_panstwa": false,
+    "czy_wykreslona": false,
+    "forma_prawna": "SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ",
+    "w_likwidacji": false,
+    "w_upadlosci": false,
+    "w_zawieszeniu": false,
+    "wielkosc": "mala"
+  },
+  "typ": "organizacja"
+}
