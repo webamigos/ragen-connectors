@@ -101,11 +101,11 @@ app.get("/", (c) =>
 
 // --- start ---
 serve(
-  { fetch: app.fetch, port: env.PORT },
+  { fetch: app.fetch, hostname: "::", port: env.PORT },
   (info) => {
     logger.info(
       { port: info.port, planTier: env.REJESTRIO_PLAN_TIER },
-      "Rejestrio MCP HTTP server listening",
+      "Rejestrio MCP HTTP server listening (dual-stack)",
     );
   },
 );
@@ -116,7 +116,7 @@ serve(
 const mcpPort = env.PORT + 1000;
 void mcp.start({
   transportType: "httpStream",
-  httpStream: { port: mcpPort },
+  httpStream: { host: "::", port: mcpPort },
 });
 logger.info({ port: mcpPort }, "Rejestrio MCP httpStream listening");
 
