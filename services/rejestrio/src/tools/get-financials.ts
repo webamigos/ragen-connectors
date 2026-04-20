@@ -309,7 +309,7 @@ export async function handleGetFinancials(
               documentId: docId,
               czyMaJson: true,
               source: "unavailable",
-              rawPayload: parsed.data ?? null,
+              rawPayload: null,
               fetchedAt: new Date(),
             });
           } catch (writeErr) {
