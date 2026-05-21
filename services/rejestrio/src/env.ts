@@ -41,5 +41,14 @@ export const env = validateEnvVars(
      * (→ MCP stream on 9004).
      */
     PORT: z.coerce.number().int().positive().default(8004),
+    /**
+     * Shared secret used to HMAC-sign server-to-server calls to the
+     * `/enrich/*` HTTP routes (ragen-app's leads pipeline). Must match
+     * the value set in ragen-app's `REJESTRIO_ENRICH_SECRET`.
+     *
+     * Unrelated to the upstream Rejestr.io API key and to MCP
+     * transport — those endpoints stay open per their own auth.
+     */
+    ENRICH_API_SECRET: z.string().min(32).optional(),
   }),
 );

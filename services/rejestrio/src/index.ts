@@ -32,6 +32,7 @@ import { registerGetPerson } from "./tools/get-person.js";
 import { registerGetPersonConnections } from "./tools/get-person-connections.js";
 import { registerGetBeneficialOwners } from "./tools/get-beneficial-owners.js";
 import { registerSearchEnrichedLeads } from "./tools/search-enriched-leads.js";
+import { createEnrichRouter } from "./http/enrich.js";
 
 const db = getDb();
 const audit = new RequestAuditRepository(db);
@@ -98,6 +99,26 @@ app.get("/health", (c) =>
 app.get("/", (c) =>
   c.json({ server: "Rejestrio MCP", hint: "GET /health for status" }),
 );
+
+// Server-to-server enrichment endpoints (called by ragen-app's leads
+// pipeline). Mounted only when the shared secret is configured —
+// otherwise the routes 404 and there is no way to authenticate.
+if (env.ENRICH_API_SECRET) {
+  app.route(
+    "/enrich",
+    createEnrichRouter(env.ENRICH_API_SECRET, {
+      client,
+      budget,
+      profiles,
+      finDocs,
+    }),
+  );
+  logger.info("Enrich HTTP routes mounted at /enrich");
+} else {
+  logger.warn(
+    "ENRICH_API_SECRET not set — /enrich routes disabled. Set it to enable ragen-app's leads enrichment pipeline.",
+  );
+}
 
 // --- start ---
 serve(
