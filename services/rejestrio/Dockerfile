@@ -2,14 +2,14 @@
 # (see services/google/Dockerfile) with Prisma generation (see
 # ragen-token-vault/Dockerfile).
 #
-# Why a single `FROM node:20-slim` and not the split base/deps/prod-deps
+# Why a single `FROM node:24-slim` and not the split base/deps/prod-deps
 # pattern? ragen-mcp services share a workspace install at the root,
 # so splitting stages mainly hurts here — each stage would have to
 # re-run `npm install --workspace=...` against the same lockfile. Keep
 # the straight-through build for consistency with sibling services;
 # revisit if image size becomes an issue.
 
-FROM node:20-slim
+FROM node:24-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl openssl ca-certificates \
