@@ -2,6 +2,7 @@
   "name": "@ragen-connectors/rejestrio",
   "version": "0.1.0",
   "description": "Multi-tenant MCP server for Polish company registries (Rejestr.io; future: GUS BIR1, Wappalyzer)",
+  "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {

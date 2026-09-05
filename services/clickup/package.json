@@ -2,6 +2,7 @@
   "name": "@ragen-connectors/clickup",
   "version": "0.1.0",
   "description": "Multi-tenant MCP server for ClickUp",
+  "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {

@@ -2,6 +2,7 @@
   "name": "@ragen-connectors/google",
   "version": "0.1.0",
   "description": "Multi-tenant MCP server for Google (Calendar, Drive, Analytics, Ads)",
+  "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {

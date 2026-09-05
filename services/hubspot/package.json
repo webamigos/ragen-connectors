@@ -2,6 +2,7 @@
   "name": "@ragen-connectors/hubspot",
   "version": "0.1.0",
   "description": "Multi-tenant MCP server for HubSpot (readonly)",
+  "license": "Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",
   "scripts": {

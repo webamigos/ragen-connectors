@@ -180,3 +180,17 @@ Build context must be the monorepo root so `COPY packages/core` works in the Doc
 ## Token Vault (ragen-token-vault)
 
 OAuth tokens are stored in [ragen-token-vault](https://github.com/webamigos/ragen-token-vault) — a centralized token vault with AES-256-GCM encryption. MCP services are stateless regarding secrets. OAuth pending states are kept in-memory with a 10-minute TTL — no database needed.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the branch model, the pre-PR checks,
+and the gotchas that catch people (ESM `.js` import extensions, core-before-
+services build order, per-customer token scoping, and Rejestr.io's paid calls).
+
+Security vulnerabilities go to **ragen@webamigos.pl**, never a public issue —
+see [SECURITY.md](SECURITY.md).
+
+## License
+
+Licensed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for
+attribution requirements.
