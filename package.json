@@ -1,5 +1,5 @@
 {
-  "name": "ragen-mcp-ts",
+  "name": "ragen-connectors",
   "private": true,
   "type": "module",
   "workspaces": [

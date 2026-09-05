@@ -1,6 +1,6 @@
 # Local dev stack for the rejestrio MCP service.
 # Only contains what this service owns (its Postgres).
-# Other ragen-mcp services get their own compose files in their own
+# Other ragen-connectors services get their own compose files in their own
 # service dirs — matches the ragen-token-vault pattern.
 #
 # Usage:

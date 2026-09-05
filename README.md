@@ -16,8 +16,8 @@ TypeScript monorepo for multi-tenant MCP (Model Context Protocol) servers. Each 
 ## Structure
 
 ```text
-ragen-mcp-ts/
-├── packages/core/             # @ragen-mcp/core — shared library
+ragen-connectors/
+├── packages/core/             # @ragen-connectors/core — shared library
 │   └── src/
 │       ├── ragen-vault-client.ts  # HMAC-authenticated vault client
 │       ├── state-store.ts         # In-memory OAuth state with TTL
@@ -146,9 +146,9 @@ For services that require authentication headers (e.g. `x-customer-id`), pass th
 4. Update `package.json` with service name and any extra dependencies
 5. Run `npm install` from the monorepo root to link the new workspace
 
-> **Build order**: `@ragen-mcp/core` must be built before any service. Run `npm run build` from the monorepo root — npm processes workspaces in dependency order, so core builds first automatically. If building a single service, ensure core is already built (`npm -w packages/core run build`).
+> **Build order**: `@ragen-connectors/core` must be built before any service. Run `npm run build` from the monorepo root — npm processes workspaces in dependency order, so core builds first automatically. If building a single service, ensure core is already built (`npm -w packages/core run build`).
 
-The shared `@ragen-mcp/core` package gives you: ragen-token-vault client, OAuth state management, env validation, and customer ID extraction — out of the box.
+The shared `@ragen-connectors/core` package gives you: ragen-token-vault client, OAuth state management, env validation, and customer ID extraction — out of the box.
 
 ## Switching Between Our MCP and Official Servers
 

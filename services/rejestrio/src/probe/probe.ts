@@ -5,8 +5,8 @@
  *   npm run probe -- --max-cost-pln 5
  *   npm run probe -- --dry-run
  *
- * Or from ragen-mcp repo root:
- *   npm run probe --workspace @ragen-mcp/rejestrio -- --dry-run
+ * Or from ragen-connectors repo root:
+ *   npm run probe --workspace @ragen-connectors/rejestrio -- --dry-run
  *
  * What it does:
  *   1. For each company in companies.ts, call each endpoint we care

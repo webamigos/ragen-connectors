@@ -19,7 +19,7 @@
  */
 import type { FastMCP } from "fastmcp";
 import { z } from "zod";
-import { logger } from "@ragen-mcp/core";
+import { logger } from "@ragen-connectors/core";
 import type { PrismaClient } from "../generated/prisma/client.js";
 import { toCanonicalKrs } from "../client/endpoints.js";
 import { parseCustomerId } from "./customer-id.js";

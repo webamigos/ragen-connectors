@@ -15,7 +15,7 @@
  */
 import type { FastMCP } from "fastmcp";
 import { z } from "zod";
-import { logger } from "@ragen-mcp/core";
+import { logger } from "@ragen-connectors/core";
 import type { RejestrioClient } from "../client/rejestrio-client.js";
 import type { BudgetGuard } from "../audit/budget-guard.js";
 import { ENDPOINTS } from "../client/endpoints.js";
@@ -32,7 +32,7 @@ const paramsSchema = z
     /**
      * MCP caller context — the chat assistant's org / user. Used
      * for cost attribution in the audit log. Format matches the
-     * ragen-mcp convention used by the google/clickup/hubspot
+     * ragen-connectors convention used by the google/clickup/hubspot
      * services: `{orgId}:{userId}:{provider}`.
      *
      * Unlike Google (per-user OAuth), Rejestr.io uses a single

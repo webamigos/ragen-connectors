@@ -1,7 +1,7 @@
 /**
  * FastMCP server for Rejestr.io — Polish company registry data.
  *
- * Unlike the other ragen-mcp services (Google, HubSpot, ClickUp),
+ * Unlike the other ragen-connectors services (Google, HubSpot, ClickUp),
  * authentication is a single service-wide API key, not per-user
  * OAuth. There's no `/auth/*` router and no token-vault integration.
  */
@@ -9,12 +9,12 @@ process.env.OTEL_SERVICE_NAME ??= "ragen-mcp-rejestrio";
 
 // OTEL import must come first — sets up instrumentation before any
 // other module loads its instrumented SDKs.
-import { shutdownOtel } from "@ragen-mcp/core/instrument";
+import { shutdownOtel } from "@ragen-connectors/core/instrument";
 
 import { FastMCP } from "fastmcp";
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
-import { logger } from "@ragen-mcp/core";
+import { logger } from "@ragen-connectors/core";
 
 import { env } from "./env.js";
 import { getDb, disconnectDb } from "./db/client.js";

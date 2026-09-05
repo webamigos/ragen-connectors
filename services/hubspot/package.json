@@ -1,5 +1,5 @@
 {
-  "name": "@ragen-mcp/hubspot",
+  "name": "@ragen-connectors/hubspot",
   "version": "0.1.0",
   "description": "Multi-tenant MCP server for HubSpot (readonly)",
   "type": "module",
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.19.11",
-    "@ragen-mcp/core": "*",
+    "@ragen-connectors/core": "*",
     "fastmcp": "^3.34.0",
     "hono": "^4.12.8",
     "zod": "^3.24.0"

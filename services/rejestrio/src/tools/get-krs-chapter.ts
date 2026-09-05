@@ -20,7 +20,7 @@
  */
 import type { FastMCP } from "fastmcp";
 import { z } from "zod";
-import { logger } from "@ragen-mcp/core";
+import { logger } from "@ragen-connectors/core";
 import type { RejestrioClient } from "../client/rejestrio-client.js";
 import type { BudgetGuard } from "../audit/budget-guard.js";
 import { ENDPOINTS, toApiKrs, toCanonicalKrs } from "../client/endpoints.js";
