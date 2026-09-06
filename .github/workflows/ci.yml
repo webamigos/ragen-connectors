@@ -60,7 +60,7 @@ jobs:
           "
       - name: Coverage report (PR comment)
         if: always() && github.event_name == 'pull_request'
-        uses: MishaKav/jest-coverage-comment@v1.0.32
+        uses: MishaKav/jest-coverage-comment@v1.0.36
         with:
           coverage-summary-path: coverage/coverage-summary.json
 
