@@ -181,6 +181,18 @@ Build context must be the monorepo root so `COPY packages/core` works in the Doc
 
 OAuth tokens are stored in [ragen-token-vault](https://github.com/webamigos/ragen-token-vault) — a centralized token vault with AES-256-GCM encryption. MCP services are stateless regarding secrets. OAuth pending states are kept in-memory with a 10-minute TTL — no database needed.
 
+## Documentation
+
+- [`AGENTS.md`](AGENTS.md) — canonical orientation for humans and coding agents:
+  commands, a Task Router, conventions. (`CLAUDE.md` is a one-line import of it.)
+- [`docs/architecture.md`](docs/architecture.md) — how a service is put together.
+- [`docs/adrs/`](docs/adrs/) — the decisions behind it, and why.
+- [`docs/lessons.md`](docs/lessons.md) — gotchas already paid for. Worth a skim
+  before nontrivial work.
+- [`.claude/skills/`](.claude/skills/) — task-scoped guides an agent loads on
+  demand: adding a tool, adding a service, working against a paid API, triaging
+  an auth failure.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the branch model, the pre-PR checks,

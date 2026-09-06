@@ -32,6 +32,16 @@
 # Rejestr.io API key.
 /services/rejestrio/src/audit/budget-guard.ts   @webamigos/ragen-ai
 
+# Agent and contributor guidance. AGENTS.md is the canonical file that every
+# coding agent reads, and the ADRs are the record of why things are the way they
+# are — both are easy to let drift.
+/AGENTS.md                              @webamigos/ragen-ai
+/CLAUDE.md                              @webamigos/ragen-ai
+/docs/adrs/                             @webamigos/ragen-ai
+
+# Build graph. A change here affects how every workspace is built and cached.
+/turbo.json                             @webamigos/ragen-ai
+
 # Licensing, security policy and this file itself — single owner on purpose.
 # Any owner listed on a line can approve alone, so these stay narrow.
 /LICENSE                                @patrykomiotek
