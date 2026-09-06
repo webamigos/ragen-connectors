@@ -50,9 +50,23 @@ Mock the client. The existing suite mocks the budget guard too, so a test can
 assert that a tool refuses when the ceiling is reached — write that assertion;
 it is the branch that protects the invoice.
 
+## The guard only guards an attributed call
+
+`BudgetGuard.assertAllowed(orgId, cost)` **returns early when `orgId` is
+null** — there is no org to bill, so there is no ceiling to check. That makes
+the ceiling only as strong as `parseCustomerId()`, which derives the org from
+the first `:`-separated segment of `customer_id` and yields `null` when that
+segment is empty.
+
+So a caller is inside the budget only if their `customer_id` actually parses to
+an org. Treat "the guard was called" and "the guard enforced something" as
+different claims, and check the second when reviewing a paid path.
+
 ## Reviewing a change here
 
 - Does any new code path reach the upstream without passing `BudgetGuard`?
+- Can `orgId` be null on that path? If so the ceiling does not apply — reject
+  before the billed call rather than proceeding unattributed.
 - Does a retry, a loop, or a `Promise.all` turn one logical lookup into N billed
   calls?
 - Does a changed cache key silently orphan everything cached under the old one?

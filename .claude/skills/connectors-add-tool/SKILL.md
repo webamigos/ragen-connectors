@@ -21,7 +21,10 @@ A throw reaches the model as an opaque protocol error. `{success: false}` with a
 sentence it can relay is the difference between the model retrying sensibly and
 the model giving up. Wrap the whole handler body, not just the fetch.
 
-**2. It takes `customer_id`, and resolves the credential per call.**
+**2. It takes `customer_id`, and resolves the credential per call.** (On
+rejestrio there is no per-customer credential — there, `customer_id` is what
+attributes cost and enforces the budget ceiling. See the
+`connectors-paid-api-calls` skill.)
 
 ```ts
 const token = await getAccessToken(customer_id);

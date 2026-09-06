@@ -145,9 +145,13 @@ A throw reaches the model as an opaque protocol error it cannot act on
 (ADR-03). Log the real error before shaping the envelope, or a bug in your
 `catch` becomes indistinguishable from a genuine upstream failure.
 
-**Every tool takes `customer_id`** and resolves credentials per call via
-`getAccessToken(customerId)`. Never cache a token in module scope — it is
-per-customer state in a process shared by every customer.
+**Every tool takes `customer_id`.** On google/clickup/hubspot it resolves the
+credential per call via `getAccessToken(customerId)` — never cache a token in
+module scope, it is per-customer state in a process shared by every customer.
+On **rejestrio there is no per-customer credential** (ADR-04): `customer_id` is
+parsed for the org id and used to attribute the call's cost and enforce the
+budget ceiling, which makes parsing it correctly a spend control rather than a
+convenience.
 
 ## Key conventions
 
