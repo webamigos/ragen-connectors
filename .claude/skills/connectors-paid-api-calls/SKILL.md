@@ -50,17 +50,25 @@ Mock the client. The existing suite mocks the budget guard too, so a test can
 assert that a tool refuses when the ceiling is reached — write that assertion;
 it is the branch that protects the invoice.
 
-## The guard only guards an attributed call
+## A paid call must be attributable
 
-`BudgetGuard.assertAllowed(orgId, cost)` **returns early when `orgId` is
-null** — there is no org to bill, so there is no ceiling to check. That makes
-the ceiling only as strong as `parseCustomerId()`, which derives the org from
-the first `:`-separated segment of `customer_id` and yields `null` when that
-segment is empty.
+The ceiling is enforced **per org**, so a call with no org is a call with no
+ceiling. `BudgetGuard.assertAllowed(orgId, cost)` therefore refuses a null
+`orgId` outright (`RejestrioUnattributedCallError`) rather than waving it
+through, and `parseCustomerId()` normalises a blank *or whitespace-only* first
+segment to `null`.
 
-So a caller is inside the budget only if their `customer_id` actually parses to
-an org. Treat "the guard was called" and "the guard enforced something" as
-different claims, and check the second when reviewing a paid path.
+That makes the ceiling exactly as strong as `parseCustomerId()`, so treat "the
+guard was called" and "the guard enforced something" as different claims, and
+check the second when reviewing a paid path.
+
+This is a fix, not a given: `assertAllowed` used to `return` early on a null
+org, so `":user:REJESTRIO"` spent against the shared key uncapped and
+unattributed, and `"  :user:REJESTRIO"` got a fresh budget per padding variant.
+On a checkout predating that fix you are looking at the bypass, not at the
+rule. Free paths are deliberately unaffected — the guard only sits in front of
+billed calls, so cached reads and `search_enriched_leads` still serve an
+unattributed caller.
 
 ## Reviewing a change here
 

@@ -37,6 +37,7 @@ a rule nobody has been bitten by belongs in `AGENTS.md` or an ADR, not here.
 
 ### deployment
 
+- [An env assignment written above an import runs after it — ESM hoists imports, so every `service.name` default in `index.ts` is dead code](lessons/an-env-assignment-above-an-import-runs-after-it.md) — area:architecture,deployment; module:core,google,clickup,hubspot,rejestrio; topic:esm,module-evaluation,otel,observability,env-vars. rejestrio's telemetry currently reports as `ragen-mcp`.
 - [FastMCP starts its own HTTP server, so a service that boots cleanly and answers `/health` can still be unreachable over MCP](lessons/fastmcp-owns-its-own-listener.md) — area:architecture,deployment; module:google,clickup,hubspot,rejestrio; topic:fastmcp,hono,ports,docker,railway,health-checks
 
 ### dependencies

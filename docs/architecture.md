@@ -54,9 +54,18 @@ unmapped looks healthy and is unusable — see
 
 `index.ts` does the same four things everywhere, in this order:
 
-1. Set `OTEL_SERVICE_NAME` if unset, then import `instrument.ts`. **OTEL patches
-   modules at import time**, so anything imported before it is never
-   instrumented.
+1. Import `instrument.ts` first. **OTEL patches modules at import time**, so
+   anything imported before it is never instrumented — keep that import above
+   every other one.
+
+   Note what this does *not* do. Each `index.ts` opens with
+   `process.env.OTEL_SERVICE_NAME ??= "…"`, which reads as though it seeds the
+   service name — but ESM hoists every `import` and evaluates it **before** any
+   statement in the module body, so `instrument.ts` has already read the
+   variable by the time that line runs. **`OTEL_SERVICE_NAME` must come from
+   the environment** (`.env.local` via `--env-file`, or the container's env);
+   otherwise the service reports as `instrument.ts`'s fallback. See
+   [`lessons/an-env-assignment-above-an-import-runs-after-it.md`](lessons/an-env-assignment-above-an-import-runs-after-it.md).
 2. Validate the environment (`validateEnvVars` / `validateEnv` from core). Both
    exit the process on failure — a service refusing to boot on a missing
    variable is intended behaviour, not a bug to work around.

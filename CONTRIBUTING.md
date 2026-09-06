@@ -91,13 +91,13 @@ hit the live API.
 
 ## Adding a new service
 
-The steps are in [CLAUDE.md](CLAUDE.md#adding-a-new-service). Two things that
+The steps are in [AGENTS.md](AGENTS.md#adding-a-new-service). Two things that
 aren't obvious:
 
 - **Claim both ports.** Each service runs a Hono HTTP server *and* a FastMCP
   stream server, and FastMCP starts its own listener rather than mounting on the
   existing one — so the MCP port is always `PORT + 1000`. Add your service to
-  the port table in [CLAUDE.md](CLAUDE.md#dual-port-design) so the next person
+  the port table in [AGENTS.md](AGENTS.md#ports) so the next person
   doesn't collide with you.
 - **Run `npm install` from the root** after creating the directory, so npm links
   the new workspace.

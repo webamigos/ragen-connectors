@@ -34,8 +34,8 @@ npm run dev:clickup
 npm run dev:hubspot
 npm run dev --workspace @ragen-connectors/rejestrio
 
-npx turbo run build --filter=@ragen-connectors/rejestrio   # one workspace + deps
-npx turbo run build --force                                # ignore the cache
+npm run build -- --filter=@ragen-connectors/rejestrio   # one workspace + deps
+npm run build -- --force                                # ignore the cache
 ```
 
 From inside a service directory: `npm run dev`, `npm run build`,

@@ -29,8 +29,12 @@ See `docs/lessons/fastmcp-owns-its-own-listener.md`.
 
 **Keep the boot order.** `index.ts` must:
 
-1. set `OTEL_SERVICE_NAME` if unset, *then* import `instrument.ts` — OTEL patches
-   modules at import time, so anything imported earlier is never instrumented
+1. import `instrument.ts` above every other import — OTEL patches modules at
+   import time, so anything imported earlier is never instrumented. Set
+   `OTEL_SERVICE_NAME` in the service's `.env.example` and its deployment env,
+   **not** with a `process.env.… ??=` line in `index.ts`: ESM evaluates the
+   imports first, so that assignment runs after `instrument.ts` has already
+   read the variable
 2. validate the environment (exits on failure — that is intended)
 3. register tools, start FastMCP on `PORT + 1000`
 4. start Hono on `PORT`
@@ -73,7 +77,7 @@ obliges you to build instead: a budget guard, a cost audit, and a kill switch.
 ```bash
 npm install
 npm run lint && npm run typecheck && npm test
-npx turbo run build --filter=@ragen-connectors/<name>
+npm run build -- --filter=@ragen-connectors/<name>
 ```
 
 Then actually start it and confirm **both** ports answer — `/health` on `PORT`
