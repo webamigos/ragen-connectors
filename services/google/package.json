@@ -15,8 +15,8 @@
   "dependencies": {
     "@hono/node-server": "^1.19.11",
     "@ragen-connectors/core": "*",
-    "fastmcp": "^3.34.0",
-    "hono": "^4.12.8",
+    "fastmcp": "^3.35.0",
+    "hono": "^4.13.5",
     "zod": "^3.24.0"
   },
   "devDependencies": {
