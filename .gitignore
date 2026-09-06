@@ -10,3 +10,6 @@ coverage/
 # Claude Code - personal files
 .claude/settings.local.json
 .claude/memory/
+
+# Turborepo local task cache
+.turbo

@@ -11,9 +11,9 @@
     "dev:google": "npm -w services/google run dev",
     "dev:clickup": "npm -w services/clickup run dev",
     "dev:hubspot": "npm -w services/hubspot run dev",
-    "build": "npm -ws run build",
-    "lint": "npm -ws run lint",
-    "typecheck": "npm -ws run typecheck",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
@@ -21,10 +21,12 @@
   "engines": {
     "node": ">=24"
   },
+  "packageManager": "npm@11.19.0",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@vitest/coverage-v8": "^4.1.1",
     "eslint": "^10.0.3",
+    "turbo": "^2.10.12",
     "typescript-eslint": "^8.57.0",
     "vitest": "^4.1.1"
   }
