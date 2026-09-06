@@ -2,7 +2,7 @@
  * Per-customer token management for ClickUp via ragen-token-vault.
  */
 
-import { RagenVaultClient, ragenVaultClient } from "@ragen-mcp/core";
+import { RagenVaultClient, ragenVaultClient } from "@ragen-connectors/core";
 
 const PROVIDER = "CLICKUP";
 

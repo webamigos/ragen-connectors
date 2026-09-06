@@ -2,7 +2,7 @@
  * Per-customer token management for Google via ragen-token-vault with auto-refresh.
  */
 
-import { RagenVaultClient, ragenVaultClient } from "@ragen-mcp/core";
+import { RagenVaultClient, ragenVaultClient } from "@ragen-connectors/core";
 
 const PROVIDER = "GOOGLE";
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID ?? "";

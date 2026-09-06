@@ -5,12 +5,12 @@
 process.env.OTEL_SERVICE_NAME ??= "ragen-mcp-google";
 
 // Must be imported first to set up OTEL before any other imports
-import { shutdownOtel } from "@ragen-mcp/core/instrument";
+import { shutdownOtel } from "@ragen-connectors/core/instrument";
 
 import { FastMCP } from "fastmcp";
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
-import { validateEnvVars, logger } from "@ragen-mcp/core";
+import { validateEnvVars, logger } from "@ragen-connectors/core";
 import { z } from "zod";
 import { registerCalendarTools } from "./tools/calendar-tools.js";
 import { registerDriveTools } from "./tools/drive-tools.js";

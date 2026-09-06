@@ -6,7 +6,7 @@ const { mockStoreToken, mockGetToken, mockDeleteToken } = vi.hoisted(() => ({
   mockDeleteToken: vi.fn(),
 }));
 
-vi.mock("@ragen-mcp/core", () => ({
+vi.mock("@ragen-connectors/core", () => ({
   RagenVaultClient: vi.fn(),
   ragenVaultClient: {
     storeToken: mockStoreToken,

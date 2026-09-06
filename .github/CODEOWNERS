@@ -1,0 +1,40 @@
+# CODEOWNERS — sensitive paths that need a named reviewer even when someone else
+# has already approved the PR.
+#
+# GOTCHA: GitHub applies the LAST matching pattern only. A later, broader rule
+# silently overrides an earlier, narrower one — so order matters, and the most
+# specific rules belong at the BOTTOM of this file, not the top.
+
+# Default: anything not matched below.
+*                                       @webamigos/ragen-ai
+
+# CI/CD, release and deployment infrastructure. Dockerfile and compose files are
+# unanchored on purpose — there is one per service, not one at the repo root.
+/.github/workflows/                     @webamigos/ragen-ai
+**/Dockerfile                           @webamigos/ragen-ai
+**/docker-compose.yml                   @webamigos/ragen-ai
+**/railway.toml                         @webamigos/ragen-ai
+
+# Shared core. Every service compiles against this, so a change here is never
+# scoped to one integration.
+/packages/core/                         @webamigos/ragen-ai
+
+# Credential handling and tenant isolation. Cross-customer token access is the
+# bug class this repo cares most about (see SECURITY.md).
+/packages/core/src/ragen-vault-client.ts    @webamigos/ragen-ai
+**/src/auth/                            @webamigos/ragen-ai
+
+# Database schema and migrations — rejestrio owns its own Postgres, and a bad
+# migration is expensive to undo on customer-hosted installs.
+/services/rejestrio/prisma/             @webamigos/ragen-ai
+
+# Spend controls. A change here can cost real money against the shared
+# Rejestr.io API key.
+/services/rejestrio/src/audit/budget-guard.ts   @webamigos/ragen-ai
+
+# Licensing, security policy and this file itself — single owner on purpose.
+# Any owner listed on a line can approve alone, so these stay narrow.
+/LICENSE                                @patrykomiotek
+/NOTICE                                 @patrykomiotek
+/SECURITY.md                            @patrykomiotek
+/.github/CODEOWNERS                     @patrykomiotek

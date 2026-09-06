@@ -16,7 +16,7 @@ npm run build                   # Build all packages (core first, then services)
 npm run dev:clickup             # Run ClickUp service with hot-reload
 npm run dev:google              # Run Google service with hot-reload
 npm run dev:hubspot             # Run HubSpot service with hot-reload
-npm run dev --workspace @ragen-mcp/rejestrio   # Run Rejestrio service with hot-reload
+npm run dev --workspace @ragen-connectors/rejestrio   # Run Rejestrio service with hot-reload
 npm run typecheck               # Typecheck all packages
 npm run lint                    # Lint all packages
 npm test                        # Run tests (vitest)
@@ -33,7 +33,7 @@ npm run start                   # node --env-file=.env.local dist/index.js
 docker compose up --build       # Docker (requires ragen-network)
 ```
 
-Build order matters: `@ragen-mcp/core` must build before any service. `npm run build` at root handles this because npm processes workspaces in dependency order.
+Build order matters: `@ragen-connectors/core` must build before any service. `npm run build` at root handles this because npm processes workspaces in dependency order.
 
 Tests use Vitest with v8 coverage. Test files live in `__tests__/` directories next to the source they test. Run `npm test` from root. Coverage HTML report is deployed to GitHub Pages on pushes to main.
 
@@ -56,7 +56,7 @@ Port allocation per service (keep in sync when adding new services):
 | hubspot    | 8003 | 9003 |
 | rejestrio  | 8004 | 9004 |
 
-### Shared core (`packages/core/` → `@ragen-mcp/core`)
+### Shared core (`packages/core/` → `@ragen-connectors/core`)
 
 - `RagenVaultClient` — HMAC-SHA256 authenticated HTTP client for ragen-token-vault. Module-level singleton `ragenVaultClient` is created at import time from `RAGEN_TOKEN_VAULT_URL` and `RAGEN_TOKEN_VAULT_SERVICE_SECRET` env vars. **Set env vars before importing.**
 - `validateEnvVars(schema)` — Zod-based validation, exits process on failure (matches ragen-token-vault/worker pattern).
@@ -90,7 +90,7 @@ Each tool module exports a `register*Tools(mcp: FastMCP)` function that calls `m
 - Native `fetch` for all HTTP calls — no axios dependency.
 - `AbortSignal.timeout(30_000)` on all outbound HTTP requests.
 - Environment loaded via `--env-file=.env.local` (Node native flag, matches ragen-token-vault/worker). No dotenv dependency.
-- npm workspaces for monorepo. Services reference core as `"@ragen-mcp/core": "*"`.
+- npm workspaces for monorepo. Services reference core as `"@ragen-connectors/core": "*"`.
 
 ### Service-specific notes
 

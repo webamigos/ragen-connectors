@@ -2,7 +2,7 @@
  * Per-customer token management for HubSpot via ragen-token-vault with auto-refresh.
  */
 
-import { RagenVaultClient, ragenVaultClient } from "@ragen-mcp/core";
+import { RagenVaultClient, ragenVaultClient } from "@ragen-connectors/core";
 
 const PROVIDER = "HUBSPOT";
 const HUBSPOT_CLIENT_ID = process.env.HUBSPOT_CLIENT_ID ?? "";

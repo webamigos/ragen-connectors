@@ -15,7 +15,7 @@ keys, and type coercions the docs don't mention. The probe:
 4. Diffs against the previous fixture to flag API drift.
 
 The captured fixtures become the test corpus for the real MCP
-service in `ragen-mcp/services/rejestrio/`.
+service in `ragen-connectors/services/rejestrio/`.
 
 ## Running
 
@@ -32,11 +32,11 @@ npm run probe -- --max-cost-pln 10     # raise the cost cap
 npm run probe -- --dry-run             # same as probe:dry, inline flag
 ```
 
-Or from the ragen-mcp repo root:
+Or from the ragen-connectors repo root:
 
 ```bash
-npm run probe --workspace @ragen-mcp/rejestrio
-npm run probe --workspace @ragen-mcp/rejestrio -- --dry-run
+npm run probe --workspace @ragen-connectors/rejestrio
+npm run probe --workspace @ragen-connectors/rejestrio -- --dry-run
 ```
 
 ## Cost

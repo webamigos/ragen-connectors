@@ -13,7 +13,7 @@
  * source of truth for "everything we know about a company's
  * financials, regardless of which tool surfaced them".
  */
-import { logger } from "@ragen-mcp/core";
+import { logger } from "@ragen-connectors/core";
 import type { FinancialDocumentRepository } from "./financial-doc-repo.js";
 
 export type Tier1Snapshot = {

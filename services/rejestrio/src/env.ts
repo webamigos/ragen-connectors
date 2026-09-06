@@ -1,4 +1,4 @@
-import { validateEnvVars } from "@ragen-mcp/core";
+import { validateEnvVars } from "@ragen-connectors/core";
 import { z } from "zod";
 
 /**

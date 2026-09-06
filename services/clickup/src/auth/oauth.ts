@@ -4,7 +4,7 @@
 
 import { randomBytes } from "node:crypto";
 import { Hono } from "hono";
-import { saveState, popState } from "@ragen-mcp/core";
+import { saveState, popState } from "@ragen-connectors/core";
 import { saveTokens, getAccessToken } from "./token-store.js";
 
 const CLICKUP_CLIENT_ID = process.env.CLICKUP_CLIENT_ID ?? "";

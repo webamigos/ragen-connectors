@@ -16,8 +16,8 @@ TypeScript monorepo for multi-tenant MCP (Model Context Protocol) servers. Each 
 ## Structure
 
 ```text
-ragen-mcp-ts/
-├── packages/core/             # @ragen-mcp/core — shared library
+ragen-connectors/
+├── packages/core/             # @ragen-connectors/core — shared library
 │   └── src/
 │       ├── ragen-vault-client.ts  # HMAC-authenticated vault client
 │       ├── state-store.ts         # In-memory OAuth state with TTL
@@ -146,9 +146,9 @@ For services that require authentication headers (e.g. `x-customer-id`), pass th
 4. Update `package.json` with service name and any extra dependencies
 5. Run `npm install` from the monorepo root to link the new workspace
 
-> **Build order**: `@ragen-mcp/core` must be built before any service. Run `npm run build` from the monorepo root — npm processes workspaces in dependency order, so core builds first automatically. If building a single service, ensure core is already built (`npm -w packages/core run build`).
+> **Build order**: `@ragen-connectors/core` must be built before any service. Run `npm run build` from the monorepo root — npm processes workspaces in dependency order, so core builds first automatically. If building a single service, ensure core is already built (`npm -w packages/core run build`).
 
-The shared `@ragen-mcp/core` package gives you: ragen-token-vault client, OAuth state management, env validation, and customer ID extraction — out of the box.
+The shared `@ragen-connectors/core` package gives you: ragen-token-vault client, OAuth state management, env validation, and customer ID extraction — out of the box.
 
 ## Switching Between Our MCP and Official Servers
 
@@ -180,3 +180,17 @@ Build context must be the monorepo root so `COPY packages/core` works in the Doc
 ## Token Vault (ragen-token-vault)
 
 OAuth tokens are stored in [ragen-token-vault](https://github.com/webamigos/ragen-token-vault) — a centralized token vault with AES-256-GCM encryption. MCP services are stateless regarding secrets. OAuth pending states are kept in-memory with a 10-minute TTL — no database needed.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the branch model, the pre-PR checks,
+and the gotchas that catch people (ESM `.js` import extensions, core-before-
+services build order, per-customer token scoping, and Rejestr.io's paid calls).
+
+Security vulnerabilities go to **ragen@webamigos.pl**, never a public issue —
+see [SECURITY.md](SECURITY.md).
+
+## License
+
+Licensed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for
+attribution requirements.
