@@ -19,11 +19,17 @@
  * - The kill-switch (`REJESTRIO_DISABLE_PAID_CALLS=true`) is enforced
  *   here too — the guard is the funnel that every paid call passes
  *   through.
+ * - A call with no org is refused, not waved through. The ceiling is
+ *   per-org, so an unattributable call is one nothing can limit; it
+ *   used to return early here, which meant a customer_id whose first
+ *   segment was empty spent against the shared API key with no cap
+ *   and left an unattributed audit row.
  */
 import type { RequestAuditRepository } from "./request-audit-repo.js";
 import {
   RejestrioBudgetExceededError,
   RejestrioDisabledError,
+  RejestrioUnattributedCallError,
 } from "../client/errors.js";
 
 export type BudgetGuardOptions = {
@@ -37,19 +43,21 @@ export class BudgetGuard {
 
   /**
    * Check whether this org may make a paid call costing `costPln`.
-   * Throws `RejestrioDisabledError` if the kill-switch is on, or
+   * Throws `RejestrioDisabledError` if the kill-switch is on,
+   * `RejestrioUnattributedCallError` if there is no org to bill, or
    * `RejestrioBudgetExceededError` if the ceiling is already reached.
    *
-   * Passing `orgId = null` skips the check (audit-only / unknown
-   * caller). Prefer to always have an orgId — the check only runs
-   * when there's something to enforce.
+   * `orgId = null` is refused rather than skipped: the budget is
+   * enforced per org, so a call with no org is a call with no ceiling.
+   * Callers derive it from `parseCustomerId(customer_id)`, which
+   * yields null for a blank first segment.
    */
   async assertAllowed(orgId: string | null, costPln: number): Promise<void> {
     if (this.opts.disabled) {
       throw new RejestrioDisabledError();
     }
     if (!orgId) {
-      return;
+      throw new RejestrioUnattributedCallError();
     }
     const spent = await this.opts.audit.spentTodayForOrg(orgId);
     if (spent + costPln > this.opts.defaultDailyBudgetPln) {

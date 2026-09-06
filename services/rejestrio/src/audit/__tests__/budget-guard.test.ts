@@ -4,6 +4,7 @@ import type { RequestAuditRepository } from "../request-audit-repo.js";
 import {
   RejestrioBudgetExceededError,
   RejestrioDisabledError,
+  RejestrioUnattributedCallError,
 } from "../../client/errors.js";
 
 function fakeAudit(spentPln: number): RequestAuditRepository {
@@ -34,15 +35,31 @@ describe("BudgetGuard", () => {
     );
   });
 
-  it("skips the check when orgId is null (unknown caller)", async () => {
+  // Regression: this used to `return` early, which meant any caller
+  // whose customer_id had a blank first segment spent against the
+  // shared API key with no ceiling and no attribution.
+  it("refuses a call with no org instead of skipping the ceiling", async () => {
     const audit = fakeAudit(100);
     const guard = new BudgetGuard({
       audit,
       defaultDailyBudgetPln: 20,
       disabled: false,
     });
-    await expect(guard.assertAllowed(null, 0.5)).resolves.toBeUndefined();
+    await expect(guard.assertAllowed(null, 0.5)).rejects.toBeInstanceOf(
+      RejestrioUnattributedCallError,
+    );
     expect(audit.spentTodayForOrg).not.toHaveBeenCalled();
+  });
+
+  it("refuses an unattributed call even when it would cost nothing", async () => {
+    const guard = new BudgetGuard({
+      audit: fakeAudit(0),
+      defaultDailyBudgetPln: 20,
+      disabled: false,
+    });
+    await expect(guard.assertAllowed(null, 0)).rejects.toBeInstanceOf(
+      RejestrioUnattributedCallError,
+    );
   });
 
   it("kill-switch refuses everything, including free check calls", async () => {
@@ -54,6 +71,8 @@ describe("BudgetGuard", () => {
     await expect(guard.assertAllowed("org-1", 0)).rejects.toBeInstanceOf(
       RejestrioDisabledError,
     );
+    // The kill-switch is checked first, so it still wins over a
+    // missing org rather than reporting the less specific problem.
     await expect(guard.assertAllowed(null, 0.5)).rejects.toBeInstanceOf(
       RejestrioDisabledError,
     );
