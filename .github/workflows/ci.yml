@@ -17,7 +17,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run build
+      # `lint` declares dependsOn ["^build"], so turbo builds core first (ADR-06).
       - run: npm run lint
 
   typecheck:
@@ -31,7 +31,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run build
+      # `typecheck` declares dependsOn ["^build"], so turbo builds core first (ADR-06).
       - run: npm run typecheck
 
   test:
@@ -48,6 +48,8 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # `test` is a root Vitest run outside turbo, and services resolve
+      # @ragen-connectors/core through its built dist/ — so this build is required.
       - run: npm run build
       - run: npm run test:coverage
       - name: Coverage summary

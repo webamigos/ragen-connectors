@@ -28,7 +28,7 @@ Node.js 24.x (see `.nvmrc`). From the monorepo root:
 
 ```bash
 npm install
-npm run build              # core builds first, then services — order matters
+npm run build              # turbo: core first, then services, cached
 npm run dev:google         # or dev:clickup / dev:hubspot
 ```
 
@@ -45,18 +45,22 @@ so a startup crash is usually a missing env var, not a code bug.
 
 ## Before you open a PR
 
-Run the same gate CI runs, in this order:
+Run the same gate CI runs:
 
 ```bash
-npm run build       # must come first — services typecheck against core's dist/
 npm run lint
 npm run typecheck
 npm test
 ```
 
-`npm run build` is not optional before `typecheck`. Services resolve
-`@ragen-connectors/core` through its built `dist/`, so a stale or missing build
-produces typecheck errors that have nothing to do with your change.
+`lint` and `typecheck` run through Turborepo, which builds `packages/core` first
+because both declare `dependsOn: ["^build"]` — so you no longer have to remember
+to build by hand ([ADR-06](docs/adrs/06-turborepo-for-the-build-graph.md)). Add
+`npm run build` if you changed anything that ships.
+
+Results are cached by content hash, so a repeat run with nothing changed is
+effectively instant. `npx turbo run build --force` ignores the cache if you ever
+need to prove a build from cold.
 
 ## Four things that catch everyone
 
@@ -65,10 +69,13 @@ produces typecheck errors that have nothing to do with your change.
 even though the file on disk is `foo.ts`. Omitting the extension typechecks in
 some editors and then fails at runtime.
 
-**2. Build order is real.** `@ragen-connectors/core` must build before any
-service. The root `npm run build` handles this because npm walks workspaces in
-dependency order — but if you build a single service directly after changing
-core, you'll be compiling against the old `dist/`.
+**2. Services compile against core's `dist/`, not its source.** Turborepo now
+enforces the ordering for `build`, `lint` and `typecheck`, so the root commands
+are safe. What is still true: running `tsc` *inside* a service directory bypasses
+the graph entirely and compiles against whatever `dist/` happens to be there. If
+a service can't find an export that plainly exists in core's source, rebuild
+before you start debugging —
+[`docs/lessons/services-typecheck-against-cores-dist-not-its-source.md`](docs/lessons/services-typecheck-against-cores-dist-not-its-source.md).
 
 **3. Every tool is multi-tenant.** Each MCP tool takes `customer_id` as a Zod
 parameter and resolves credentials through `getAccessToken(customerId)` against
@@ -84,13 +91,13 @@ hit the live API.
 
 ## Adding a new service
 
-The steps are in [CLAUDE.md](CLAUDE.md#adding-a-new-service). Two things that
+The steps are in [AGENTS.md](AGENTS.md#adding-a-new-service). Two things that
 aren't obvious:
 
 - **Claim both ports.** Each service runs a Hono HTTP server *and* a FastMCP
   stream server, and FastMCP starts its own listener rather than mounting on the
   existing one — so the MCP port is always `PORT + 1000`. Add your service to
-  the port table in [CLAUDE.md](CLAUDE.md#dual-port-design) so the next person
+  the port table in [AGENTS.md](AGENTS.md#ports) so the next person
   doesn't collide with you.
 - **Run `npm install` from the root** after creating the directory, so npm links
   the new workspace.
@@ -128,6 +135,22 @@ docs: correct the rejestrio port in the README
 
 In the PR description, say what changed and why, and what you ran to convince
 yourself it works. Link the issue with `Fixes #123`.
+
+## Where to look things up
+
+[`AGENTS.md`](AGENTS.md) is the canonical orientation file — architecture,
+conventions, and a **Task Router** table mapping a kind of task to the doc that
+explains it. `CLAUDE.md` is a one-line import of it, so edit `AGENTS.md`.
+
+Before nontrivial work, check [`docs/lessons.md`](docs/lessons.md) for the area
+you're touching: it catalogs gotchas someone has already paid for. Architecture
+decisions and their reasoning live in [`docs/adrs/`](docs/adrs/) — read the
+relevant one before changing something it covers, and add one if you make a
+decision a future reader would otherwise have to reverse-engineer.
+
+If you hit a non-obvious gotcha while working, add a lesson. That file has
+instructions; the only hard rule is that a lesson records something that
+actually happened.
 
 ## Licensing
 
