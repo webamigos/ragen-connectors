@@ -25,9 +25,9 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@vitest/coverage-v8": "^4.1.1",
-    "eslint": "^10.0.3",
+    "eslint": "^10.10.0",
     "turbo": "^2.10.12",
-    "typescript-eslint": "^8.57.0",
+    "typescript-eslint": "^8.69.0",
     "vitest": "^4.1.1"
   }
 }
