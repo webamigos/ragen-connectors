@@ -89,6 +89,19 @@ export class RejestrioBudgetExceededError extends RejestrioError {
   }
 }
 
+export class RejestrioUnattributedCallError extends RejestrioError {
+  constructor() {
+    super(
+      "Cannot make a paid Rejestr.io call without an organization: " +
+        "customer_id must begin with a non-empty organization id " +
+        '(expected "{orgId}:{userId}:{provider}"). The daily spend ' +
+        "ceiling is enforced per organization, so an unattributable " +
+        "call cannot be allowed.",
+    );
+    this.name = "RejestrioUnattributedCallError";
+  }
+}
+
 export class RejestrioDisabledError extends RejestrioError {
   constructor() {
     super(
