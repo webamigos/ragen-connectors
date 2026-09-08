@@ -9,7 +9,7 @@
 # the straight-through build for consistency with sibling services;
 # revisit if image size becomes an issue.
 
-FROM node:24-slim
+FROM node:26-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl openssl ca-certificates \
