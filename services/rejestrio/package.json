@@ -20,17 +20,17 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.19.11",
-    "@prisma/adapter-pg": "^7.3.0",
-    "@prisma/client": "^7.3.0",
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "^7.10.0",
     "@ragen-connectors/core": "*",
-    "fastmcp": "^3.34.0",
-    "hono": "^4.12.8",
-    "pg": "^8.13.1",
+    "fastmcp": "^3.35.0",
+    "hono": "^4.13.5",
+    "pg": "^8.23.0",
     "zod": "^3.24.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "@types/pg": "^8.11.0",
+    "@types/pg": "^8.23.1",
     "prisma": "^7.3.0",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0",
