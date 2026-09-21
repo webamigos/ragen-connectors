@@ -2,6 +2,7 @@ import {
   chmodSync,
   existsSync,
   mkdirSync,
+  readdirSync,
   mkdtempSync,
   readFileSync,
   rmSync,
@@ -170,7 +171,11 @@ describe("when a port table cannot be updated", () => {
     try {
       expect(() => scaffold(p)).toThrow();
       expect(existsSync(p.destination), "their directory survives").toBe(true);
-      expect(existsSync(join(p.destination, "package.json"))).toBe(false);
+      // Empty, not merely free of the files. Removing the files and leaving
+      // `src/`, `src/tools/` and the rest behind gave them back a non-empty
+      // directory — which the *next* run refuses, which is the failure this
+      // rollback exists to prevent, one level down.
+      expect(readdirSync(p.destination), "and is empty again").toEqual([]);
     } finally {
       chmodSync(second, 0o644);
     }

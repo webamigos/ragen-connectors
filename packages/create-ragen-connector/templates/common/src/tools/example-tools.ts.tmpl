@@ -1,5 +1,5 @@
 /**
- * The MCP tools __LABEL__ exposes, and the three places Ragen's client departs
+ * The MCP tools `__SLUG__` exposes, and the three places Ragen's client departs
  * from what the MCP specification alone would tell you.
  *
  * 1. **`customer_id` is a tool parameter, not a header.** Ragen strips it from
@@ -70,8 +70,19 @@ export function register__LABEL_IDENT__Tools(mcp: FastMCP<Session>): void {
       customer_id: z
         .string()
         .describe("Customer identifier. Ragen injects this; ignore it."),
-      latitude: z.number().describe("Degrees north, between -90 and 90."),
-      longitude: z.number().describe("Degrees east, between -180 and 180."),
+      // Bounds in the schema, not only in the description: the description is
+      // advice to the model and the schema is what rejects a bad call before
+      // it reaches the upstream.
+      latitude: z
+        .number()
+        .min(-90)
+        .max(90)
+        .describe("Degrees north, between -90 and 90."),
+      longitude: z
+        .number()
+        .min(-180)
+        .max(180)
+        .describe("Degrees east, between -180 and 180."),
     }),
     execute: async ({ customer_id, latitude, longitude }, context) => {
       const problem = credentialProblem(context);
