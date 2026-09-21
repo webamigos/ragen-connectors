@@ -109,10 +109,16 @@ export async function currentWeather(
     throw new Error("the upstream returned conditions that did not decode");
   }
 
+  // `String(undefined)` is the string "undefined", which would be handed to
+  // the model as a timestamp. Same class as the numbers above.
+  if (typeof current.time !== "string" || current.time.length === 0) {
+    throw new Error("the upstream returned conditions with no observation time");
+  }
+
   return {
     temperatureC,
     windSpeedKph,
-    observedAt: String(current.time),
+    observedAt: current.time,
   };
 }
 

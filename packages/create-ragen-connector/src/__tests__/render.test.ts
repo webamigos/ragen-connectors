@@ -229,6 +229,29 @@ describe("free text a user typed", () => {
     expect(index).not.toMatch(/`[^`]*Acme "Pro"/);
   });
 
+  it("keeps free text out of comments, where escaping cannot save it", () => {
+    // A label containing `*/` closed the generated file's header comment and
+    // put the rest of the label into the file as code. Escaping is per file
+    // type, not per position, so a string-literal escaper cannot fix a
+    // comment — the label is simply not written into one. The slug can be:
+    // it is `^[a-z][a-z0-9-]*$`.
+    // Asserted by *where the label lands*, not by slicing the comment: the
+    // first attempt cut the header at `indexOf("*/")`, which is the injected
+    // terminator itself, so it passed with the bug reinstated.
+    const marker = "Evil */ globalThis.pwned = 1; /*";
+    const hostile = options({ label: marker });
+
+    const index = render(hostile).get("src/index.ts")!;
+    const lines = index.split("\n").filter((line) => line.includes("pwned"));
+    expect(lines, "the label appears exactly once").toHaveLength(1);
+    expect(lines[0].trim()).toMatch(/^const NAME = "/);
+
+    // The tools file names the connector too, and must not carry it at all.
+    expect(render(hostile).get("src/tools/example-tools.ts")).not.toContain(
+      "pwned",
+    );
+  });
+
   it("does not escape anything in markdown, where there is nothing to break", () => {
     expect(render(awkward).get("README.md")).toContain('Acme "Pro" CRM');
   });

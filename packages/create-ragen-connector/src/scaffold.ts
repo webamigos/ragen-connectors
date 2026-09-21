@@ -98,12 +98,25 @@ export function scaffold(plan: ScaffoldPlan): ScaffoldResult {
   const destinationIsOurs = !existsSync(plan.destination);
 
   const written: string[] = [];
+  /** Directories this run created, so a rollback removes only those. */
+  const madeDirectories = new Set<string>();
   const restore: Array<() => void> = [];
 
   try {
     for (const [relativePath, body] of files) {
       const full = join(plan.destination, relativePath);
-      mkdirSync(dirname(full), { recursive: true });
+      // `mkdirSync` with `recursive` returns the **first** path it created —
+      // the shallowest, not the leaf — and `undefined` when everything already
+      // existed. That return value is the root of a subtree that did not exist
+      // before this run, so it is exactly what the rollback may remove whole.
+      //
+      // Recording the leaf instead left `src` behind: writing
+      // `src/tools/example-tools.ts` creates `src` *and* `src/tools`, and only
+      // `src/tools` was tracked.
+      const created = mkdirSync(dirname(full), { recursive: true });
+      if (created !== undefined) {
+        madeDirectories.add(created);
+      }
       writeFileSync(full, body, "utf8");
       written.push(relativePath);
     }
@@ -137,7 +150,7 @@ export function scaffold(plan: ScaffoldPlan): ScaffoldResult {
     // Then remove what this run wrote. A half-written service left behind is
     // refused by the *next* run as a non-empty destination, so the failure
     // compounds into "delete this by hand before trying again".
-    rollBackWrites(plan.destination, written, destinationIsOurs);
+    rollBackWrites(plan.destination, written, madeDirectories, destinationIsOurs);
     throw error;
   }
 
@@ -159,14 +172,29 @@ export function scaffold(plan: ScaffoldPlan): ScaffoldResult {
 function rollBackWrites(
   destination: string,
   written: string[],
+  madeDirectories: Set<string>,
   destinationIsOurs: boolean,
 ): void {
   try {
+    if (destinationIsOurs) {
+      // This run created the destination, so the whole tree is ours.
+      rmSync(destination, { recursive: true, force: true });
+      return;
+    }
+
+    // The operator made the destination, so only what this run put inside it
+    // may go: the files, and the directory subtrees that did not exist before.
+    // Leaving the directories behind gave them back a *non-empty* directory,
+    // which the next run refuses — the failure this rollback exists to
+    // prevent, one level down.
     for (const relativePath of written) {
       rmSync(join(destination, relativePath), { force: true });
     }
-    if (destinationIsOurs) {
-      rmSync(destination, { recursive: true, force: true });
+    for (const dir of madeDirectories) {
+      if (dir === destination) {
+        continue;
+      }
+      rmSync(dir, { recursive: true, force: true });
     }
   } catch {
     // The original error is what the caller needs to see. A failure to clean

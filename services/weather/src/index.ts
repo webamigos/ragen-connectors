@@ -1,5 +1,9 @@
 /**
- * Weather — an MCP server a Ragen installation connects to.
+ * The `weather` connector — an MCP server a Ragen installation connects to.
+ *
+ * The display name is `NAME` below. It is free text somebody typed, so it is
+ * kept out of comments entirely — a label carrying a block-comment terminator
+ * would close this one and put the rest of itself into the file as code.
  *
  * Two listeners, always: Hono on PORT for health and REST, FastMCP on
  * PORT + 1000 for `/mcp`. FastMCP owns its own listener and cannot be mounted
