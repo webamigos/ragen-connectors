@@ -1,4 +1,0 @@
-dist/
-src/generated/
-.env.local
-.env.*.local

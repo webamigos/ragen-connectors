@@ -21,7 +21,7 @@ labels: bug
 - [ ] google
 - [ ] clickup
 - [ ] hubspot
-- [ ] rejestrio
+- [ ] weather
 - [ ] `packages/core` (shared)
 
 ## Environment
@@ -36,7 +36,6 @@ labels: bug
 Fill in what applies — **redact all secrets and tokens**:
 
 - Is ragen-token-vault reachable, and did `/health` return OK?
-- For rejestrio: `REJESTRIO_PLAN_TIER`, and is `REJESTRIO_DISABLE_PAID_CALLS`
   set?
 - Any non-default `*_BASE_URL` or `HUBSPOT_AUTH_DOMAIN`:
 

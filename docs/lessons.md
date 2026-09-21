@@ -28,6 +28,13 @@ After a nontrivial correction or a non-obvious gotcha (see `AGENTS.md`'s
 A lesson records something that actually happened. Do not add speculative ones —
 a rule nobody has been bitten by belongs in `AGENTS.md` or an ADR, not here.
 
+> **`rejestrio` appears in several entries below and is no longer in this
+> repository** — it moved to
+> [`ragen-connectors-enterprise`](https://github.com/webamigos/ragen-connectors-enterprise)
+> once it became clear a paid upstream could not stay open source. The lessons
+> keep its name because that is what happened; every one of them is general and
+> applies to the services that are still here.
+
 ## Catalog
 
 ### architecture

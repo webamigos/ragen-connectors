@@ -21,10 +21,10 @@ A throw reaches the model as an opaque protocol error. `{success: false}` with a
 sentence it can relay is the difference between the model retrying sensibly and
 the model giving up. Wrap the whole handler body, not just the fetch.
 
-**2. It takes `customer_id`, and resolves the credential per call.** (On
-rejestrio there is no per-customer credential — there, `customer_id` is what
-attributes cost and enforces the budget ceiling. See the
-`connectors-paid-api-calls` skill.)
+**2. It takes `customer_id`, and resolves the credential per call.** Never
+cache a token in module scope: one process serves every customer, so a
+module-level credential is one customer's token answering another customer's
+question.
 
 ```ts
 const token = await getAccessToken(customer_id);
@@ -82,6 +82,9 @@ Mock the upstream; never hit a live API.
 
 ## If the upstream bills per call
 
-Stop and read `.claude/skills/connectors-paid-api-calls/SKILL.md` first. On
-rejestrio every paid call must pass through `BudgetGuard`, and a tool that
-bypasses it is a security finding, not a style problem.
+Stop. No connector in this repository has a paid upstream, and that is
+deliberate — caching becomes a correctness concern rather than an optimisation,
+and a test that reaches the network spends money. A tool that can issue a
+billed call belongs in
+[`ragen-connectors-enterprise`](https://github.com/webamigos/ragen-connectors-enterprise),
+behind a budget guard and a cost audit.

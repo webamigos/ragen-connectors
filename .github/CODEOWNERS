@@ -24,13 +24,9 @@
 /packages/core/src/ragen-vault-client.ts    @webamigos/ragen-ai
 **/src/auth/                            @webamigos/ragen-ai
 
-# Database schema and migrations — rejestrio owns its own Postgres, and a bad
-# migration is expensive to undo on customer-hosted installs.
-/services/rejestrio/prisma/             @webamigos/ragen-ai
-
-# Spend controls. A change here can cost real money against the shared
-# Rejestr.io API key.
-/services/rejestrio/src/audit/budget-guard.ts   @webamigos/ragen-ai
+# The scaffolder and its templates. They are the written form of Ragen's wire
+# contract, so a change here reaches every connector generated afterwards.
+/packages/create-ragen-connector/       @webamigos/ragen-ai
 
 # Agent and contributor guidance. AGENTS.md is the canonical file that every
 # coding agent reads, and the ADRs are the record of why things are the way they

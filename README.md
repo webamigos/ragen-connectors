@@ -1,5 +1,12 @@
 # Ragen MCP (TypeScript)
 
+> **Looking for rejestr.io?** It moved to
+> [`ragen-connectors-enterprise`](https://github.com/webamigos/ragen-connectors-enterprise)
+> along with its ADRs and its paid-call skill. This repository holds the open
+> connectors; one that cannot be open source — a paid upstream, a credential
+> that cannot be handed out — belongs there.
+
+
 TypeScript monorepo for multi-tenant MCP (Model Context Protocol) servers. Each service exposes a third-party API as MCP tools over HTTP.
 
 ## Stack
@@ -28,7 +35,6 @@ ragen-connectors/
 │   ├── clickup/               # ClickUp MCP server (HTTP 8002, MCP 9002)
 │   ├── google/                # Google MCP server (HTTP 8001, MCP 9001) — Calendar, Drive, Analytics, Ads, Gmail
 │   ├── hubspot/               # HubSpot MCP server (HTTP 8003, MCP 9003)
-│   ├── rejestrio/             # Rejestr.io MCP server (HTTP 8004, MCP 9004) — Polish KRS registry, B2B lead scoring
 │   └── weather/               # Weather MCP server (HTTP 8005, MCP 9005) — the scaffolder's worked example
 └── .github/workflows/         # CI + Release
 ```
@@ -114,21 +120,6 @@ Each service requires these variables in `.env.local`:
 | `OAUTH_REDIRECT_URI`    | Yes      | OAuth callback URL                       |
 | `HUBSPOT_AUTH_DOMAIN`   | No       | Auth domain (default: `app.hubspot.com`) |
 
-**Rejestr.io-specific:** (no OAuth — single service-wide API key)
-
-| Variable                             | Required | Description                                            |
-| ------------------------------------ | -------- | ------------------------------------------------------ |
-| `REJESTRIO_API_KEY`                  | Yes      | Rejestr.io API key (bare token, NOT `Bearer <key>`)    |
-| `DATABASE_URL`                       | Yes      | Postgres URL for this service's cache DB (see below)   |
-| `REJESTRIO_BASE_URL`                 | No       | Default `https://rejestr.io/api/v2`                    |
-| `REJESTRIO_PLAN_TIER`                | No       | `base` \| `premium` \| `biznes` (default `base`)       |
-| `REJESTRIO_DEFAULT_DAILY_BUDGET_PLN` | No       | Per-org daily spend ceiling, default 20                |
-| `REJESTRIO_DISABLE_PAID_CALLS`       | No       | Kill-switch — serves cache only when `true`            |
-
-Unlike the OAuth services, Rejestr.io has its own Postgres database
-(cache of KRS data + per-call cost audit). Spin it up locally via
-`services/rejestrio/docker-compose.yml` (port 5434).
-
 ## Testing with MCP Inspector
 
 Use the [MCP Inspector](https://github.com/modelcontextprotocol/inspector) to interactively test tools without connecting through ragen-app.
@@ -141,7 +132,6 @@ npx @modelcontextprotocol/inspector
 npx @modelcontextprotocol/inspector --cli http://localhost:9001/mcp   # Google
 npx @modelcontextprotocol/inspector --cli http://localhost:9002/mcp   # ClickUp
 npx @modelcontextprotocol/inspector --cli http://localhost:9003/mcp   # HubSpot
-npx @modelcontextprotocol/inspector --cli http://localhost:9004/mcp   # Rejestrio
 ```
 
 The Inspector opens a web UI where you can:
@@ -211,7 +201,7 @@ OAuth tokens are stored in [ragen-token-vault](https://github.com/webamigos/rage
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the branch model, the pre-PR checks,
 and the gotchas that catch people (ESM `.js` import extensions, core-before-
-services build order, per-customer token scoping, and Rejestr.io's paid calls).
+services build order, and per-customer token scoping).
 
 Security vulnerabilities go to **ragen@webamigos.pl**, never a public issue —
 see [SECURITY.md](SECURITY.md).
