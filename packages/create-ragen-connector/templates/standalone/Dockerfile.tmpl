@@ -1,0 +1,18 @@
+FROM node:24-slim
+
+WORKDIR /app
+
+COPY package.json package-lock.json* tsconfig.json tsconfig.build.json ./
+RUN npm install
+
+COPY src/ ./src/
+RUN npm run build
+
+# Both listeners. Publishing only __PORT__ leaves a container whose health
+# check passes and whose tools never load.
+EXPOSE __PORT__ __MCP_PORT__
+
+# The build needs to write; serving does not. `node:*` images ship this user.
+USER node
+
+CMD ["node", "dist/index.js"]

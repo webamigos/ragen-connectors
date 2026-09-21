@@ -1,0 +1,12 @@
+/**
+ * The tool context a test supplies, for this connector's auth shape.
+ *
+ * It lives in the auth layer because that is what decides what a session
+ * carries. The tool tests are the same file whatever the shape, which is what
+ * keeps them from drifting apart.
+ */
+
+export function testContext(): unknown {
+  // `server_side` carries no credential, so there is nothing to put here.
+  return { session: { customerId: "org:user:__SLUG__" } };
+}

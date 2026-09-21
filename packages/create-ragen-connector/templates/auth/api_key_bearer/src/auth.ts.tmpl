@@ -1,0 +1,69 @@
+/**
+ * `api_key_bearer` — the customer pastes their own key into Ragen, and Ragen
+ * presents it here.
+ *
+ * The flow: the user enters their key in Settings > Connectors, Ragen stores
+ * it in ragen-token-vault (never in its database), and every MCP session
+ * arrives with `Authorization: Bearer <that key>`. This connector never sees
+ * the vault and stores nothing.
+ *
+ * **There is no `x-customer-id` header on this path.** Ragen sends
+ * `Authorization` instead, and nothing else. `customer_id` still arrives as a
+ * tool parameter, which is why the tools take it from there — see
+ * `tools/example-tools.ts`.
+ *
+ * **Never cache a key in module scope.** One process serves every customer, so
+ * a module-level credential is one customer's key answering another customer's
+ * question. Resolve it per call, from the session, which is what
+ * `credentialFor` does.
+ *
+ * ## Why a missing key is an envelope and not a refused session
+ *
+ * Ragen's **Test connection** button opens a session and lists the tool names
+ * with **no headers at all** — it has no key to send, because the key belongs
+ * to a customer who has not connected yet. Refusing the session here would
+ * make the operator's only check of the address fail on a server that is
+ * working.
+ *
+ * So the session is accepted with a null key, and a tool called without one
+ * returns `{success: false}` saying so — which is a message the model can pass
+ * on ("your key seems to be missing") rather than a protocol error it cannot
+ * explain. The tool list is readable to anyone who can reach the port; no data
+ * is.
+ */
+
+import type { IncomingMessage } from "node:http";
+import { singleValueHeaders } from "./headers.js";
+
+export interface Session extends Record<string, unknown> {
+  /** Null for a session Ragen's Test connection opened. */
+  apiKey: string | null;
+}
+
+export async function authenticate(request: IncomingMessage): Promise<Session> {
+  const header = singleValueHeaders(request)["authorization"];
+  const token = header?.startsWith("Bearer ")
+    ? header.slice("Bearer ".length).trim()
+    : "";
+
+  return { apiKey: token.length > 0 ? token : null };
+}
+
+/** The customer's key for this call, or null if the session carried none. */
+export function credentialFor(context: unknown): string | null {
+  const session = (context as { session?: Session } | undefined)?.session;
+  return session?.apiKey ?? null;
+}
+
+/**
+ * Why a tool cannot run, in words the model can repeat to the user.
+ *
+ * Checked before the upstream call rather than after its 401, because "the
+ * API key is missing" is something the user can act on and
+ * `upstream returned 401 Unauthorized` is not.
+ */
+export function credentialProblem(context: unknown): string | null {
+  return credentialFor(context) === null
+    ? "No API key was presented for this connector. Reconnect it in Settings > Connectors and enter your key."
+    : null;
+}

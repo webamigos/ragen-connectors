@@ -1,0 +1,40 @@
+{
+  "name": "create-ragen-connector",
+  "version": "0.1.0",
+  "description": "Scaffold an MCP server a Ragen installation can connect to",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "create-ragen-connector": "dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webamigos/ragen-connectors.git",
+    "directory": "packages/create-ragen-connector"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && chmod +x dist/index.js",
+    "clean": "rm -rf dist",
+    "prepack": "npm run clean && npm run build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

@@ -1,0 +1,26 @@
+FROM node:24-slim
+
+WORKDIR /app
+
+# The build context is the MONOREPO ROOT, not this directory — `COPY
+# packages/core` has to resolve. Point your platform's Dockerfile path at
+# services/__SLUG__/Dockerfile and leave the root directory at /.
+COPY package.json package-lock.json* tsconfig.base.json ./
+COPY packages/core/ ./packages/core/
+COPY services/__SLUG__/ ./services/__SLUG__/
+
+RUN npm install --workspace=services/__SLUG__ --workspace=packages/core
+RUN npm -w packages/core run build && npm -w services/__SLUG__ run build
+
+WORKDIR /app/services/__SLUG__
+
+# Both listeners. Publishing only __PORT__ leaves a container whose health
+# check passes and whose tools never load.
+EXPOSE __PORT__ __MCP_PORT__
+
+ENV NODE_OPTIONS="--dns-result-order=ipv6first"
+
+# The build needs to write; serving does not. `node:*` images ship this user.
+USER node
+
+CMD ["node", "dist/index.js"]

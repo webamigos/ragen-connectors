@@ -23,13 +23,27 @@ ragen-connectors/
 │       ├── state-store.ts         # In-memory OAuth state with TTL
 │       ├── env.ts                 # Zod-based env validation
 │       └── customer.ts            # Multi-tenancy (x-customer-id header)
+├── packages/create-ragen-connector/  # `npx create-ragen-connector` — scaffolds a new service (ADR-07)
 ├── services/
 │   ├── clickup/               # ClickUp MCP server (HTTP 8002, MCP 9002)
 │   ├── google/                # Google MCP server (HTTP 8001, MCP 9001) — Calendar, Drive, Analytics, Ads, Gmail
 │   ├── hubspot/               # HubSpot MCP server (HTTP 8003, MCP 9003)
-│   └── rejestrio/             # Rejestr.io MCP server (HTTP 8004, MCP 9004) — Polish KRS registry, B2B lead scoring
+│   ├── rejestrio/             # Rejestr.io MCP server (HTTP 8004, MCP 9004) — Polish KRS registry, B2B lead scoring
+│   └── weather/               # Weather MCP server (HTTP 8005, MCP 9005) — the scaffolder's worked example
 └── .github/workflows/         # CI + Release
 ```
+
+## Adding a service
+
+```bash
+npx create-ragen-connector "Notion" --slug=notion
+```
+
+It writes `services/<slug>/`, claims the next free port pair and updates both
+port tables. Outside a checkout it writes a standalone project instead — for
+connecting your own MCP server to a Ragen installation without forking
+anything. See [`packages/create-ragen-connector`](packages/create-ragen-connector/README.md)
+and [ADR-07](docs/adrs/07-a-connector-is-scaffolded-not-copied.md).
 
 ## Quick Start
 

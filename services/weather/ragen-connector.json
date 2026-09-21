@@ -1,0 +1,11 @@
+{
+  "$schema": "https://docs.ragen.ai/schemas/ragen-connector-v1.json",
+  "slug": "weather",
+  "label": "Weather",
+  "description": "Current conditions and place lookup, from Open-Meteo.",
+  "lucideIcon": "cloud-sun",
+  "authType": "SERVER_SIDE",
+  "scopes": [],
+  "mcpServerUrl": "http://localhost:9005/mcp",
+  "generatedBy": "create-ragen-connector@0.1.0"
+}

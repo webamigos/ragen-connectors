@@ -1,0 +1,32 @@
+/**
+ * Pino, without the OpenTelemetry bridge.
+ *
+ * `@ragen-connectors/core`'s logger forwards every record to an OTLP
+ * collector through a pino hook. That is right inside Ragen's own deployment
+ * and wrong here: it would pull a dozen OTEL packages into a standalone
+ * connector to reach a collector that does not exist.
+ *
+ * The shape is the same, so the call sites are: `logger.info({ ...attrs }, msg)`.
+ * This is the one vendored file that is deliberately *not* a copy — `env.ts`
+ * and `customer.ts` beside it are byte-identical to core's, and a test in the
+ * CLI asserts they stay that way.
+ */
+
+import pino from "pino";
+
+const isProduction = process.env.NODE_ENV === "production";
+
+const logger = pino({
+  // `.env.example` documents LOG_LEVEL, so it has to do something. Core's
+  // logger decides the level from NODE_ENV alone, which is why the workspace
+  // build of this file behaves differently — one more reason this one is a
+  // reimplementation rather than a copy.
+  level: process.env.LOG_LEVEL ?? (isProduction ? "info" : "debug"),
+  base: {
+    pid: process.pid,
+    hostname: process.env.HOSTNAME,
+  },
+  serializers: { err: pino.stdSerializers.err },
+});
+
+export { logger };

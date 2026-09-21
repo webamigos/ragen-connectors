@@ -36,6 +36,8 @@ npm run dev --workspace @ragen-connectors/rejestrio
 
 npm run build -- --filter=@ragen-connectors/rejestrio   # one workspace + deps
 npm run build -- --force                                # ignore the cache
+
+npx create-ragen-connector "Notion"   # scaffold a new service — see "Adding a new service"
 ```
 
 From inside a service directory: `npm run dev`, `npm run build`,
@@ -65,7 +67,8 @@ single-line or obvious fixes.
 |---|---|
 | **Adding to a service** | |
 | Adding or changing an MCP tool | [ADR-03](docs/adrs/03-tools-return-envelopes-never-throw.md), "Tool contract" below, skill `connectors-add-tool` |
-| Adding a whole new service | [`docs/architecture.md`](docs/architecture.md), [ADR-01](docs/adrs/01-dual-port-hono-and-fastmcp.md), skill `connectors-add-service` |
+| Adding a whole new service | run `npx create-ragen-connector`, then skill `connectors-add-service` for the credential model; [`docs/architecture.md`](docs/architecture.md), [ADR-01](docs/adrs/01-dual-port-hono-and-fastmcp.md) |
+| Changing what a scaffolded connector looks like, or what Ragen sends one | [`packages/create-ragen-connector/README.md`](packages/create-ragen-connector/README.md), [ADR-07](docs/adrs/07-a-connector-is-scaffolded-not-copied.md) |
 | Adding an env var | "Key conventions" below — schema *and* `.env.example`, both |
 | **Credentials and tenancy** | |
 | Anything touching tokens, OAuth, `customer_id` | [ADR-02](docs/adrs/02-credentials-live-in-ragen-token-vault.md), [`SECURITY.md`](SECURITY.md) |
@@ -89,7 +92,9 @@ their reasoning: [`docs/adrs/`](docs/adrs/). Process and branch model:
 
 ```text
 packages/core/          @ragen-connectors/core — shared by every service
-services/{google,clickup,hubspot,rejestrio}/
+packages/create-ragen-connector/
+                        the scaffolder; its templates are the wire contract
+services/{google,clickup,hubspot,rejestrio,weather}/
   src/index.ts          entrypoint: env validation → FastMCP + Hono
   src/tools/            MCP tool definitions (addTool + Zod)
   src/services/         API client logic
@@ -112,6 +117,7 @@ owns its own listener and cannot be mounted on the Hono app (ADR-01).
 | clickup   | 8002 | 9002 |
 | hubspot   | 8003 | 9003 |
 | rejestrio | 8004 | 9004 |
+| weather   | 8005 | 9005 |
 
 Keep this table in sync when adding a service, and claim both ports in every
 Dockerfile, compose file and Railway config. A service with an unmapped MCP port
@@ -198,18 +204,32 @@ Tests live in `__tests__/` next to the code, run under Vitest from the root
 
 ## Adding a new service
 
-1. Copy `services/clickup/`, rename, update `package.json` name to
-   `@ragen-connectors/<name>`.
-2. It joins the workspace automatically (`services/*`). Run `npm install` from
-   the root to link it.
-3. Replace `tools/`, `services/`, `auth/` with provider-specific code.
-4. Update `index.ts`: env validation, tool registration, port.
-5. **Claim both ports** and add a row to the table above and in
-   [`docs/architecture.md`](docs/architecture.md).
-6. Add its Dockerfile with the monorepo root as build context.
+**Do not copy `services/clickup/` by hand.** Run the scaffolder:
 
-Turbo picks the new workspace up with no config change — it reads the dependency
+```bash
+npx create-ragen-connector "Notion" --slug=notion --auth=server_side
+```
+
+From the repository root it writes `services/<slug>/`, claims the next free
+port pair, and adds the row to the table above **and** to
+[`docs/architecture.md`](docs/architecture.md). Run it outside a checkout and
+it writes a standalone project instead. Flags and both shapes:
+[`packages/create-ragen-connector/README.md`](packages/create-ragen-connector/README.md).
+
+Then `npm install` from the root to link it, replace the example tool with real
+ones, and run the gate. Turbo needs no config change — it reads the dependency
 graph from `package.json`.
+
+What a template cannot decide is the credential model, and it is the real work:
+skill `connectors-add-service`, and ADR-04 if your upstream genuinely cannot do
+per-customer auth.
+
+**Connecting it to Ragen needs no deploy of Ragen.** A platform administrator
+adds a catalogue row at `/mcp-catalogue` in `apps/admin`; the scaffolder prints
+its values and leaves them in `ragen-connector.json`. Two things catch people
+and the generated README explains both — the URL must end in `/mcp`, and
+`localhost` is refused by Ragen's address policy even with "allow a private
+address" ticked.
 
 ## Deployment
 
