@@ -114,8 +114,13 @@ src/
 ## Before you claim it works
 
 ```bash
-npm run lint && npm run typecheck && npm test
+npm run lint && npm run typecheck
 ```
+
+Then the tests. In a standalone project that is `npm test` here; inside the
+`ragen-connectors` monorepo it is `npm test` **from the repository root**,
+which runs one Vitest config over every workspace — this service has no `test`
+script of its own on purpose.
 
 Then start it and confirm **both** ports answer. The health check alone has
 never been evidence.

@@ -112,7 +112,10 @@ replacing. The CLI says so by name instead of listing what it accepts.
   assertion of the contract.
 - `services/weather` is a generated service kept in the repository as the
   worked example, and is the scaffolder's own integration test: it is
-  regenerated, not hand-edited.
+  regenerated, not hand-edited. Regenerating it means deleting **both** the
+  directory and its row in the two port tables — the CLI refuses a slug the
+  table already lists, because a directory and a row can diverge and a table
+  with two rows for one service is worse than one with none.
 - Two rough edges in Ragen were found by doing this and are recorded in its
   spec rather than fixed here: a self-hosted Ragen cannot connect an MCP server
   on its own host unless both are containerised (the address policy admits

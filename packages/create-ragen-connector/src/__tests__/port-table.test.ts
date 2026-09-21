@@ -6,6 +6,7 @@ import {
   nextFreeHttpPort,
   parsePortTable,
   portConflict,
+  serviceConflict,
 } from "../port-table.js";
 
 const REPO_ROOT = fileURLToPath(new URL("../../../../", import.meta.url));
@@ -78,6 +79,22 @@ describe("portConflict", () => {
 
   it("names the next free pair in the message", () => {
     expect(portConflict(rows, 8002)).toMatch(/8005\/9005/);
+  });
+});
+
+describe("serviceConflict", () => {
+  const rows = parsePortTable(TABLE);
+
+  it("passes a name the table does not list", () => {
+    expect(serviceConflict(rows, "weather")).toBeNull();
+  });
+
+  it("refuses a name already in the table, naming its ports", () => {
+    // Found by regenerating a service whose directory had been deleted while
+    // its row survived: the run appended a *second* `weather` row on a
+    // different port, and both documents then listed the service twice.
+    expect(serviceConflict(rows, "clickup")).toMatch(/already lists/);
+    expect(serviceConflict(rows, "clickup")).toMatch(/8002\/9002/);
   });
 });
 

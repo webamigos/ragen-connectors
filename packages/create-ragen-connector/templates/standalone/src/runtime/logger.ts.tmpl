@@ -17,7 +17,11 @@ import pino from "pino";
 const isProduction = process.env.NODE_ENV === "production";
 
 const logger = pino({
-  level: isProduction ? "info" : "debug",
+  // `.env.example` documents LOG_LEVEL, so it has to do something. Core's
+  // logger decides the level from NODE_ENV alone, which is why the workspace
+  // build of this file behaves differently — one more reason this one is a
+  // reimplementation rather than a copy.
+  level: process.env.LOG_LEVEL ?? (isProduction ? "info" : "debug"),
   base: {
     pid: process.pid,
     hostname: process.env.HOSTNAME,

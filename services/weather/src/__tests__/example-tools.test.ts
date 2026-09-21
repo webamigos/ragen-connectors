@@ -92,6 +92,60 @@ describe("find_place", () => {
   });
 });
 
+describe("get_current_weather", () => {
+  it("forwards the coordinates and returns the reading", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        current: { temperature_2m: 3.4, wind_speed_10m: 11, time: "2026-01-01T12:00" },
+      }),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const tool = registeredTools().get("get_current_weather");
+    const result = JSON.parse(
+      await tool!.execute(
+        { customer_id: "org:user:weather", latitude: 52.23, longitude: 21.01 },
+        testContext(),
+      ),
+    );
+
+    expect(result.success).toBe(true);
+    expect(result.weather.temperatureC).toBe(3.4);
+
+    // The arguments actually reached the upstream. A tool that answers
+    // plausibly for the wrong place is worse than one that fails.
+    const url = String(fetchMock.mock.calls[0][0]);
+    expect(url).toContain("latitude=52.23");
+    expect(url).toContain("longitude=21.01");
+  });
+
+  it("resolves with an envelope when the upstream fails, rather than rejecting", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 429,
+        statusText: "Too Many Requests",
+        json: async () => ({}),
+      }),
+    );
+
+    const tool = registeredTools().get("get_current_weather");
+    const raw = await tool!.execute(
+      { customer_id: "org:user:weather", latitude: 52.23, longitude: 21.01 },
+      testContext(),
+    );
+
+    // `resolves`, not `rejects` — a throw reaches the model as an opaque
+    // protocol error it cannot act on.
+    const result = JSON.parse(raw);
+    expect(result.success).toBe(false);
+    expect(result.error).toContain("429");
+  });
+});
+
 describe("the wire contract", () => {
   it("takes customer_id as a parameter, so a call with no headers still works", async () => {
     vi.stubGlobal(

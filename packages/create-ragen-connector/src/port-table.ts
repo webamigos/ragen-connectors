@@ -59,6 +59,28 @@ export function nextFreeHttpPort(rows: PortRow[], floor = 8001): number {
   return Math.max(highest + 1, floor);
 }
 
+/**
+ * Whether the table already lists this service.
+ *
+ * The directory check catches the ordinary case — you cannot scaffold over an
+ * existing `services/<slug>`. A row and a directory can still diverge: delete
+ * the directory to regenerate a service and the row stays, and the next run
+ * appends a *second* row for the same name on a different port. A table with
+ * two rows for one service is worse than one with none, by the same argument
+ * that makes the pair of documents worth keeping in step — both are read, and
+ * nothing says which is right.
+ */
+export function serviceConflict(
+  rows: PortRow[],
+  service: string,
+): string | null {
+  const existing = rows.find((row) => row.service === service);
+  if (!existing) {
+    return null;
+  }
+  return `The port table already lists \`${service}\` on ${existing.http}/${existing.mcp}. Remove that row first, or pick another slug — a second row for the same service is a table nobody can trust.`;
+}
+
 export function portConflict(rows: PortRow[], http: number): string | null {
   const mcp = http + MCP_PORT_OFFSET;
   const taken = rows.find((row) => row.http === http || row.mcp === http || row.mcp === mcp || row.http === mcp);

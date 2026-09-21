@@ -6,6 +6,16 @@ import {
   unresolvedTokens,
   type RenderOptions,
 } from "../render.js";
+import { planFiles } from "../scaffold.js";
+
+/** `ragen-connector.json` as the scaffold plan produces it. */
+function planFilesFor(o: RenderOptions): string {
+  return planFiles({
+    ...o,
+    destination: "/tmp/unused",
+    workspaceRoot: null,
+  }).get("ragen-connector.json")!;
+}
 
 function options(overrides: Partial<RenderOptions> = {}): RenderOptions {
   return {
@@ -170,6 +180,53 @@ describe("the two targets", () => {
     ]) {
       expect(standalone.get(shared)).toBe(workspace.get(shared));
     }
+  });
+});
+
+describe("free text a user typed", () => {
+  // A label or description is the only thing here that is not constrained by
+  // this CLI, and it lands in a JSON string and in TypeScript string literals.
+  const awkward = options({
+    label: 'Acme "Pro" CRM',
+    description: 'Deals, contacts \\ "everything"',
+  });
+
+  it("keeps package.json parseable", () => {
+    const manifest = render(awkward).get("package.json")!;
+    expect(() => JSON.parse(manifest)).not.toThrow();
+    expect(JSON.parse(manifest).description).toBe(
+      'Deals, contacts \\ "everything"',
+    );
+  });
+
+  it("keeps ragen-connector.json parseable", () => {
+    // Built with JSON.stringify rather than substituted, but assert it — the
+    // file is the handoff to the catalogue form.
+    const entry = planFilesFor(awkward);
+    expect(() => JSON.parse(entry)).not.toThrow();
+    expect(JSON.parse(entry).label).toBe('Acme "Pro" CRM');
+  });
+
+  it("keeps the entrypoint's string literals closed", () => {
+    const index = render(awkward).get("src/index.ts")!;
+    expect(index).toContain('const NAME = "Acme \\"Pro\\" CRM";');
+    // The label is stated once and referenced everywhere else, so there is
+    // one quoting to get right. An unescaped copy inside a template literal
+    // is what the two-quotings version produced, and ESLint rejected the
+    // escaped form there as a useless escape.
+    expect(index).not.toMatch(/`[^`]*Acme "Pro"/);
+  });
+
+  it("does not escape anything in markdown, where there is nothing to break", () => {
+    expect(render(awkward).get("README.md")).toContain('Acme "Pro" CRM');
+  });
+
+  it("neutralises a template-literal substitution in a label", () => {
+    // `${...}` inside a generated backtick string would be evaluated.
+    const index = render(options({ label: "A ${process.env.HOME} B" })).get(
+      "src/index.ts",
+    )!;
+    expect(index).not.toContain("`A ${process.env.HOME} B");
   });
 });
 

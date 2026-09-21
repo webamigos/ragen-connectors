@@ -1,4 +1,11 @@
-import { existsSync, mkdtempSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -97,6 +104,38 @@ describe("scaffold", () => {
 
   it("touches no port table for a standalone target", () => {
     expect(scaffold(plan({ target: "standalone" })).portTablesUpdated).toEqual([]);
+  });
+});
+
+describe("when a port table cannot be updated", () => {
+  it("writes nothing at all, rather than a service with one table updated", () => {
+    // The half-scaffold is the one state nobody can recover from: the next run
+    // refuses the directory as non-empty, and a standalone target has no git.
+    const root = fakeWorkspace();
+    writeFileSync(join(root, "docs", "architecture.md"), "# Moved\n\nNo table.\n");
+
+    const p = plan({ workspaceRoot: root, port: 8005 });
+
+    expect(() => scaffold(p)).toThrow(/table found/);
+    expect(
+      existsSync(p.destination),
+      "the service directory should not exist after a refused run",
+    ).toBe(false);
+
+    // And the table that *could* be updated was left alone, so the pair still
+    // agrees with itself.
+    expect(parsePortTable(readFileSync(join(root, "AGENTS.md"), "utf8"))).toEqual([
+      { service: "google", http: 8001, mcp: 9001 },
+    ]);
+  });
+
+  it("tolerates a document a fork simply does not carry", () => {
+    const root = fakeWorkspace();
+    rmSync(join(root, "docs", "architecture.md"));
+
+    const result = scaffold(plan({ workspaceRoot: root, port: 8005 }));
+
+    expect(result.portTablesUpdated).toEqual(["AGENTS.md"]);
   });
 });
 

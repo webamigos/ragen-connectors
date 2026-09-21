@@ -10,7 +10,11 @@ import {
   type CliArgs,
 } from "./args.js";
 import { catalogueSummary, mcpEndpoint } from "./catalogue.js";
-import { MCP_PORT_OFFSET, nextFreeHttpPort } from "./port-table.js";
+import {
+  MCP_PORT_OFFSET,
+  nextFreeHttpPort,
+  serviceConflict,
+} from "./port-table.js";
 import { catalogSlugError, slugify } from "./slug.js";
 import {
   claimedPorts,
@@ -118,10 +122,19 @@ export async function run(argv: string[], cwd = process.cwd()): Promise<boolean>
     throw new Error(`Unknown auth shape: ${auth}.`);
   }
 
-  const claimed = workspace ? claimedPorts(workspace.root) : [];
-  const suggestedPort = workspace
-    ? nextFreeHttpPort(claimed)
-    : DEFAULT_STANDALONE_PORT;
+  // Keyed on the *target*, not on whether a workspace was found. Running
+  // `--target=standalone` inside a checkout still finds one, and allocating
+  // from its table would both pick the wrong default and refuse a perfectly
+  // good standalone port because some service in the monorepo happens to hold
+  // it. A standalone project shares nothing with that table.
+  const claimed = target === "workspace" ? claimedPorts(workspace!.root) : [];
+  const suggestedPort =
+    target === "workspace" ? nextFreeHttpPort(claimed) : DEFAULT_STANDALONE_PORT;
+
+  const alreadyListed = serviceConflict(claimed, slug.trim());
+  if (alreadyListed) {
+    throw new Error(alreadyListed);
+  }
 
   const port = args.port ?? suggestedPort;
   const conflict = portConflict(claimed, port);

@@ -67,6 +67,34 @@ describe("parseArgs", () => {
     });
   });
 
+  it.each([["--auth"], ["--slug"], ["--port"], ["--target"], ["--icon"]])(
+    "refuses %s with no value rather than treating it as absent",
+    (flag) => {
+      // Both forms used to come back `undefined`, which is the same answer as
+      // "not given" — so the CLI prompted, or under `--yes` silently chose the
+      // default. A malformed CI command scaffolded the wrong connector and
+      // reported success.
+      expect(() => parseArgs(["Weather", flag])).toThrow(/needs a value/);
+      expect(() => parseArgs(["Weather", `${flag}=`])).toThrow(
+        /was given no value/,
+      );
+    },
+  );
+
+  it("accepts an empty description, because empty is its default", () => {
+    // `--description="$DESC"` with an unset variable is an ordinary thing for
+    // a CI job to produce, and it means exactly what the default means.
+    expect(parseArgs(["Weather", "--description="]).description).toBe("");
+  });
+
+  it("refuses a flag it does not know, rather than ignoring it", () => {
+    // Same failure as the empty operand: a typo that changes nothing and says
+    // nothing.
+    expect(() => parseArgs(["Weather", "--slugg=weather"])).toThrow(
+      /Unknown flag --slugg/,
+    );
+  });
+
   it("leaves unset flags undefined so the CLI knows to ask", () => {
     const args = parseArgs(["Weather"]);
     expect(args.auth).toBeUndefined();

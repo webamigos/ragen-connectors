@@ -38,6 +38,29 @@ export interface CliArgs {
 
 const TARGETS = ["workspace", "standalone"] as const;
 
+/** Every flag this CLI accepts. Anything else is a typo, and is refused. */
+const KNOWN_FLAGS = new Set([
+  "slug",
+  "description",
+  "auth",
+  "port",
+  "icon",
+  "target",
+  "skip-install",
+  "skip-git",
+  "yes",
+]);
+
+/**
+ * Flags whose empty operand is a real answer rather than a malformed one.
+ *
+ * Only `--description=`, because an empty description *is* the default and
+ * `--description="$DESC"` with an unset variable is an ordinary thing for a CI
+ * job to produce. Every other flag's empty operand means the command was built
+ * wrong.
+ */
+const EMPTY_IS_A_VALUE = new Set(["description"]);
+
 export function parseArgs(argv: string[]): CliArgs {
   const positionals = argv.filter((arg) => !arg.startsWith("--"));
   if (positionals.length > 1) {
@@ -48,13 +71,43 @@ export function parseArgs(argv: string[]): CliArgs {
     );
   }
 
+  const unknown = argv
+    .filter((arg) => arg.startsWith("--"))
+    .map((arg) => arg.split("=")[0].slice(2))
+    .find((name) => !KNOWN_FLAGS.has(name));
+  if (unknown) {
+    // Same reasoning as the empty operand below: a typo in a CI job that is
+    // silently ignored produces a connector nobody asked for.
+    throw new Error(
+      `Unknown flag --${unknown}. Expected one of: ${[...KNOWN_FLAGS].map((f) => `--${f}`).join(", ")}.`,
+    );
+  }
+
   const hasFlag = (name: string): boolean => argv.includes(`--${name}`);
+
+  /**
+   * A value flag's operand — and `undefined` only when the flag is absent.
+   *
+   * `--auth` and `--auth=` used to both come back `undefined`, which is the
+   * same answer as "not given", so the CLI prompted — or, under `--yes`,
+   * silently chose the default. A malformed automation command therefore
+   * scaffolded the wrong auth shape and reported success, which is precisely
+   * the failure the refusals in this file exist to prevent.
+   */
   const valueOf = (name: string): string | undefined => {
+    if (argv.includes(`--${name}`)) {
+      throw new Error(`--${name} needs a value: --${name}=<value>.`);
+    }
     const prefix = `--${name}=`;
-    const value = argv
-      .find((arg) => arg.startsWith(prefix))
-      ?.slice(prefix.length);
-    return value || undefined;
+    const arg = argv.find((candidate) => candidate.startsWith(prefix));
+    if (arg === undefined) {
+      return undefined;
+    }
+    const value = arg.slice(prefix.length);
+    if (value.length === 0 && !EMPTY_IS_A_VALUE.has(name)) {
+      throw new Error(`--${name}= was given no value.`);
+    }
+    return value;
   };
 
   const auth = valueOf("auth");

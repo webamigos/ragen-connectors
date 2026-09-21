@@ -1,8 +1,13 @@
-import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { catalogueEntry, type CatalogueEntry } from "./catalogue.js";
 import type { AuthType } from "./args.js";
-import { insertPortRow, portConflict, parsePortTable } from "./port-table.js";
+import {
+  MCP_PORT_OFFSET,
+  insertPortRow,
+  parsePortTable,
+  portConflict,
+} from "./port-table.js";
 import { render, unresolvedTokens, type RenderedFiles } from "./render.js";
 import type { Target } from "./workspace.js";
 
@@ -71,6 +76,15 @@ export const PORT_TABLE_DOCUMENTS = ["AGENTS.md", "docs/architecture.md"];
 export function scaffold(plan: ScaffoldPlan): ScaffoldResult {
   const files = planFiles(plan);
 
+  // Everything is rendered before anything is written, the port tables
+  // included. They used to be updated *after* the service files, so a document
+  // whose table had moved threw with a service already on disk — a half
+  // scaffold that the next run then refuses as a non-empty directory, which is
+  // the one state this CLI can leave that nobody can recover from.
+  const tables = plan.workspaceRoot
+    ? planPortTables(plan.workspaceRoot, plan.slug, plan.port)
+    : [];
+
   const written: string[] = [];
   for (const [relativePath, body] of files) {
     const full = join(plan.destination, relativePath);
@@ -79,48 +93,60 @@ export function scaffold(plan: ScaffoldPlan): ScaffoldResult {
     written.push(relativePath);
   }
 
-  const portTablesUpdated = plan.workspaceRoot
-    ? updatePortTables(plan.workspaceRoot, plan.slug, plan.port)
-    : [];
+  for (const table of tables) {
+    writeFileSync(table.path, table.contents, "utf8");
+  }
 
   return {
     files: written.sort(),
     entry: catalogueEntry(plan),
-    portTablesUpdated,
+    portTablesUpdated: tables.map((table) => table.relativePath),
   };
 }
 
+export interface PlannedPortTable {
+  /** Absolute path to write. */
+  path: string;
+  relativePath: string;
+  contents: string;
+}
+
 /**
- * Add the service to every port table in the repository.
+ * The new contents of every port table in the repository — computed, not
+ * written.
  *
- * Both documents, always — they are the same table written twice, and a pair
+ * Both documents, always: they are the same table written twice, and a pair
  * that disagrees is worse than one that is missing, because the wrong one is
- * as likely to be read.
+ * as likely to be read. A document that is absent is a fork that does not
+ * carry it and is skipped; a document that is *present* and has no table is a
+ * refusal, because silently updating one of the two is how a service ends up
+ * with ports only half claimed.
  */
-export function updatePortTables(
+export function planPortTables(
   root: string,
   service: string,
   http: number,
-): string[] {
-  const updated: string[] = [];
+): PlannedPortTable[] {
+  const planned: PlannedPortTable[] = [];
   for (const relativePath of PORT_TABLE_DOCUMENTS) {
-    const full = join(root, relativePath);
-    let markdown: string;
-    try {
-      markdown = readFileSync(full, "utf8");
-    } catch {
-      // A fork may not carry both documents. Missing is fine; present and
-      // unwritable is not, and that throws below.
+    const path = join(root, relativePath);
+    if (!existsSync(path)) {
       continue;
     }
-    writeFileSync(
-      full,
-      insertPortRow(markdown, { service, http, mcp: http + 1000 }),
-      "utf8",
-    );
-    updated.push(relativePath);
+    // Any other read failure — a permission, a directory where a file should
+    // be — throws, before a single file has been written.
+    const markdown = readFileSync(path, "utf8");
+    planned.push({
+      path,
+      relativePath,
+      contents: insertPortRow(markdown, {
+        service,
+        http,
+        mcp: http + MCP_PORT_OFFSET,
+      }),
+    });
   }
-  return updated;
+  return planned;
 }
 
 /** The ports already claimed in the repository, for allocation and conflict checks. */
