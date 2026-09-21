@@ -143,11 +143,13 @@ export function planPortTables(
   http: number,
 ): PlannedPortTable[] {
   const planned: PlannedPortTable[] = [];
+  let anyFound = false;
   for (const relativePath of PORT_TABLE_DOCUMENTS) {
     const path = join(root, relativePath);
     if (!existsSync(path)) {
       continue;
     }
+    anyFound = true;
     // Any other read failure — a permission, a directory where a file should
     // be — throws, before a single file has been written.
     const markdown = readFileSync(path, "utf8");
@@ -161,6 +163,16 @@ export function planPortTables(
       }),
     });
   }
+  if (!anyFound) {
+    // A fork may be missing one document. Missing *both* means this is not a
+    // repository whose ports are tracked, and a service scaffolded into it
+    // would claim its pair nowhere at all — the silent failure the table
+    // exists to prevent.
+    throw new Error(
+      `No port table found in ${PORT_TABLE_DOCUMENTS.join(" or ")}. A workspace service has to claim its ports somewhere.`,
+    );
+  }
+
   return planned;
 }
 
@@ -175,22 +187,21 @@ export function planPortTables(
  * itself.
  */
 export function claimedPorts(root: string): PortRow[] {
-  const byService = new Map<string, PortRow>();
+  const seen = new Map<string, PortRow>();
   for (const relativePath of PORT_TABLE_DOCUMENTS) {
     const path = join(root, relativePath);
     if (!existsSync(path)) {
       continue;
     }
     for (const row of parsePortTable(readFileSync(path, "utf8"))) {
-      // Keyed by service so the same row in both documents counts once; a
-      // disagreement between them keeps the first, and `serviceConflict`
-      // refuses a slug either document lists.
-      if (!byService.has(row.service)) {
-        byService.set(row.service, row);
-      }
+      // Keyed by the whole pair, not by the service: the same row in both
+      // documents counts once, and two documents that *disagree* about a
+      // service's ports contribute both pairs. Keeping only the first would
+      // hide the second from allocation and hand it to a new service.
+      seen.set(`${row.service}:${row.http}:${row.mcp}`, row);
     }
   }
-  return [...byService.values()];
+  return [...seen.values()];
 }
 
 export { portConflict };

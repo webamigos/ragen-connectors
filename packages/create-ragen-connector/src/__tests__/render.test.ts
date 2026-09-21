@@ -3,6 +3,7 @@ import { TEMPLATED_AUTH_TYPES } from "../args.js";
 import {
   identifierFor,
   render,
+  substitute,
   unresolvedTokens,
   type RenderOptions,
 } from "../render.js";
@@ -119,6 +120,17 @@ describe("render", () => {
     }
   });
 
+  it("documents the tool prefix Ragen actually uses — two underscores", () => {
+    // `mergedTools[`${prefix}__${name}`]` in apps/web/src/libs/mcp/client.ts.
+    // The README said `weather_<tool>` for its whole life: the template wrote
+    // `__SLUG___<tool>`, and the substituter consumed one of the underscores.
+    // This file exists to get the wire contract right, so getting it wrong in
+    // prose is the same bug as getting it wrong in code.
+    const readme = render(options()).get("README.md")!;
+    expect(readme).toContain("`weather__<tool>`");
+    expect(readme).not.toContain("`weather_<tool>`");
+  });
+
   it("emits the catalogue URL with the /mcp suffix in the README", () => {
     // A row without it names a different address than the connector Ragen
     // creates from it.
@@ -219,6 +231,19 @@ describe("free text a user typed", () => {
 
   it("does not escape anything in markdown, where there is nothing to break", () => {
     expect(render(awkward).get("README.md")).toContain('Acme "Pro" CRM');
+  });
+
+  it("does not substitute a token that appears inside a value", () => {
+    // Substituting token by token meant a *value* containing a token was
+    // itself rewritten by a later round: a label of `__PORT__` became the
+    // port number, silently, in every file that carries the label.
+    const index = render(options({ label: "__PORT__" })).get("src/index.ts")!;
+    expect(index).toContain('const NAME = "__PORT__";');
+    expect(index).not.toContain('const NAME = "8005";');
+  });
+
+  it("leaves a token nothing defines alone, so the plan can refuse it", () => {
+    expect(substitute("__NOT_A_TOKEN__", options())).toBe("__NOT_A_TOKEN__");
   });
 
   it("neutralises a template-literal substitution in a label", () => {

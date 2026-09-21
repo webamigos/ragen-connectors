@@ -67,8 +67,15 @@ export function readLayer(dir: string): RenderedFiles {
   let entries: string[];
   try {
     entries = readdirSync(dir);
-  } catch {
-    return files;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+      // An auth shape with nothing to add is a legitimate state, and turning
+      // it into a crash would make adding one a two-file change for no reason.
+      return files;
+    }
+    // Anything else — a permission, a file where a directory should be —
+    // would otherwise render a *silently incomplete* scaffold.
+    throw error;
   }
 
   for (const entry of entries) {
@@ -151,21 +158,32 @@ export function substitute(
   options: RenderOptions,
   destination = "",
 ): string {
-  let result = body;
-  for (const [token, value] of Object.entries(substitutions(options))) {
-    const safe = FREE_TEXT_TOKENS.has(token)
-      ? escapeFor(destination, value)
-      : value;
-    result = result.split(token).join(safe);
-  }
-  return result;
+  const table = substitutions(options);
+
+  // One pass over the original body, not one pass per token. Substituting in
+  // sequence meant a *value* containing a token was itself substituted by a
+  // later round: a label of `__PORT__` became the port number. A token this
+  // table does not define is left alone, and `unresolvedTokens` then refuses
+  // the plan.
+  //
+  // Lazily, because a token can be followed immediately by underscores —
+  // `__SLUG____find_place` is the slug and then Ragen's `__` tool prefix, and
+  // a greedy match would swallow the separator.
+  return body.replace(/__[A-Z][A-Z0-9_]*?__/g, (token) => {
+    if (!(token in table)) {
+      return token;
+    }
+    return FREE_TEXT_TOKENS.has(token)
+      ? escapeFor(destination, table[token])
+      : table[token];
+  });
 }
 
 /** Every `__TOKEN__` left in rendered output — a template referring to a token nobody defines. */
 export function unresolvedTokens(files: RenderedFiles): string[] {
   const found = new Set<string>();
   for (const body of files.values()) {
-    for (const match of body.matchAll(/__[A-Z][A-Z0-9_]*__/g)) {
+    for (const match of body.matchAll(/__[A-Z][A-Z0-9_]*?__/g)) {
       found.add(match[0]);
     }
   }

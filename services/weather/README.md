@@ -97,7 +97,8 @@ customer header. Take the parameter.
 protocol error it cannot act on or explain.
 
 **Tool names are prefixed.** Ragen exposes yours to the model as
-`weather_<tool>`. Keep names short.
+`weather__<tool>` — the slug, two underscores, then your tool's name.
+Keep names short.
 
 ## Layout
 

@@ -155,9 +155,36 @@ describe("claimedPorts", () => {
     });
   });
 
-  it("counts a service listed in both documents once", async () => {
+  it("counts a service listed identically in both documents once", async () => {
     const { claimedPorts } = await import("../scaffold.js");
     expect(claimedPorts(fakeWorkspace())).toHaveLength(1);
+  });
+
+  it("sees both pairs when the two documents disagree about a service", async () => {
+    // Keeping only the first would hide the second from allocation and hand
+    // it to a new service — a collision produced by the deduplication.
+    const { claimedPorts } = await import("../scaffold.js");
+    const root = fakeWorkspace();
+    writeFileSync(
+      join(root, "docs", "architecture.md"),
+      "# B\n\n| Service | HTTP | MCP  |\n| ------- | ---- | ---- |\n| google  | 8009 | 9009 |\n",
+    );
+
+    const claimed = claimedPorts(root);
+    expect(claimed).toHaveLength(2);
+    expect(claimed.map((row) => row.http).sort()).toEqual([8001, 8009]);
+  });
+
+  it("refuses a workspace target whose repository tracks no ports at all", async () => {
+    // A service scaffolded there would claim its pair nowhere — the silent
+    // failure the table exists to prevent.
+    const root = fakeWorkspace();
+    rmSync(join(root, "AGENTS.md"));
+    rmSync(join(root, "docs", "architecture.md"));
+
+    expect(() => scaffold(plan({ workspaceRoot: root }))).toThrow(
+      /No port table found/,
+    );
   });
 });
 

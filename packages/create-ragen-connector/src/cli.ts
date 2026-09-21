@@ -67,7 +67,7 @@ export async function run(argv: string[], cwd = process.cwd()): Promise<boolean>
   }
 
   const suggestedSlug = slugify(name);
-  const slug = await ask(args, "slug", () =>
+  const rawSlug = await ask(args, "slug", () =>
     p.text({
       message: "Catalogue slug",
       placeholder: suggestedSlug,
@@ -78,10 +78,14 @@ export async function run(argv: string[], cwd = process.cwd()): Promise<boolean>
       validate: (value) => catalogSlugError(value.trim()) ?? undefined,
     }),
   );
-  if (slug === null) {
+  if (rawSlug === null) {
     return cancelled();
   }
-  const slugProblem = catalogSlugError(slug.trim());
+  // Normalised once, here, and every later use reads this. The destination
+  // path used the raw value while validation used the trimmed one, so the two
+  // could disagree about what was being created.
+  const slug = rawSlug.trim();
+  const slugProblem = catalogSlugError(slug);
   if (slugProblem) {
     throw new Error(slugProblem);
   }
@@ -131,7 +135,7 @@ export async function run(argv: string[], cwd = process.cwd()): Promise<boolean>
   const suggestedPort =
     target === "workspace" ? nextFreeHttpPort(claimed) : DEFAULT_STANDALONE_PORT;
 
-  const alreadyListed = serviceConflict(claimed, slug.trim());
+  const alreadyListed = serviceConflict(claimed, slug);
   if (alreadyListed) {
     throw new Error(alreadyListed);
   }
@@ -155,7 +159,7 @@ export async function run(argv: string[], cwd = process.cwd()): Promise<boolean>
   }
 
   const plan: ScaffoldPlan = {
-    slug: slug.trim(),
+    slug,
     label: name.trim(),
     description: description.trim(),
     icon,
