@@ -56,15 +56,21 @@ describe("the target decides the ports, not the directory", () => {
   });
 
   it("leaves the checkout's port tables alone for a standalone target", async () => {
+    // Both documents. Comparing only `AGENTS.md` while claiming "tables"
+    // would pass a regression that wrote to the other one — the same half
+    // check this CLI refuses to make about its own writes.
     const root = fakeCheckout();
-    const before = readFileSync(join(root, "AGENTS.md"), "utf8");
+    const documents = ["AGENTS.md", join("docs", "architecture.md")];
+    const before = documents.map((doc) => readFileSync(join(root, doc), "utf8"));
 
     await run(
       ["Acme", "--slug=acme", "--target=standalone", "--skip-git", "--yes"],
       root,
     );
 
-    expect(readFileSync(join(root, "AGENTS.md"), "utf8")).toBe(before);
+    documents.forEach((doc, index) => {
+      expect(readFileSync(join(root, doc), "utf8"), doc).toBe(before[index]);
+    });
   });
 
   it("still allocates from the table, and claims it, for a workspace target", async () => {

@@ -1,4 +1,10 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { dirname, join } from "node:path";
 import { catalogueEntry, type CatalogueEntry } from "./catalogue.js";
 import type { AuthType } from "./args.js";
@@ -86,29 +92,52 @@ export function scaffold(plan: ScaffoldPlan): ScaffoldResult {
     ? planPortTables(plan.workspaceRoot, plan.slug, plan.port)
     : [];
 
-  const written: string[] = [];
-  for (const [relativePath, body] of files) {
-    const full = join(plan.destination, relativePath);
-    mkdirSync(dirname(full), { recursive: true });
-    writeFileSync(full, body, "utf8");
-    written.push(relativePath);
-  }
+  // Whether this run is the one that created the destination. If the operator
+  // pointed the CLI at a directory that already existed (empty, or it would
+  // have been refused), rolling back must not delete *their* directory.
+  const destinationIsOurs = !existsSync(plan.destination);
 
-  // Written last, and rolled back together. Two documents that are supposed to
-  // hold the same table must not be left holding different ones because the
-  // second write failed — that pair is worse than no row at all, since both
-  // are read and nothing says which is right.
+  const written: string[] = [];
   const restore: Array<() => void> = [];
+
   try {
+    for (const [relativePath, body] of files) {
+      const full = join(plan.destination, relativePath);
+      mkdirSync(dirname(full), { recursive: true });
+      writeFileSync(full, body, "utf8");
+      written.push(relativePath);
+    }
+
+    // Written last, and rolled back together. Two documents that are supposed
+    // to hold the same table must not be left holding different ones because
+    // the second write failed — that pair is worse than no row at all, since
+    // both are read and nothing says which is right.
     for (const table of tables) {
       const original = readFileSync(table.path, "utf8");
-      restore.push(() => writeFileSync(table.path, original, "utf8"));
       writeFileSync(table.path, table.contents, "utf8");
+      // Registered *after* the write, not before. Registering first meant the
+      // undo for the document that had just failed was itself attempted — and
+      // it failed the same way, which threw out of the catch below, aborted
+      // the rest of the rollback and replaced the original error with the
+      // error from trying to undo it.
+      restore.push(() => writeFileSync(table.path, original, "utf8"));
     }
   } catch (error) {
+    // Put the documents back first — they are shared state, and the service
+    // directory is not. Each one independently: a rollback that stops at its
+    // first failure leaves exactly the half-updated pair it exists to prevent.
     for (const undo of restore.reverse()) {
-      undo();
+      try {
+        undo();
+      } catch {
+        // Nothing useful to do, and the original error is what the caller
+        // needs. Carry on with the rest.
+      }
     }
+    // Then remove what this run wrote. A half-written service left behind is
+    // refused by the *next* run as a non-empty destination, so the failure
+    // compounds into "delete this by hand before trying again".
+    rollBackWrites(plan.destination, written, destinationIsOurs);
     throw error;
   }
 
@@ -117,6 +146,33 @@ export function scaffold(plan: ScaffoldPlan): ScaffoldResult {
     entry: catalogueEntry(plan),
     portTablesUpdated: tables.map((table) => table.relativePath),
   };
+}
+
+/**
+ * Undo the files this run created, and nothing else.
+ *
+ * Deliberately not `rm -rf destination`: the operator may have created that
+ * directory themselves, and a scaffolder that deletes a directory it did not
+ * make is a worse failure than the one it is recovering from. Only the paths
+ * we wrote are removed, and the directory itself only when this run made it.
+ */
+function rollBackWrites(
+  destination: string,
+  written: string[],
+  destinationIsOurs: boolean,
+): void {
+  try {
+    for (const relativePath of written) {
+      rmSync(join(destination, relativePath), { force: true });
+    }
+    if (destinationIsOurs) {
+      rmSync(destination, { recursive: true, force: true });
+    }
+  } catch {
+    // The original error is what the caller needs to see. A failure to clean
+    // up is worth nothing next to it, and throwing here would replace the
+    // cause with its consequence.
+  }
 }
 
 export interface PlannedPortTable {

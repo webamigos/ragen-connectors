@@ -1,4 +1,5 @@
 import {
+  chmodSync,
   existsSync,
   mkdirSync,
   mkdtempSync,
@@ -127,6 +128,52 @@ describe("when a port table cannot be updated", () => {
     expect(parsePortTable(readFileSync(join(root, "AGENTS.md"), "utf8"))).toEqual([
       { service: "google", http: 8001, mcp: 9001 },
     ]);
+  });
+
+  it("removes the service it wrote when a table write fails", () => {
+    // The failure has to land *after* the files are written, which means the
+    // table write itself — planning now happens first, so an unparseable
+    // table throws before anything exists and would prove nothing.
+    //
+    // The second document is made read-only: both parse, the first is
+    // rewritten, and the second refuses. That is the exact case the rollback
+    // exists for.
+    const root = fakeWorkspace();
+    const second = join(root, "docs", "architecture.md");
+    const firstBefore = readFileSync(join(root, "AGENTS.md"), "utf8");
+    chmodSync(second, 0o444);
+    const p = plan({ workspaceRoot: root, port: 8005 });
+
+    try {
+      expect(() => scaffold(p)).toThrow();
+
+      // The service this run wrote is gone, so the next run is not refused.
+      expect(existsSync(p.destination), "service directory").toBe(false);
+      // And the document that *did* get written is back as it was, so the
+      // pair still agrees with itself.
+      expect(readFileSync(join(root, "AGENTS.md"), "utf8")).toBe(firstBefore);
+    } finally {
+      chmodSync(second, 0o644);
+    }
+  });
+
+  it("keeps a destination the operator made themselves", () => {
+    // Only the paths this run wrote are removed. A scaffolder that deletes a
+    // directory it did not create is a worse failure than the one it is
+    // recovering from.
+    const root = fakeWorkspace();
+    const second = join(root, "docs", "architecture.md");
+    chmodSync(second, 0o444);
+    const p = plan({ workspaceRoot: root, port: 8005 });
+    mkdirSync(p.destination, { recursive: true });
+
+    try {
+      expect(() => scaffold(p)).toThrow();
+      expect(existsSync(p.destination), "their directory survives").toBe(true);
+      expect(existsSync(join(p.destination, "package.json"))).toBe(false);
+    } finally {
+      chmodSync(second, 0o644);
+    }
   });
 
   it("tolerates a document a fork simply does not carry", () => {

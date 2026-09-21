@@ -17,6 +17,21 @@
 
 const TIMEOUT_MS = 30_000;
 
+/**
+ * A decoded field, only if it really is a finite number.
+ *
+ * `Number(null)` and `Number("")` are both **0**, not NaN — so a missing field
+ * coerced and range-checked still passes, and the tool answers confidently
+ * about a place at 0°N 0°E or a temperature of exactly zero. Checking the type
+ * before coercing is the difference between a missing value and a real one.
+ */
+function finiteNumber(value: unknown): number | null {
+  if (typeof value !== "number") {
+    return null;
+  }
+  return Number.isFinite(value) ? value : null;
+}
+
 export interface Place {
   name: string;
   country: string | null;
@@ -48,12 +63,12 @@ export async function findPlace(
   // a place at no location — the worst shape a tool result can take.
   return results.flatMap((entry) => {
     const place = entry as Record<string, unknown>;
-    const latitude = Number(place.latitude);
-    const longitude = Number(place.longitude);
+    const latitude = finiteNumber(place.latitude);
+    const longitude = finiteNumber(place.longitude);
     if (
       typeof place.name !== "string" ||
-      !Number.isFinite(latitude) ||
-      !Number.isFinite(longitude)
+      latitude === null ||
+      longitude === null
     ) {
       return [];
     }
@@ -85,12 +100,12 @@ export async function currentWeather(
     throw new Error("the upstream returned no current conditions");
   }
 
-  const temperatureC = Number(current.temperature_2m);
-  const windSpeedKph = Number(current.wind_speed_10m);
-  if (!Number.isFinite(temperatureC) || !Number.isFinite(windSpeedKph)) {
+  const temperatureC = finiteNumber(current.temperature_2m);
+  const windSpeedKph = finiteNumber(current.wind_speed_10m);
+  if (temperatureC === null || windSpeedKph === null) {
     // Thrown, so the tool layer shapes it into the failure envelope. Reporting
-    // `success: true` with NaN readings would be answered by the model as
-    // fact.
+    // `success: true` with a reading the upstream never sent would be answered
+    // by the model as fact.
     throw new Error("the upstream returned conditions that did not decode");
   }
 
