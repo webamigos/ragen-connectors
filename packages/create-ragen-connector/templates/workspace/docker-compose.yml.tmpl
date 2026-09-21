@@ -1,0 +1,13 @@
+services:
+  __SLUG__:
+    build:
+      # The monorepo root, so `COPY packages/core` in the Dockerfile resolves.
+      context: ../..
+      dockerfile: services/__SLUG__/Dockerfile
+    ports:
+      # Hono, then MCP. The second is the one Ragen dials.
+      - "__PORT__:__PORT__"
+      - "__MCP_PORT__:__MCP_PORT__"
+    env_file:
+      - .env.local
+    restart: unless-stopped

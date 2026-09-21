@@ -1,0 +1,16 @@
+/**
+ * OpenTelemetry — not wired up.
+ *
+ * The workspace build of this file re-exports `@ragen-connectors/core/instrument`,
+ * which configures traces, metrics and logs against an OTLP collector. A
+ * standalone connector has no collector to assume, and pulling a dozen OTEL
+ * packages in to export nothing would be a tax on every install.
+ *
+ * `index.ts` imports this first and awaits `shutdownOtel()` on SIGTERM, so
+ * wiring OTEL up later is a change to this file and nothing else: install the
+ * SDK, start it here, and return its `shutdown()`.
+ */
+
+export async function shutdownOtel(): Promise<void> {
+  // Nothing to flush.
+}

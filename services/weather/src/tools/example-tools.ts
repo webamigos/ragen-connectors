@@ -1,0 +1,111 @@
+/**
+ * The MCP tools Weather exposes, and the three places Ragen's client departs
+ * from what the MCP specification alone would tell you.
+ *
+ * 1. **`customer_id` is a tool parameter, not a header.** Ragen strips it from
+ *    the schema the model sees and injects the connector's own value into
+ *    every call, so the model can neither see nor choose it. It is
+ *    `{orgId}:{userId}:{slug}` and it is how a multi-tenant connector keeps one
+ *    customer's data away from another's. The `x-customer-id` header exists
+ *    too, but only for `server_side` connectors — an `api_key_bearer` one gets
+ *    `Authorization` and no customer header at all. Take the parameter.
+ *
+ * 2. **A tool never throws.** A throw reaches the model as an opaque protocol
+ *    error it cannot act on, so every tool returns a JSON envelope:
+ *    `{success: true, ...}` or `{success: false, error}`. Log the real error
+ *    before shaping the envelope, or a bug in your `catch` becomes
+ *    indistinguishable from a genuine upstream failure.
+ *
+ * 3. **Describe parameters for a model, not for a developer.** The description
+ *    is the only thing the model reads. "The city to look up, as a name —
+ *    `Warsaw`, not a postal code" earns its length.
+ */
+
+import { FastMCP } from "fastmcp";
+import { z } from "zod";
+import { logger } from "../runtime/index.js";
+import type { Session } from "../auth.js";
+import { credentialFor, credentialProblem } from "../auth.js";
+import * as api from "../services/example-api.js";
+
+export function registerWeatherTools(mcp: FastMCP<Session>): void {
+  mcp.addTool({
+    name: "find_place",
+    description:
+      "Look up a place by name and return its coordinates, country and timezone. Call this first when the user names a place, then pass the latitude and longitude to get_current_weather.",
+    parameters: z.object({
+      customer_id: z
+        .string()
+        .describe("Customer identifier. Ragen injects this; ignore it."),
+      name: z
+        .string()
+        .describe("The place to look up, as a name — `Warsaw`, not a postal code."),
+    }),
+    execute: async ({ customer_id, name }, context) => {
+      // Before the call, not inside the catch: a missing credential is a
+      // sentence the model can pass on ("your key seems to be missing"),
+      // where the 401 it would otherwise cause is not.
+      const problem = credentialProblem(context);
+      if (problem) {
+        return JSON.stringify({ success: false, error: problem });
+      }
+      try {
+        const places = await api.findPlace(name, credentialFor(context));
+        return JSON.stringify({ success: true, places, count: places.length });
+      } catch (error) {
+        logger.error({ err: error, customer_id, name }, "find_place failed");
+        return JSON.stringify({
+          success: false,
+          error: `Could not look up "${name}": ${describe(error)}`,
+        });
+      }
+    },
+  });
+
+  mcp.addTool({
+    name: "get_current_weather",
+    description:
+      "Current temperature, wind and conditions at a latitude and longitude. Use find_place first if the user gave a place name rather than coordinates.",
+    parameters: z.object({
+      customer_id: z
+        .string()
+        .describe("Customer identifier. Ragen injects this; ignore it."),
+      latitude: z.number().describe("Degrees north, between -90 and 90."),
+      longitude: z.number().describe("Degrees east, between -180 and 180."),
+    }),
+    execute: async ({ customer_id, latitude, longitude }, context) => {
+      const problem = credentialProblem(context);
+      if (problem) {
+        return JSON.stringify({ success: false, error: problem });
+      }
+      try {
+        const weather = await api.currentWeather(
+          latitude,
+          longitude,
+          credentialFor(context),
+        );
+        return JSON.stringify({ success: true, weather });
+      } catch (error) {
+        logger.error(
+          { err: error, customer_id, latitude, longitude },
+          "get_current_weather failed",
+        );
+        return JSON.stringify({
+          success: false,
+          error: `Could not read the weather there: ${describe(error)}`,
+        });
+      }
+    },
+  });
+}
+
+/**
+ * An error, in the caller's terms.
+ *
+ * `String(error)` on an `Error` gives `Error: connect ECONNREFUSED`, which the
+ * model then repeats at the user. The message alone is the part they can act
+ * on.
+ */
+function describe(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}

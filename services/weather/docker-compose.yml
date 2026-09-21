@@ -1,0 +1,13 @@
+services:
+  weather:
+    build:
+      # The monorepo root, so `COPY packages/core` in the Dockerfile resolves.
+      context: ../..
+      dockerfile: services/weather/Dockerfile
+    ports:
+      # Hono, then MCP. The second is the one Ragen dials.
+      - "8005:8005"
+      - "9005:9005"
+    env_file:
+      - .env.local
+    restart: unless-stopped

@@ -1,0 +1,52 @@
+import type { IncomingMessage } from "node:http";
+import { describe, expect, it } from "vitest";
+import { authenticate, credentialFor, credentialProblem } from "../auth.js";
+
+function request(headers: Record<string, string | string[]>): IncomingMessage {
+  return { headers } as unknown as IncomingMessage;
+}
+
+describe("authenticate", () => {
+  it("accepts a session with no Authorization header", async () => {
+    // This is Ragen's "Test connection" button, which has no key to send —
+    // the key belongs to a customer who has not connected yet. Refusing the
+    // session would make an operator's only check of the address fail on a
+    // server that is working.
+    //
+    // Nothing leaks by accepting it: the tool *names* become readable, and
+    // every tool refuses to run without a key. Delete this test only together
+    // with that trade.
+    await expect(authenticate(request({}))).resolves.toEqual({ apiKey: null });
+  });
+
+  it("reads the bearer token Ragen presents", async () => {
+    const session = await authenticate(
+      request({ authorization: "Bearer sk-live-1234" }),
+    );
+    expect(session.apiKey).toBe("sk-live-1234");
+  });
+
+  it("ignores a header that is not a bearer token", async () => {
+    const session = await authenticate(request({ authorization: "Basic abc" }));
+    expect(session.apiKey).toBeNull();
+  });
+});
+
+describe("credentialProblem", () => {
+  it("names the missing key in words the model can pass on", () => {
+    // Before the upstream call, not after its 401: "the API key is missing"
+    // is something the user can act on and `upstream returned 401` is not.
+    expect(credentialProblem({ session: { apiKey: null } })).toMatch(
+      /Settings > Connectors/,
+    );
+  });
+
+  it("is silent once a key is present", () => {
+    expect(credentialProblem({ session: { apiKey: "sk-live-1234" } })).toBeNull();
+  });
+
+  it("treats a session that never arrived as a missing key", () => {
+    expect(credentialProblem(undefined)).not.toBeNull();
+    expect(credentialFor(undefined)).toBeNull();
+  });
+});

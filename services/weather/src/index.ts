@@ -1,0 +1,63 @@
+/**
+ * Weather — an MCP server a Ragen installation connects to.
+ *
+ * Two listeners, always: Hono on PORT for health and REST, FastMCP on
+ * PORT + 1000 for `/mcp`. FastMCP owns its own listener and cannot be mounted
+ * on the Hono app. A service whose MCP port is unmapped passes its health
+ * check and is unusable, and the client reports it as "no tools".
+ */
+
+// OTEL patches modules at import time, so the service name has to be set
+// before any import runs — and an ESM `process.env.X ??=` line below would
+// run *after* them. Set OTEL_SERVICE_NAME in the environment instead; the
+// generated .env.example already does.
+import { shutdownOtel } from "./runtime/instrument.js";
+
+import { FastMCP } from "fastmcp";
+import { Hono } from "hono";
+import { serve } from "@hono/node-server";
+import { z } from "zod";
+import { validateEnvVars, logger } from "./runtime/index.js";
+import { authenticate } from "./auth.js";
+import { registerWeatherTools } from "./tools/example-tools.js";
+
+validateEnvVars(
+  z.object({
+    PORT: z.string().optional(),
+  }),
+);
+
+const PORT = parseInt(process.env.PORT ?? "8005", 10);
+
+const mcp = new FastMCP({
+  name: "Weather",
+  version: "0.1.0",
+  authenticate,
+});
+registerWeatherTools(mcp);
+
+const app = new Hono();
+
+// Ragen does not call this; it is for your platform's health checks. It
+// deliberately says nothing about whether the MCP listener came up — see the
+// note at the top of this file, and check `/mcp` separately.
+app.get("/health", (c) => c.json({ status: "ok", server: "Weather MCP" }));
+
+serve({ fetch: app.fetch, hostname: "::", port: PORT }, (info) => {
+  logger.info(`Weather HTTP server listening on port ${info.port} (dual-stack)`);
+});
+
+const MCP_PORT = PORT + 1000;
+mcp.start({
+  transportType: "httpStream",
+  httpStream: { host: "::", port: MCP_PORT },
+});
+logger.info(`Weather MCP endpoint at http://localhost:${MCP_PORT}/mcp`);
+
+const shutdown = async () => {
+  logger.info("Shutting down...");
+  await shutdownOtel();
+  process.exit(0);
+};
+process.on("SIGTERM", shutdown);
+process.on("SIGINT", shutdown);
