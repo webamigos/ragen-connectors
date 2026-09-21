@@ -14,7 +14,7 @@ content. Edit this file, never the pointer.
 ## What this is
 
 A TypeScript monorepo of multi-tenant MCP servers. Each service in `services/`
-wraps a third-party API (ClickUp, HubSpot, Google, Rejestr.io) as MCP tools over
+wraps a third-party API (ClickUp, HubSpot, Google) as MCP tools over
 HTTP, using FastMCP (npm) + Hono. Deployed on Railway. Part of the larger `ragen`
 platform; this is the TypeScript port of `ragen-mcp` (Python).
 
@@ -32,9 +32,8 @@ npm run test:coverage
 npm run dev:google           # hot-reload one service (tsx watch, .env.local)
 npm run dev:clickup
 npm run dev:hubspot
-npm run dev --workspace @ragen-connectors/rejestrio
 
-npm run build -- --filter=@ragen-connectors/rejestrio   # one workspace + deps
+npm run build -- --filter=@ragen-connectors/clickup     # one workspace + deps
 npm run build -- --force                                # ignore the cache
 
 npx create-ragen-connector "Notion"   # scaffold a new service — see "Adding a new service"
@@ -43,18 +42,15 @@ npx create-ragen-connector "Notion"   # scaffold a new service — see "Adding a
 From inside a service directory: `npm run dev`, `npm run build`,
 `npm run start`, `docker compose up --build`.
 
-rejestrio only: `npm run db:migrate`, `npm run db:migrate:dev`,
-`npm run generate:types`, `npm run probe`, `npm run probe:dry`.
-
 **The gate before you claim a change works:**
 
 ```bash
 npm run lint && npm run typecheck && npm test
 ```
 
-`typecheck` builds `packages/core` and generates rejestrio's Prisma client
-first (ADR-06), so it no longer needs a manual `build` in front of it. Run
-`npm run build` too if you touched anything that ships.
+`typecheck` builds `packages/core` first (ADR-06), so it no longer needs a
+manual `build` in front of it. Run `npm run build` too if you touched anything
+that ships.
 
 ## Task Router
 
@@ -74,10 +70,8 @@ single-line or obvious fixes.
 | Anything touching tokens, OAuth, `customer_id` | [ADR-02](docs/adrs/02-credentials-live-in-ragen-token-vault.md), [`SECURITY.md`](SECURITY.md) |
 | An OAuth flow or token failure | skill `connectors-oauth-triage` |
 | Changing the vault HMAC or `X-Service-Name` | [ADR-02](docs/adrs/02-credentials-live-in-ragen-token-vault.md) — cross-repo contract, needs a two-sided rollout |
-| **rejestrio / paid APIs** | |
-| Anything that can issue a billed call | [ADR-04](docs/adrs/04-rejestrio-uses-a-service-wide-api-key.md), [ADR-05](docs/adrs/05-tiered-fetching-and-caching-negative-results.md), skill `connectors-paid-api-calls` |
-| Cache keys, TTLs, or clearing the cache | [ADR-05](docs/adrs/05-tiered-fetching-and-caching-negative-results.md) — this is a billing change |
-| Prisma schema / migrations | rejestrio owns its own DB; `prisma migrate deploy` runs on boot |
+| **A connector that cannot be open source** | |
+| A paid upstream, a credential that cannot be handed out, or logic that is the product | It goes in [`ragen-connectors-enterprise`](https://github.com/webamigos/ragen-connectors-enterprise), not here — with its own ADRs about spending money |
 | **Build and infra** | |
 | Build order, turbo tasks, caching | [ADR-06](docs/adrs/06-turborepo-for-the-build-graph.md) |
 | Ports, Dockerfiles, Railway, compose | [ADR-01](docs/adrs/01-dual-port-hono-and-fastmcp.md), [`lessons/fastmcp-owns-its-own-listener.md`](docs/lessons/fastmcp-owns-its-own-listener.md) |
@@ -94,7 +88,7 @@ their reasoning: [`docs/adrs/`](docs/adrs/). Process and branch model:
 packages/core/          @ragen-connectors/core — shared by every service
 packages/create-ragen-connector/
                         the scaffolder; its templates are the wire contract
-services/{google,clickup,hubspot,rejestrio,weather}/
+services/{google,clickup,hubspot,weather}/
   src/index.ts          entrypoint: env validation → FastMCP + Hono
   src/tools/            MCP tool definitions (addTool + Zod)
   src/services/         API client logic
@@ -102,9 +96,6 @@ services/{google,clickup,hubspot,rejestrio,weather}/
 docs/adrs/              why things are the way they are
 docs/lessons.md         gotchas already paid for — check before nontrivial work
 ```
-
-rejestrio has no `auth/` (no per-customer credential) and adds `cache/`,
-`audit/`, `db/`, `client/`, `schemas/`.
 
 ## Ports
 
@@ -116,7 +107,6 @@ owns its own listener and cannot be mounted on the Hono app (ADR-01).
 | google    | 8001 | 9001 |
 | clickup   | 8002 | 9002 |
 | hubspot   | 8003 | 9003 |
-| rejestrio | 8004 | 9004 |
 | weather   | 8005 | 9005 |
 
 Keep this table in sync when adding a service, and claim both ports in every
@@ -154,10 +144,9 @@ A throw reaches the model as an opaque protocol error it cannot act on
 **Every tool takes `customer_id`.** On google/clickup/hubspot it resolves the
 credential per call via `getAccessToken(customerId)` — never cache a token in
 module scope, it is per-customer state in a process shared by every customer.
-On **rejestrio there is no per-customer credential** (ADR-04): `customer_id` is
-parsed for the org id and used to attribute the call's cost and enforce the
-budget ceiling, which makes parsing it correctly a spend control rather than a
-convenience.
+A service with no per-customer credential still takes `customer_id` — it is
+how a multi-tenant connector keeps one customer's data away from another's, and
+on a paid upstream it is what attributes the cost.
 
 ## Key conventions
 
@@ -195,12 +184,10 @@ Tests live in `__tests__/` next to the code, run under Vitest from the root
 - **HubSpot** — access tokens expire in ~30 minutes; the service layer
   auto-refreshes on 401 via `refreshAndGetToken()`. Auth domain configurable
   via `HUBSPOT_AUTH_DOMAIN`.
-- **rejestrio** — *not* OAuth. One service-wide `REJESTRIO_API_KEY`, sent
-  verbatim in `Authorization` with no `Bearer` prefix. Owns its own Postgres
-  (cache + cost audit + budget). Every paid call goes through `BudgetGuard`
-  (per-org daily PLN ceiling); `REJESTRIO_DISABLE_PAID_CALLS=true` serves cache
-  only. `get_financials` is two-tier — see
-  [ADR-05](docs/adrs/05-tiered-fetching-and-caching-negative-results.md).
+- **weather** — the worked example `create-ragen-connector` generates
+  ([ADR-07](docs/adrs/07-a-connector-is-scaffolded-not-copied.md)). Regenerated,
+  never hand-edited — and regenerating means deleting its row in **both** port
+  tables first, because the CLI refuses a slug the table already lists.
 
 ## Adding a new service
 
@@ -221,8 +208,12 @@ ones, and run the gate. Turbo needs no config change — it reads the dependency
 graph from `package.json`.
 
 What a template cannot decide is the credential model, and it is the real work:
-skill `connectors-add-service`, and ADR-04 if your upstream genuinely cannot do
-per-customer auth.
+skill `connectors-add-service`. The default is per-customer OAuth through
+ragen-token-vault (ADR-02); if your upstream genuinely cannot do per-customer
+auth, a service-wide key obliges you to build a budget guard, a cost audit and
+a kill switch — and a paid upstream probably belongs in
+[`ragen-connectors-enterprise`](https://github.com/webamigos/ragen-connectors-enterprise)
+rather than here.
 
 **Connecting it to Ragen needs no deploy of Ragen.** A platform administrator
 adds a catalogue row at `/mcp-catalogue` in `apps/admin`; the scaffolder prints
@@ -235,8 +226,7 @@ address" ticked.
 
 Railway, Dockerfile builder, **build context is the monorepo root** so
 `COPY packages/core` resolves. Each service is its own Railway service pointing
-at its own Dockerfile. rejestrio also needs a Postgres add-on and runs
-`prisma migrate deploy` on boot.
+at its own Dockerfile.
 
 CI (GitHub Actions): lint → typecheck + test with coverage → build, on Node 24.
 Release is semantic-release from `main`.

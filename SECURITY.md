@@ -48,10 +48,8 @@ you would rather stay anonymous.
 - prompt injection through tool *results* — upstream API content (a ClickUp task
   description, a Drive document) that causes the calling assistant to act
   outside its instructions or leak other tool output
-- SSRF through configurable upstream URLs, SQL injection in the rejestrio cache,
-  RCE, and the rest of the usual list
-- billing abuse: a path that bypasses rejestrio's `BudgetGuard` and lets an
-  unauthenticated or unauthorized caller spend PLN against the shared API key
+- SSRF through configurable upstream URLs, SQL injection, RCE, and the rest of
+  the usual list
 
 **Out of scope:**
 
@@ -59,8 +57,8 @@ you would rather stay anonymous.
   customer they are attacking
 - denial of service through sheer volume, and rate-limit tuning
 - vulnerabilities in the upstream providers themselves (ClickUp, HubSpot,
-  Google, Rejestr.io) — report those to the provider; tell us if our integration
-  makes it worse
+  Google) — report those to the provider; tell us if our integration makes it
+  worse
 - results from an automated scanner with no demonstrated exploit
 - missing hardening headers with no demonstrated impact
 
@@ -75,9 +73,6 @@ Two deployment properties matter more than anything in the code:
   listens on `PORT` (Hono) and `PORT + 1000` (FastMCP). Neither is safe to
   expose directly to the internet — put them behind your own authenticating
   proxy, and treat `x-customer-id` as trusted only because that proxy set it.
-- **`REJESTRIO_API_KEY` is service-wide.** It is a single shared credential held
-  by the container, not a per-user one. Anyone who can reach the rejestrio
-  service can spend against it, bounded only by `BudgetGuard`.
 
 A vulnerability in a dependency of your own deployment (your Postgres, your
 reverse proxy) is yours to patch, not ours — but tell us if our defaults made it

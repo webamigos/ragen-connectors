@@ -34,8 +34,10 @@ Links to the provider's API docs for the endpoints involved.
 Every tool in this repo is multi-tenant: it takes a `customer_id` and resolves
 credentials per customer through ragen-token-vault. A proposal that needs a
 single shared credential for all users, or that can't scope its data by
-customer, is unlikely to land as-is — rejestrio is the one deliberate exception
-and it exists because the upstream registry has no per-user auth at all.
+customer, is unlikely to land as-is. A connector whose upstream has no per-user
+auth at all belongs in
+[`ragen-connectors-enterprise`](https://github.com/webamigos/ragen-connectors-enterprise),
+where a service-wide key comes with the budget guard and cost audit it needs.
 
 Note also that some upstreams bill per call. If yours does, say so here so we
 can plan the budget guard alongside the tool.

@@ -23,8 +23,6 @@ What you actually ran, and what it said.
 - [ ] **If this touches `packages/core`:** every service still builds — core is
       a shared dependency, not a service-local change
 - [ ] **If this adds a local import:** it uses a `.js` extension (ESM-only)
-- [ ] **If this touches the rejestrio service:** paid calls still pass through
-      `BudgetGuard`, and no test consumes live API quota
 - [ ] **If this adds a new service or changes a port:** the port table in
       `AGENTS.md` and `docs/architecture.md` is updated, and MCP is `PORT + 1000`
 - [ ] **If this adds an env var:** it's in the service's `.env.example` and in

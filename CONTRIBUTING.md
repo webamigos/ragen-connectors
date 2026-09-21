@@ -1,7 +1,7 @@
 # Contributing to Ragen Connectors
 
 Thanks for wanting to help. This repo holds the multi-tenant MCP servers that
-wrap third-party APIs (ClickUp, HubSpot, Google, Rejestr.io) as MCP tools. This
+wrap third-party APIs (ClickUp, HubSpot, Google) as MCP tools. This
 guide covers how we branch, what we expect in a pull request, and the handful of
 things about this codebase that reliably trip people up.
 
@@ -30,12 +30,6 @@ Node.js 24.x (see `.nvmrc`). From the monorepo root:
 npm install
 npm run build              # turbo: core first, then services, cached
 npm run dev:google         # or dev:clickup / dev:hubspot
-```
-
-For Rejestrio, which is not in the root `dev:*` shortcuts:
-
-```bash
-npm run dev --workspace @ragen-connectors/rejestrio
 ```
 
 Each service reads its config from `.env.local` via Node's native `--env-file`
@@ -83,11 +77,11 @@ ragen-token-vault. Never cache a token in module scope, and never let one
 customer's request reach another's token — that is the bug class this repo cares
 most about.
 
-**4. Rejestr.io calls cost real money.** The rejestrio service bills per upstream
-call in PLN. `BudgetGuard` enforces a per-org daily ceiling and every paid call
-goes through it — don't add a code path that bypasses it. When developing, set
-`REJESTRIO_DISABLE_PAID_CALLS=true` to serve from cache only. Tests must never
-hit the live API.
+**4. A paid upstream does not belong here.** Every connector in this repository
+wraps an API that costs nothing per call. One that bills per call needs a budget
+guard, a cost audit and a kill switch, and it goes in
+[`ragen-connectors-enterprise`](https://github.com/webamigos/ragen-connectors-enterprise)
+instead — where those rules are written down and enforced.
 
 ## Adding a new service
 
@@ -130,7 +124,7 @@ version bump.
 ```
 feat(google): add Drive folder listing tool
 fix(hubspot): refresh the token on 401 instead of failing the call
-docs: correct the rejestrio port in the README
+docs: correct the clickup port in the README
 ```
 
 In the PR description, say what changed and why, and what you ran to convince

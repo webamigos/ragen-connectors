@@ -30,12 +30,16 @@ what a template cannot decide.
 The default is per-customer OAuth through ragen-token-vault (ADR-02): every
 tool takes `customer_id`, no service stores a credential.
 
-`rejestrio` is the one deliberate exception — one service-wide API key, because
-the upstream has no per-user auth at all (ADR-04). **If your upstream *can* do
-per-customer auth, it must.** If it genuinely cannot, ADR-04 says what that
-obliges you to build instead: a budget guard, a cost audit keyed on the org,
-and a kill switch. A service-wide key with none of those means the first
-customer to loop a tool call spends the budget for all of them.
+**If your upstream *can* do per-customer auth, it must.** Every connector in
+this repository does.
+
+If it genuinely cannot — one service-wide key for everyone — the connector
+probably does not belong here. That shape obliges you to build a budget guard,
+a cost audit keyed on the org and a kill switch, because a service-wide key
+with none of those means the first customer to loop a tool call spends the
+budget for all of them. Those rules are written down in
+[`ragen-connectors-enterprise`](https://github.com/webamigos/ragen-connectors-enterprise),
+which is where such a connector goes.
 
 The scaffolder templates `server_side` and `api_key_bearer`. **It does not
 template `external_mcp`** — that needs an authorization server and client
