@@ -38,18 +38,21 @@ export interface CliArgs {
 
 const TARGETS = ["workspace", "standalone"] as const;
 
-/** Every flag this CLI accepts. Anything else is a typo, and is refused. */
-const KNOWN_FLAGS = new Set([
+/** Flags that take `--name=value`. */
+const VALUE_FLAGS = new Set([
   "slug",
   "description",
   "auth",
   "port",
   "icon",
   "target",
-  "skip-install",
-  "skip-git",
-  "yes",
 ]);
+
+/** Flags that are present or absent and never carry a value. */
+const BOOLEAN_FLAGS = new Set(["skip-install", "skip-git", "yes"]);
+
+/** Anything else is a typo, and is refused. */
+const KNOWN_FLAGS = new Set([...VALUE_FLAGS, ...BOOLEAN_FLAGS]);
 
 /**
  * Flags whose empty operand is a real answer rather than a malformed one.
@@ -71,16 +74,23 @@ export function parseArgs(argv: string[]): CliArgs {
     );
   }
 
-  const unknown = argv
-    .filter((arg) => arg.startsWith("--"))
-    .map((arg) => arg.split("=")[0].slice(2))
-    .find((name) => !KNOWN_FLAGS.has(name));
-  if (unknown) {
-    // Same reasoning as the empty operand below: a typo in a CI job that is
-    // silently ignored produces a connector nobody asked for.
-    throw new Error(
-      `Unknown flag --${unknown}. Expected one of: ${[...KNOWN_FLAGS].map((f) => `--${f}`).join(", ")}.`,
-    );
+  for (const arg of argv.filter((candidate) => candidate.startsWith("--"))) {
+    const name = arg.split("=")[0].slice(2);
+    if (!KNOWN_FLAGS.has(name)) {
+      // Same reasoning as the malformed operand below: a typo in a CI job that
+      // is silently ignored produces a connector nobody asked for.
+      throw new Error(
+        `Unknown flag --${name}. Expected one of: ${[...KNOWN_FLAGS].map((f) => `--${f}`).join(", ")}.`,
+      );
+    }
+    if (BOOLEAN_FLAGS.has(name) && arg.includes("=")) {
+      // `--yes=true` is not `--yes`. It reads as one, and `hasFlag` sees an
+      // absent flag — so the run stops at a prompt the job cannot answer,
+      // which is the failure `--yes` exists to prevent.
+      throw new Error(
+        `--${name} takes no value. Write --${name} on its own.`,
+      );
+    }
   }
 
   const hasFlag = (name: string): boolean => argv.includes(`--${name}`);

@@ -114,7 +114,7 @@ src/
 ## Before you claim it works
 
 ```bash
-npm run lint && npm run typecheck
+npm run lint && npm run typecheck && npm run build
 ```
 
 Then the tests. In a standalone project that is `npm test` here; inside the

@@ -20,4 +20,7 @@ EXPOSE __PORT__ __MCP_PORT__
 
 ENV NODE_OPTIONS="--dns-result-order=ipv6first"
 
+# The build needs to write; serving does not. `node:*` images ship this user.
+USER node
+
 CMD ["node", "dist/index.js"]

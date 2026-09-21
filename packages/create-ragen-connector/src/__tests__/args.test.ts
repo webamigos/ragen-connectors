@@ -87,6 +87,18 @@ describe("parseArgs", () => {
     expect(parseArgs(["Weather", "--description="]).description).toBe("");
   });
 
+  it.each([["--yes"], ["--skip-git"], ["--skip-install"]])(
+    "refuses %s given a value, which is not the same as giving the flag",
+    (flag) => {
+      // `--yes=true` reads as `--yes` and is not one: `hasFlag` sees an absent
+      // flag, so the run stops at a prompt the job cannot answer — the exact
+      // failure `--yes` exists to prevent.
+      expect(() => parseArgs(["Weather", `${flag}=true`])).toThrow(
+        /takes no value/,
+      );
+    },
+  );
+
   it("refuses a flag it does not know, rather than ignoring it", () => {
     // Same failure as the empty operand: a typo that changes nothing and says
     // nothing.

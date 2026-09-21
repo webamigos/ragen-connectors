@@ -57,6 +57,26 @@ describe("nextFreeHttpPort", () => {
   it("starts at the floor when the table is empty", () => {
     expect(nextFreeHttpPort([])).toBe(8001);
   });
+
+  it("skips a candidate that collides with a row not following the +1000 rule", () => {
+    // One past the highest is free only if every row's MCP port is its HTTP
+    // port plus 1000. A hand-edited row that breaks that would otherwise be
+    // handed a colliding pair — and `portConflict` would then refuse the
+    // CLI's own suggestion, which reads as the tool being broken.
+    const odd = [
+      { service: "google", http: 8001, mcp: 9001 },
+      { service: "odd", http: 8002, mcp: 8003 },
+    ];
+    expect(nextFreeHttpPort(odd)).toBe(8004);
+  });
+
+  it("refuses rather than returning a pair that cannot fit", () => {
+    // 64536 + 1000 is past the end of the port space, so the MCP listener
+    // could never bind — the failure this whole table exists to prevent.
+    expect(() =>
+      nextFreeHttpPort([{ service: "x", http: 64535, mcp: 65535 }]),
+    ).toThrow(/No free port pair/);
+  });
 });
 
 describe("portConflict", () => {

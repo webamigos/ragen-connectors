@@ -42,15 +42,30 @@ export async function findPlace(
   const body = await getJson(url, credential);
   const results = (body as { results?: unknown[] }).results ?? [];
 
-  return results.map((entry) => {
+  // A record that does not decode is dropped rather than returned with NaN
+  // coordinates. `Number(undefined)` is NaN and JSON.stringify writes it as
+  // `null`, so an unchecked mapping hands the model a confident answer about
+  // a place at no location — the worst shape a tool result can take.
+  return results.flatMap((entry) => {
     const place = entry as Record<string, unknown>;
-    return {
-      name: String(place.name ?? ""),
-      country: typeof place.country === "string" ? place.country : null,
-      latitude: Number(place.latitude),
-      longitude: Number(place.longitude),
-      timezone: typeof place.timezone === "string" ? place.timezone : null,
-    };
+    const latitude = Number(place.latitude);
+    const longitude = Number(place.longitude);
+    if (
+      typeof place.name !== "string" ||
+      !Number.isFinite(latitude) ||
+      !Number.isFinite(longitude)
+    ) {
+      return [];
+    }
+    return [
+      {
+        name: place.name,
+        country: typeof place.country === "string" ? place.country : null,
+        latitude,
+        longitude,
+        timezone: typeof place.timezone === "string" ? place.timezone : null,
+      },
+    ];
   });
 }
 
@@ -70,9 +85,18 @@ export async function currentWeather(
     throw new Error("the upstream returned no current conditions");
   }
 
+  const temperatureC = Number(current.temperature_2m);
+  const windSpeedKph = Number(current.wind_speed_10m);
+  if (!Number.isFinite(temperatureC) || !Number.isFinite(windSpeedKph)) {
+    // Thrown, so the tool layer shapes it into the failure envelope. Reporting
+    // `success: true` with NaN readings would be answered by the model as
+    // fact.
+    throw new Error("the upstream returned conditions that did not decode");
+  }
+
   return {
-    temperatureC: Number(current.temperature_2m),
-    windSpeedKph: Number(current.wind_speed_10m),
+    temperatureC,
+    windSpeedKph,
     observedAt: String(current.time),
   };
 }

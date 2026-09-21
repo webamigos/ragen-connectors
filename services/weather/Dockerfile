@@ -20,4 +20,7 @@ EXPOSE 8005 9005
 
 ENV NODE_OPTIONS="--dns-result-order=ipv6first"
 
+# The build needs to write; serving does not. `node:*` images ship this user.
+USER node
+
 CMD ["node", "dist/index.js"]

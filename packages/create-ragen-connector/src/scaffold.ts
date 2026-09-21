@@ -7,6 +7,7 @@ import {
   insertPortRow,
   parsePortTable,
   portConflict,
+  type PortRow,
 } from "./port-table.js";
 import { render, unresolvedTokens, type RenderedFiles } from "./render.js";
 import type { Target } from "./workspace.js";
@@ -93,8 +94,22 @@ export function scaffold(plan: ScaffoldPlan): ScaffoldResult {
     written.push(relativePath);
   }
 
-  for (const table of tables) {
-    writeFileSync(table.path, table.contents, "utf8");
+  // Written last, and rolled back together. Two documents that are supposed to
+  // hold the same table must not be left holding different ones because the
+  // second write failed — that pair is worse than no row at all, since both
+  // are read and nothing says which is right.
+  const restore: Array<() => void> = [];
+  try {
+    for (const table of tables) {
+      const original = readFileSync(table.path, "utf8");
+      restore.push(() => writeFileSync(table.path, original, "utf8"));
+      writeFileSync(table.path, table.contents, "utf8");
+    }
+  } catch (error) {
+    for (const undo of restore.reverse()) {
+      undo();
+    }
+    throw error;
   }
 
   return {
@@ -149,13 +164,33 @@ export function planPortTables(
   return planned;
 }
 
-/** The ports already claimed in the repository, for allocation and conflict checks. */
-export function claimedPorts(root: string): ReturnType<typeof parsePortTable> {
-  try {
-    return parsePortTable(readFileSync(join(root, "AGENTS.md"), "utf8"));
-  } catch {
-    return [];
+/**
+ * Every port claimed anywhere in the repository.
+ *
+ * Both documents, not just `AGENTS.md`: they are the same table written twice
+ * and are supposed to agree, but allocation must not *depend* on that. Reading
+ * one and finding it missing used to return an empty list, which starts
+ * allocation at 8001 and hands out a pair the other document already claims —
+ * the collision this function exists to prevent, produced by the function
+ * itself.
+ */
+export function claimedPorts(root: string): PortRow[] {
+  const byService = new Map<string, PortRow>();
+  for (const relativePath of PORT_TABLE_DOCUMENTS) {
+    const path = join(root, relativePath);
+    if (!existsSync(path)) {
+      continue;
+    }
+    for (const row of parsePortTable(readFileSync(path, "utf8"))) {
+      // Keyed by service so the same row in both documents counts once; a
+      // disagreement between them keeps the first, and `serviceConflict`
+      // refuses a slug either document lists.
+      if (!byService.has(row.service)) {
+        byService.set(row.service, row);
+      }
+    }
   }
+  return [...byService.values()];
 }
 
 export { portConflict };

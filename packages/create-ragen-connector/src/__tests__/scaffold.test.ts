@@ -139,6 +139,28 @@ describe("when a port table cannot be updated", () => {
   });
 });
 
+describe("claimedPorts", () => {
+  it("reads every port table, not just the first", async () => {
+    // Reading one and finding it missing returned an empty list, which starts
+    // allocation at 8001 and hands out a pair the other document claims — the
+    // collision this function exists to prevent, produced by itself.
+    const { claimedPorts } = await import("../scaffold.js");
+    const root = fakeWorkspace();
+    rmSync(join(root, "AGENTS.md"));
+
+    expect(claimedPorts(root)).toContainEqual({
+      service: "google",
+      http: 8001,
+      mcp: 9001,
+    });
+  });
+
+  it("counts a service listed in both documents once", async () => {
+    const { claimedPorts } = await import("../scaffold.js");
+    expect(claimedPorts(fakeWorkspace())).toHaveLength(1);
+  });
+});
+
 describe("the generated service", () => {
   it("is a tree the repository's own tools can read", () => {
     // Not a substitute for the integration check that compiles it — this only

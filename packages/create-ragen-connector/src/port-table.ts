@@ -54,9 +54,28 @@ export function parsePortTable(markdown: string): PortRow[] {
  * one would produce a collision whose cause is in a repository the author is
  * not looking at.
  */
+export const MAX_HTTP_PORT = 64_535;
+
 export function nextFreeHttpPort(rows: PortRow[], floor = 8001): number {
   const highest = rows.reduce((max, row) => Math.max(max, row.http), 0);
-  return Math.max(highest + 1, floor);
+  let candidate = Math.max(highest + 1, floor);
+
+  // One past the highest is free *if* every row follows the `mcp = http + 1000`
+  // convention. A hand-edited row that does not would otherwise be handed a
+  // pair that collides with it — and `portConflict` would then refuse the
+  // CLI's own suggestion, which reads as the tool being broken rather than the
+  // table being odd.
+  while (candidate <= MAX_HTTP_PORT && pairIsTaken(rows, candidate)) {
+    candidate += 1;
+  }
+
+  if (candidate > MAX_HTTP_PORT) {
+    throw new Error(
+      `No free port pair left below ${MAX_HTTP_PORT}. The MCP listener is the HTTP port plus ${MCP_PORT_OFFSET}, so both have to fit.`,
+    );
+  }
+
+  return candidate;
 }
 
 /**
@@ -81,9 +100,32 @@ export function serviceConflict(
   return `The port table already lists \`${service}\` on ${existing.http}/${existing.mcp}. Remove that row first, or pick another slug — a second row for the same service is a table nobody can trust.`;
 }
 
+/**
+ * Whether either half of the pair `http` / `http + 1000` is already claimed.
+ *
+ * Separate from `portConflict` so the two can share the rule without sharing a
+ * cycle: `portConflict`'s message names the next free pair, so it calls
+ * `nextFreeHttpPort`, and `nextFreeHttpPort` needs the rule — calling
+ * `portConflict` for it recursed until the stack ran out.
+ */
+export function pairIsTaken(rows: PortRow[], http: number): boolean {
+  return takenBy(rows, http) !== undefined;
+}
+
+function takenBy(rows: PortRow[], http: number): PortRow | undefined {
+  const mcp = http + MCP_PORT_OFFSET;
+  return rows.find(
+    (row) =>
+      row.http === http ||
+      row.mcp === http ||
+      row.mcp === mcp ||
+      row.http === mcp,
+  );
+}
+
 export function portConflict(rows: PortRow[], http: number): string | null {
   const mcp = http + MCP_PORT_OFFSET;
-  const taken = rows.find((row) => row.http === http || row.mcp === http || row.mcp === mcp || row.http === mcp);
+  const taken = takenBy(rows, http);
   if (!taken) {
     return null;
   }

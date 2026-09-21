@@ -12,4 +12,7 @@ RUN npm run build
 # check passes and whose tools never load.
 EXPOSE __PORT__ __MCP_PORT__
 
+# The build needs to write; serving does not. `node:*` images ship this user.
+USER node
+
 CMD ["node", "dist/index.js"]
